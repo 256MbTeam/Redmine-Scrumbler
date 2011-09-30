@@ -2,6 +2,7 @@ require 'redmine'
 require 'dispatcher'
 
 require_dependency "scrumbler"
+require_dependency 'hooks'
 
 Dispatcher.to_prepare :redmine_scrumbler do
   require_dependency "infector"
