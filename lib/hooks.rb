@@ -29,8 +29,10 @@ module Scrumbler
     
     def enable_module(params)
       @module = params[:module]
+      @project = params[:project]
       if @module.name == Scrumbler::MODULE_NAME
-        ScrumblerSprint.create_sprints_for_project(@module.project_id)
+        @project.create_scrumbler_setting(:maintrackers => @project.tracker_ids)
+        ScrumblerSprint.create_sprints_for_project(@module.project)
       end
     end
     

@@ -22,11 +22,11 @@ module Scrumbler
 
       module InstanceMethods
         def enable_module
-          Redmine::Hook.call_hook(:enable_module, :module => self)
+          Redmine::Hook.call_hook(:enable_module, {:module => self, :project => project})
         end
         
         def disable_module
-          Redmine::Hook.call_hook(:disable_module, :module => self)
+          Redmine::Hook.call_hook(:disable_module, {:module => self, :project => project})
         end
         
       end

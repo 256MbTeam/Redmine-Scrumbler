@@ -26,4 +26,6 @@ class ScrumblerProjectSetting < ActiveRecord::Base
     self.settings ||= {}
     self.maintrackers ||= []
   end
+  
+ 
 end

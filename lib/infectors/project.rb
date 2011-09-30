@@ -26,7 +26,7 @@ module Scrumbler
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval {
-          has_one :scrumbler_project_setting
+          has_one :scrumbler_project_setting, :dependent => :destroy
           has_many :scrumbler_sprints
         }
       end
