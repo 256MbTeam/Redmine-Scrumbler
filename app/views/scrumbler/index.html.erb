@@ -1,8 +1,12 @@
 <div class="contextual">
-  <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
+    <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
-<% if @scrumbler_sprints.any? %>
-<% else %>
+<p>
+    <%= label_tag :scrumbler_sprint_id, l(:scrumbler_sprint) %>
+<%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name, {:prompt => '---'}%>
+</p>
+<%# if @scrumbler_sprints.any? %>
+<%# else %>
 <p class="nodata"><%= l(:label_no_data) %></p>
-<% end %>
+<%# end %>
