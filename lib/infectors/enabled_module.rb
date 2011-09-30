@@ -19,7 +19,7 @@ module Scrumbler
         receiver.send :include, InstanceMethods
         receiver.class_eval {
           after_create :enable_module
-          before_dstroy :disable_module
+          before_destroy :disable_module
         }
       end
     end

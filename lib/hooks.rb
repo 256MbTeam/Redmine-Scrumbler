@@ -7,15 +7,17 @@ module Scrumbler
     
     def create_version(params)
       @version = params[:version]
-      ScrumblerSprint.crate_if_not_exists(@version.project_id, @version.id)
+      ScrumblerSprint.create_if_not_exists(@version.project_id, @version.id)
     end
     
     def enable_module(params)
-     
+      @module = params[:module]
+      ScrumblerSprint.create_sprints_for_project(@module.project_id)
     end
     
     def disable_module(params)
-     
+      @module = params[:module]
+      ScrumblerSprint.destroy_all_in_project(@module.project_id)
     end
   end
 end
