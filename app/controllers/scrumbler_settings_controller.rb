@@ -4,8 +4,6 @@ class ScrumblerSettingsController < ScrumblerAbstractController
 #  before_filter :authorize, :only => [:settings]
   
   def show
-    puts "sdf"
-    p @scrumbler_project_setting
   end
   
   def update_maintrackers
