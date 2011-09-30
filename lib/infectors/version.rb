@@ -21,11 +21,11 @@ module Scrumbler
       module ClassMethods;end
 
       module InstanceMethods
-        def create_sprint
+        def version_created
           Redmine::Hook.call_hook(:create_version, :version => self)
         end
         
-        def destroy_sprint
+        def version_destroed
           Redmine::Hook.call_hook(:destroy_version, :version => self)
         end
       end
@@ -34,8 +34,9 @@ module Scrumbler
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval {
-          after_create :create_sprint
-          before_destroy :destroy_sprint
+          has_one :scrumbler_sprint, :dependent => :destroy
+          after_create :version_created
+          before_destroy :version_destroed
         }
       end
     end

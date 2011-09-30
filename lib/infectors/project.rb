@@ -20,7 +20,14 @@ module Scrumbler
     module Project
       module ClassMethods;end
       
-      module InstanceMethods;end
+      module InstanceMethods
+        def create_scrumbler_sprints
+          versions.each do |version|
+            version.create_scrumbler_sprint(:project_id => id)
+          end
+        end
+      
+      end
       
       def self.included(receiver)
         receiver.extend         ClassMethods

@@ -17,29 +17,26 @@
 
 module Scrumbler
   class Hooks < Redmine::Hook::ViewListener
-    def destroy_version(params)
-      @version = params[:version]
-      ScrumblerSprint.destroy_if_exists(@version.project_id, @version.id)
-    end
     
     def create_version(params)
       @version = params[:version]
-      ScrumblerSprint.create_if_not_exists(@version.project_id, @version.id)
+      @version.create_scrumbler_sprint(:project => @version.project)
     end
     
     def enable_module(params)
       @module = params[:module]
       @project = params[:project]
       if @module.name == Scrumbler::MODULE_NAME
-        @project.create_scrumbler_setting(:maintrackers => @project.tracker_ids)
-        ScrumblerSprint.create_sprints_for_project(@module.project)
+        @project.create_scrumbler_project_setting(:maintrackers => @project.trackers.map(&:id))
+        @project.create_scrumbler_sprints
       end
     end
     
     def disable_module(params)
       @module = params[:module]
+      @project = params[:project]
       if @module.name == Scrumbler::MODULE_NAME
-        ScrumblerSprint.destroy_all_in_project(@module.project_id)
+        @project.scrumbler_sprints.destroy_all
       end
     end
   end
