@@ -3,3 +3,4 @@ ru:
   scrumbler_menu: "Скрамблер"
   label_maintrackers: "Основные трекеры"
   maintracker_use?: "Использовать?"
+  error_scrumbler_maintrackers_update: "Основные трекеры не удалось обновить"
