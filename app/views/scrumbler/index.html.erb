@@ -1,2 +1,4 @@
-<h2>Scrumber#index</h2>
-<%= link_to_if_authorized l(:label_settings), :controller => :scrumbler, :action => :settings, :project_id => @project  %>
+<div class="contextual">
+  <%= link_to_if_authorized l(:label_settings), :controller => :scrumbler, :action => :settings, :project_id => @project  %>
+</div>
+<h2><%=l(:scrumbler_menu)%></h2>

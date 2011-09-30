@@ -16,6 +16,6 @@ Redmine::Plugin.register :redmine_scrumbler do
     permission :scrumbler_settings, :scrumbler => :settings, :public => false
   end
   
-  menu :project_menu, :redmine_scrumbler, { :controller => 'scrumbler', :action => 'index' }, :caption => 'Scrumbler', :after => :activity, :param => :project_id
+  menu :project_menu, :redmine_scrumbler, { :controller => 'scrumbler', :action => 'index' }, :caption => :scrumbler_menu, :after => :activity, :param => :project_id
   
 end
