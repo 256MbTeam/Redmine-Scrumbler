@@ -1,8 +1,12 @@
 require 'redmine'
 require_dependency "scrumbler"
 
+
+
 Dispatcher.to_prepare :redmine_scrumbler do
-  
+  # Guards against including the module multiple time (like in tests)
+  # and registering multiple callbacks
+  require_dependency "infector"
 end
 
 Redmine::Plugin.register :redmine_scrumbler do

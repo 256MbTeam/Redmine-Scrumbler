@@ -2,3 +2,4 @@
   <%= link_to_if_authorized l(:label_settings), :controller => :scrumbler, :action => :settings, :project_id => @project  %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
+  <td> <%=  select_tag("msp_resource_member_id[#{local_assigns['member'].id}]", content_tag('option', "-- #{l :actionview_instancetag_blank_option} --", :value => '') + options_from_collection_for_select(@msp_resources, 'RES_UID', 'RES_NAME', msp_resource_id))%></td>
