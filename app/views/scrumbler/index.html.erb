@@ -6,7 +6,9 @@
     <%= label_tag :scrumbler_sprint_id, l(:scrumbler_sprint) %>
 <%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name, {:prompt => '---'}%>
 </p>
-<%# if @scrumbler_sprints.any? %>
-<%# else %>
+<% if @scrumbler_sprints.any? %>
+#TODO
+
+<% else %>
 <p class="nodata"><%= l(:label_no_data) %></p>
-<%# end %>
+<% end %>
