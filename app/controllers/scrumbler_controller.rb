@@ -1,7 +1,6 @@
-class ScrumblerController < ApplicationController
+class ScrumblerController < ScrumblerAbstractController
   unloadable
 
-  before_filter :find_project, :only => [:index, :settings]
 #  before_filter :authorize, :only => [:settings]
   
   def index
