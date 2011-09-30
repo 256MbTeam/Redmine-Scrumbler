@@ -35,4 +35,17 @@ class ScrumblerSettingsController < ScrumblerAbstractController
     redirect_to project_scrumbler_settings_url(@project)
   end
   
+  def update_issue_statuses
+    params[:scrumbler_issue_statuses] ||= []
+    ScrumblerProjectSetting.transaction do
+      @scrumbler_project_setting.settings[:issue_statuses] = params[:scrumbler_issue_statuses].map(&:to_i)
+      unless @scrumbler_project_setting.save
+        flash[:error] = t :error_scrumbler_maintrackers_update
+      end
+    end
+    
+    flash[:notice] = t :notice_successful_update unless flash[:error]
+    redirect_to project_scrumbler_settings_url(@project)
+  end
+  
 end

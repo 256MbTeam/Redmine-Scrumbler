@@ -24,7 +24,8 @@ class ScrumblerProjectSetting < ActiveRecord::Base
   
   def after_initialize
     self.settings ||= {}
-    self.maintrackers ||= []
+    self.settings[:issue_statuses] ||= IssueStatus.all.map(&:id)
+    self.maintrackers ||= Tracker.all.map(&:id)
   end
   
  
