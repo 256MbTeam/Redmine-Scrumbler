@@ -9,8 +9,7 @@ class ScrumblerSettingsController < ScrumblerAbstractController
   def update_maintrackers
     params[:scrumbler_maintrackers] ||= []
     
-    @scrumbler_project_setting.maintrackers = params[:scrumbler_maintrackers].map &:to_i
-    @scrumbler_project_setting.save
+    @scrumbler_project_setting.update_attributes(:maintrackers => params[:scrumbler_maintrackers].map(&:to_i))
     redirect_to project_scrumbler_settings_url(@project)
   end
   
