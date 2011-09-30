@@ -1,4 +1,5 @@
 # Russian strings go here for Rails i18n
 ru:
   scrumbler_menu: "Скрамблер"
-  label_maintrackers: "Трекеры"
+  label_maintrackers: "Основные трекеры"
+  maintracker_use?: "Использовать?"

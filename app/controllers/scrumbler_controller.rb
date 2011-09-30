@@ -4,7 +4,7 @@ class ScrumblerController < ScrumblerAbstractController
 #  before_filter :authorize, :only => [:settings]
   
   def index
-    @versions
+    @scrumbler_sprints = @project.scrumbler_sprints
   end
   
 end
