@@ -23,9 +23,17 @@ class ScrumblerSprint < ActiveRecord::Base
   belongs_to :project
   belongs_to :version
   
-  has_many :scrumbler_sprint_trackers
-  has_many :scrumbler_sprint_statuses
+  delegate :scrumbler_project_setting, :to => :project
+  
+  has_many :scrumbler_sprint_trackers, :dependent => :destroy
+  has_many :scrumbler_sprint_statuses, :dependent => :destroy
   
   delegate :name, :to => :version
   
+  
+  def after_create
+    scrumbler_project_setting.maintrackers.each {|tracker_id|
+      self.scrumbler_sprint_trackers.create(:tracker_id => tracker_id)
+    }
+  end
 end

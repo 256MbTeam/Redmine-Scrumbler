@@ -6,6 +6,9 @@ ActionController::Routing::Routes.draw do |map|
       :update_issue_statuses => :post
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler'
     
+    project.resources :scrumbler_sprints, :member => {
+      :settings => :get
+    }
     project.sprint 'sprint/:sprint_id', :controller => 'scrumbler', :action => :sprint, :method => :post
   end
 

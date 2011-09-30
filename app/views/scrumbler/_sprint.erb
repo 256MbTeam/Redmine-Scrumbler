@@ -1,7 +1,7 @@
 <div id="scrumbler_sprint">
     <% if sprint %>
     <div class="contextual">
-        <%= link_to "Настройки спринта" %>
+        <%= link_to "Настройки спринта", settings_project_scrumbler_sprint_url(@project, sprint) %>
     </div>
     <h3><%= sprint.name %></h3>
     <% else %>
