@@ -13,7 +13,7 @@ class ScrumblerSprint < ActiveRecord::Base
   delegate :name, :to => :version
   
   class << self
-    def crate_if_not_exists(project_id, version_id)
+    def create_if_not_exists(project_id, version_id)
       sprint_hash = {:project_id => project_id, :version_id => version_id}
       unless exists?(sprint_hash)
         create(sprint_hash)
