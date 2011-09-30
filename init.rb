@@ -6,6 +6,7 @@ require_dependency 'hooks'
 
 Dispatcher.to_prepare :redmine_scrumbler do
   require_dependency "infector"
+  puts "Dispatcher.to_prepare\n"*12
 end
 
 Redmine::Plugin.register :redmine_scrumbler do
@@ -13,7 +14,7 @@ Redmine::Plugin.register :redmine_scrumbler do
   author 'Alexandr_Andrianov, Dmitry Kuzmin, Ivan Kotenko'
   description 'This is a scrum plugin for Redmine'
   version '0.0.1'
-  
+  puts "Redmine::Plugin.register\n"*12
   project_module :redmine_scrumbler do
     permission :scrumbler, :scrumbler => :index
     permission :scrumbler_settings, :scrumbler => :settings, :public => false

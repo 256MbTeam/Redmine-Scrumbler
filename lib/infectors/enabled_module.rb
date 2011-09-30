@@ -1,26 +1,28 @@
 module Scrumbler
   module Infectors
-    module Version
+    module EnabledModule
       module ClassMethods;end
 
       module InstanceMethods
-        def create_sprint
-          Redmine::Hook.call_hook(:create_version, :version => self)
+        def enable_module
+          Redmine::Hook.call_hook(:enable_module, :module => self)
         end
         
-        def destroy_sprint
-          Redmine::Hook.call_hook(:destroy_version, :version => self)
+        def disable_module
+          Redmine::Hook.call_hook(:disable_module, :module => self)
         end
+        
       end
       
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval {
-          after_create :create_sprint
-          before_destroy :destroy_sprint
+          after_create :enable_module
+          before_dstroy :disable_module
         }
       end
     end
   end
 end
+

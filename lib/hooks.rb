@@ -9,5 +9,13 @@ module Scrumbler
       @version = params[:version]
       ScrumblerSprint.crate_if_not_exists(@version.project_id, @version.id)
     end
+    
+    def enable_module(params)
+     
+    end
+    
+    def disable_module(params)
+     
+    end
   end
 end

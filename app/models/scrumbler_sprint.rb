@@ -15,7 +15,10 @@ class ScrumblerSprint < ActiveRecord::Base
   end
   
   def self.destroy_if_exists(project_id, version_id)
-    ScrumblerSprint.destroy_all(:project_id => project_id, :version_id => version_id)
+    destroy_all(:project_id => project_id, :version_id => version_id)
   end
 
+  def self.destroy_all_in_project(project_id)
+    destroy_all(:project_id => project_id)
+  end
 end
