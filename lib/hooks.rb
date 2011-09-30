@@ -29,12 +29,16 @@ module Scrumbler
     
     def enable_module(params)
       @module = params[:module]
-      ScrumblerSprint.create_sprints_for_project(@module.project_id)
+      if @module.name == Scrumbler::MODULE_NAME
+        ScrumblerSprint.create_sprints_for_project(@module.project_id)
+      end
     end
     
     def disable_module(params)
       @module = params[:module]
-      ScrumblerSprint.destroy_all_in_project(@module.project_id)
+      if @module.name == Scrumbler::MODULE_NAME
+        ScrumblerSprint.destroy_all_in_project(@module.project_id)
+      end
     end
   end
 end
