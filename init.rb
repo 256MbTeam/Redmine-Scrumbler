@@ -1,8 +1,13 @@
 require 'redmine'
+require 'dispatcher'
+
 require_dependency "scrumbler"
+require_dependency "infectors/project"
+
+
 
 Dispatcher.to_prepare :redmine_scrumbler do
-  
+  Project.send(:include, Scrumbler::Infectors::Project) unless Project.included_modules.include? Scrumbler::Infectors::Project
 end
 
 Redmine::Plugin.register :redmine_scrumbler do

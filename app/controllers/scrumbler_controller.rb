@@ -7,12 +7,4 @@ class ScrumblerController < ScrumblerAbstractController
     
   end
   
-  def settings
-    
-  end
-  
-  private
-  def find_project
-    @project = Project.find_by_identifier(params[:project_id])
-  end
 end

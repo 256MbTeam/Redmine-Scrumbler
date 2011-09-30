@@ -1,0 +1,26 @@
+<h3><%=l :label_maintrackers%></h3>
+
+<% form_tag update_maintrackers_project_scrumbler_settings_url(@project) do%>
+    <table class="list">
+        <thead>
+            <tr>
+                <th>Трекер</th>
+                <th width="100px">Использовать?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @project.trackers.each do |tracker| %>
+                <tr class="<%= cycle 'odd', 'even' %>">
+                    <td><%=  tracker.name%></td>
+                    <td>
+                        <%= check_box_tag "scrumbler_maintrackers[]", 
+                                          tracker.id, 
+                                          @scrumbler_project_setting.maintrackers.include?(tracker.id)  
+                        %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <p><%= submit_tag(l(:button_update)) %></p>
+<% end %>

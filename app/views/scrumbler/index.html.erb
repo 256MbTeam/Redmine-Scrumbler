@@ -1,4 +1,4 @@
 <div class="contextual">
-  <%= link_to_if_authorized l(:label_settings), :controller => :scrumbler, :action => :settings, :project_id => @project  %>
+  <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
