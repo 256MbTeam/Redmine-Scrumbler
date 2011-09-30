@@ -12,16 +12,20 @@ class ScrumblerSprint < ActiveRecord::Base
 
   delegate :name, :to => :version
   
-  def self.crate_if_not_exists(project_id, version_id)
-    sprint_hash = {:project_id => project_id, :version_id => version_id}
-    unless ScrumblerSprint.exists?(sprint_hash)
-      ScrumblerSprint.create(sprint_hash)
+  
+  class << self
+    def crate_if_not_exists(project_id, version_id)
+      sprint_hash = {:project_id => project_id, :version_id => version_id}
+      unless exists?(sprint_hash)
+        create(sprint_hash)
+      end
+    end
+  
+    def destroy_if_exists(project_id, version_id)
+      destroy_all(:project_id => project_id, :version_id => version_id)
     end
   end
   
-  def self.destroy_if_exists(project_id, version_id)
-    ScrumblerSprint.destroy_all(:project_id => project_id, :version_id => version_id)
-  end
 
   
 end

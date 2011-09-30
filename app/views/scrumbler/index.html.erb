@@ -2,13 +2,24 @@
     <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
+<% if @scrumbler_sprints.any? %>
 <p>
     <%= label_tag :scrumbler_sprint_id, l(:scrumbler_sprint) %>
-<%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name, {:prompt => '---'}%>
+    <%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name, 
+                          {
+                           :prompt => '---', 
+                           :selected => @scrumbler_sprints.last.id
+                          },
+                          {
+                            :onchange => "#{remote_function :url => {
+                                                                    :controller => :scrumbler,
+                                                                    :action => :sprint,
+                                                                    :project_id => @project
+                                                                    }, :with => "'sprint_id='+value"}"
+                          }
+                   %>
 </p>
-<% if @scrumbler_sprints.any? %>
-#TODO
-
+    <%= render :partial => 'sprint', :object =>  @scrumbler_sprints.last %>
 <% else %>
-<p class="nodata"><%= l(:label_no_data) %></p>
+    <p class="nodata"><%= l(:label_no_data) %></p>
 <% end %>
