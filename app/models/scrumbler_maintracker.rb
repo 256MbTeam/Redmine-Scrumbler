@@ -1,4 +1,4 @@
-class ScrumblerMaintrackers < ActiveRecord::Base
+class ScrumblerMaintracker < ActiveRecord::Base
   unloadable
   
   belongs_to :project
