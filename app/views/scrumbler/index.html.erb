@@ -1,0 +1,4 @@
+<h2>Scrumber#index</h2>
+<%= project_scrumbler_settings_path(@project) %>
+<%= User.current.allowed_to?({:controller => :scrumbler, :action => :settings}, @project) %>
+<%= link_to_if_authorized l(:label_settings), :controller => :scrumbler, :action => :settings, :project_id => @project  %>

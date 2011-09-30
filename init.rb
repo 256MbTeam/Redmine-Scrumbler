@@ -12,7 +12,10 @@ Redmine::Plugin.register :redmine_scrumbler do
   version '0.0.1'
   
   project_module :redmine_scrumbler do
-#    menu :project_menu, :redmine_scrumbler, { :controller => 'msp_integration', :action => 'index' }, :caption => 'Ms Project 2003', :after => :activity, :param => :project_id
+    permission :scrumbler, :scrumbler => :index
+    permission :scrumbler_settings, :scrumbler => :settings, :public => false
   end
+  
+  menu :project_menu, :redmine_scrumbler, { :controller => 'scrumbler', :action => 'index' }, :caption => 'Scrumbler', :after => :activity, :param => :project_id
   
 end
