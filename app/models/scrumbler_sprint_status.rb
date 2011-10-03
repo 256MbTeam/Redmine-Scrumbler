@@ -18,9 +18,10 @@
 class ScrumblerSprintStatus < ActiveRecord::Base
   unloadable
   
-  default_scope :include => [:issue_status]
-  
   belongs_to :scrumbler_sprint
-  
   belongs_to :issue_status
+  
+  default_scope :include => [:issue_status]
+
+  delegate :name, :to => :issue_status
 end

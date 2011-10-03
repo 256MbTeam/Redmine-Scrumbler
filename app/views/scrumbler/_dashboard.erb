@@ -1,3 +1,9 @@
-<table>
-    
+<table width="100%">
+    <tr>
+        <% dashboard.scrumbler_sprint_statuses.each do |status| %>
+        <th>
+            <%= status.name %>
+        </th>
+    <% end %>
+    </tr>
 </table>
