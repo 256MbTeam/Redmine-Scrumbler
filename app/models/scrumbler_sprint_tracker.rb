@@ -21,5 +21,8 @@ class ScrumblerSprintTracker < ActiveRecord::Base
   belongs_to :scrumbler_sprint
   
   has_many :trackers
+
+  validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id
+
   serialize :settings, Hash
 end

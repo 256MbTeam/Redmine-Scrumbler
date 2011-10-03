@@ -30,6 +30,7 @@ class ScrumblerSprint < ActiveRecord::Base
   
   delegate :name, :to => :version
   
+  has_and_belongs_to_many :trackers, :join_table  => :scrumbler_sprint_trackers
   
   def after_create
     scrumbler_project_setting.maintrackers.each {|tracker_id|

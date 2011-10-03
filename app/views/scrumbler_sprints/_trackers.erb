@@ -1,1 +1,28 @@
 <h3><%=l :label_tracker_plural %></h3>
+
+<% form_tag update_trackers_project_scrumbler_sprint_url(@project, @scrumbler_sprint) do%>
+    <%= hidden_field_tag "scrumbler_sprint[scrumbler_sprint_trackers][]"%>
+    <table class="list">
+        <thead>
+            <tr>
+                <th><%=l :label_tracker_plural %></th>
+                <th width="100px"><%=l :maintracker_use?%></th>
+                <th><%=l "active_record.models", :scrumbler_sprint_tracker, :priority %></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @trackers.each do |tracker| %>
+                <tr class="<%= cycle 'odd', 'even' %>">
+                    <td><%=  tracker.name%></td>
+                    <td>
+                        <%= check_box_tag "scrumbler_sprint[scrumbler_sprint_trackers][]", 
+                                          tracker.id, 
+                                          @scrumbler_sprint.scrumbler_sprint_trackers.map(&:tracker_id).include?(tracker.id)  
+                        %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <p><%= submit_tag(l(:button_update)) %></p>
+<% end %>
