@@ -8,7 +8,8 @@ ActionController::Routing::Routes.draw do |map|
     
     project.resources :scrumbler_sprints, :member => {
       :settings => :get,
-      :update_trackers => :post
+      :update_trackers => :post,
+      :update_issue_statuses => :post
     }
     
     project.sprint 'sprint/:sprint_id', :controller => 'scrumbler', :action => :sprint, :method => :post
