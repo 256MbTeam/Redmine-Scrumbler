@@ -24,4 +24,10 @@ class ScrumblerSprintStatus < ActiveRecord::Base
   default_scope :include => [:issue_status], :order => 'priority ASC'
 
   delegate :name, :to => :issue_status
+  
+  def as_json(*args)
+    json = super
+    json[:name] = self.name
+    json
+  end
 end
