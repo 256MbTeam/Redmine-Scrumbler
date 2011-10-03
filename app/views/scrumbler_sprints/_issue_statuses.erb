@@ -1,6 +1,6 @@
 <h3><%=l :label_issue_statuses%></h3>
 
-<% form_tag update_issue_statuses_project_scrumbler_settings_url(@project) do%>
+<% form_tag update_issue_statuses_project_scrumbler_sprint_url(@project, @project_sprint) do%>
     <table class="list">
         <thead>
             <tr>
@@ -9,13 +9,13 @@
             </tr>
         </thead>
         <tbody>
-            <% IssueStatus.all.each do |issue_status| %>
+            <% @issue_statuses.each do |issue_status| %>
                 <tr class="<%= cycle 'odd', 'even' %>">
                     <td><%=  issue_status.name%></td>
                     <td>
                         <%= check_box_tag "scrumbler_issue_statuses[]", 
                                           issue_status.id, 
-                                          @scrumbler_project_setting.settings[:issue_statuses].include?(issue_status.id)  
+                                          @enabled_issue_statuses_ids.include?(issue_status.id)  
                         %>
                     </td>
                 </tr>
