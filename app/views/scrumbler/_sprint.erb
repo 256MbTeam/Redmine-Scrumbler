@@ -24,6 +24,8 @@
            
            this.statuses = this.makeStatuses(statuses);
            this.drawStatuses();
+           console.log(this.config.status_id)
+           console.log(statuses)
            this.statuses.get(this.config.status_id).appendChild(this.issueEl);
 
            this.make_Drag_N_Drop();
@@ -32,7 +34,7 @@
             var statusElements = {};
             
             statuses.each(function(status){
-                statusElements[status.id] = new Element('td');
+                statusElements[status.issue_status_id] = new Element('td');
             })
             return $H(statusElements);
         },

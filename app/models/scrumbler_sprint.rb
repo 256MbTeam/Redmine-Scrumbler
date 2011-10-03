@@ -32,10 +32,12 @@ class ScrumblerSprint < ActiveRecord::Base
 inner join issues on issues.project_id = projects.id
 join scrumbler_sprint_trackers on scrumbler_sprint_trackers.scrumbler_sprint_id = scrumbler_sprints.id
 join versions on versions.id = issues.fixed_version_id
+join scrumbler_sprint_statuses on scrumbler_sprint_statuses.scrumbler_sprint_id = scrumbler_sprints.id
 where 
 issues.tracker_id = scrumbler_sprint_trackers.tracker_id
 and versions.id = scrumbler_sprints.version_id
-and scrumbler_sprints.id = 6), :readonly => true, :uniq => true
+and scrumbler_sprint_statuses.issue_status_id = issues.status_id
+and scrumbler_sprints.id = #{self.id}), :readonly => true, :uniq => true
   
   delegate :name, :to => :version
   
