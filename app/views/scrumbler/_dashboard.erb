@@ -1,9 +1,10 @@
-<table width="100%">
+<table width="100%" border="1">
     <tr>
-        <% dashboard.scrumbler_sprint_statuses.each do |status| %>
-        <th>
-            <%= status.name %>
-        </th>
-    <% end %>
+        <%= draw_statuses_on_dashboard(dashboard.scrumbler_sprint_statuses)  %>
     </tr>
+    <% dashboard.issues.each do |issue| %>
+        <tr>
+           <%= draw_issue_on_dashboard(issue, dashboard.scrumbler_sprint_statuses) %>
+        </tr>
+    <% end %>
 </table>

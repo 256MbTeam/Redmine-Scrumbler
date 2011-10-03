@@ -21,7 +21,7 @@ class ScrumblerSprintStatus < ActiveRecord::Base
   belongs_to :scrumbler_sprint
   belongs_to :issue_status
   
-  default_scope :include => [:issue_status]
+  default_scope :include => [:issue_status], :order => 'priority ASC'
 
   delegate :name, :to => :issue_status
 end

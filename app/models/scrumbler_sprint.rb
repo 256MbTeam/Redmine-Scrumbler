@@ -28,6 +28,15 @@ class ScrumblerSprint < ActiveRecord::Base
   has_many :scrumbler_sprint_trackers, :dependent => :destroy
   has_many :scrumbler_sprint_statuses, :dependent => :destroy
   
+  has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints inner join projects on scrumbler_sprints.project_id = projects.id
+inner join issues on issues.project_id = projects.id
+join scrumbler_sprint_trackers on scrumbler_sprint_trackers.scrumbler_sprint_id = scrumbler_sprints.id
+join versions on versions.id = issues.fixed_version_id
+where 
+issues.tracker_id = scrumbler_sprint_trackers.tracker_id
+and versions.id = scrumbler_sprints.version_id
+and scrumbler_sprints.id = 6), :readonly => true, :uniq => true
+  
   delegate :name, :to => :version
   
   has_and_belongs_to_many :trackers, :join_table  => :scrumbler_sprint_trackers
