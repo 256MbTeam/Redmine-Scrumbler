@@ -22,7 +22,7 @@ class ScrumblerSprintTracker < ActiveRecord::Base
   
   has_many :trackers
 
-  validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id
+  validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id, :if => :new_record?
 
   serialize :settings, Hash
 end
