@@ -18,7 +18,9 @@
 class ScrumblerSprintStatus < ActiveRecord::Base
   unloadable
   
+  default_scope :include => [:issue_status]
+  
   belongs_to :scrumbler_sprint
   
-  has_many :issue_statuses
+  belongs_to :issue_status
 end

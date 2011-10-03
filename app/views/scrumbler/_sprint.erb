@@ -4,6 +4,7 @@
         <%= link_to "Настройки спринта", settings_project_scrumbler_sprint_url(@project, sprint) %>
     </div>
     <h3><%= sprint.name %></h3>
+    <%= render :partial => "dashboard", :object => sprint %>
     <% else %>
         <p id="errorExplanation"><%=l :error_sprint_not_found_in_project %></p>
     <% end %>
