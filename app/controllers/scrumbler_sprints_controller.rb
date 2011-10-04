@@ -28,6 +28,8 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_trackers
+    puts "#{params.inspect}\n"*14
+    
     # delete empty data
     params[:scrumbler_sprint][:scrumbler_sprint_trackers].delete_if { |obj|  !obj[:tracker_id]}
     
@@ -55,6 +57,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
         if @to_update_trackers.any?
           @to_update_trackers.each {|tracker_params|
             sprint_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.first(:conditions => {:tracker_id => tracker_params[:tracker_id]})
+            puts "UPDATE #{tracker_params.inspect}\n"*8
             sprint_tracker.update_attributes!(tracker_params)
           }
         end

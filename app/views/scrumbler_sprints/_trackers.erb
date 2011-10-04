@@ -5,6 +5,7 @@
         <thead>
             <tr>
                 <th><%=l :label_tracker_plural %></th>
+                <th>HUY</th>
                 <th width="100px"><%=l :maintracker_use?%></th>
                 <th width="100px"><%=t "active_record.models.scrumbler_sprint_tracker.priority" %></th>
             </tr>
@@ -14,6 +15,7 @@
             <% existing_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.find_by_tracker_id(tracker.id) %>
                 <tr class="<%= cycle 'odd', 'even' %>">
                     <td><%=  tracker.name%></td>
+                    <td><%=select_color_tag({:id=>"color_chooser_#{tracker.id}", :name => "scrumbler_sprint[scrumbler_sprint_trackers][][settings][color]", :value => existing_tracker.try(:settings).try("[]", :color) || "FFFFFF"}) %></td>
                     <td>
                         <%= check_box_tag "scrumbler_sprint[scrumbler_sprint_trackers][][tracker_id]", 
                                           tracker.id, 
