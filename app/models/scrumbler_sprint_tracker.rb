@@ -18,20 +18,30 @@
 class ScrumblerSprintTracker < ActiveRecord::Base
   unloadable
   
+  class << self
+    def has_setting attr_name, args = {}
+      self.send :define_method, "#{attr_name}=" do |value|
+        self.settings[attr_name] ||= args[:default]
+        self.settings[attr_name] = value
+      end
+    end
+  end
+  
+  serialize :settings, Hash
+ 
+  has_setting :color, :default => "000000"
+  
   belongs_to :scrumbler_sprint
   
   has_many :trackers
 
   validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id, :if => :new_record?
 
-  serialize :settings, Hash
-  
-  def color=(value)
-    self.settings[:color] = value
-  end
-  
+
   def after_initialize
     self.settings ||= {}
-    self.settings[:color] ||= '000000'
   end
+  
+   
+  
 end
