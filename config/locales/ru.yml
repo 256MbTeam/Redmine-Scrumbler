@@ -12,3 +12,4 @@ ru:
     models:
       scrumbler_sprint_tracker:
         priority: "Приоритет"
+        color: "Цвет"

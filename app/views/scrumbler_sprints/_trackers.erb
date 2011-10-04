@@ -1,3 +1,8 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag    'prototype_colorpicker', :plugin => 'redmine_scrumbler' %>
+  <%= javascript_include_tag 'prototype_colorpicker', :plugin => 'redmine_scrumbler' %>
+<% end %>
+
 <h3><%=l :label_tracker_plural %></h3>
 
 <% form_tag update_trackers_project_scrumbler_sprint_url(@project, @scrumbler_sprint) do%>
@@ -5,8 +10,8 @@
     <thead>
       <tr>
         <th><%=l :label_tracker_plural %></th>
-        <th>HUY</th>
-        <th width="100px"><%=l :maintracker_use?%></th>
+        <th width="100px"><%=l "active_record.models.scrumbler_sprint_tracker.color"%></th>
+        <th width="100px"><%=l :label_tracker_plural%></th>
         <th width="100px"><%=t "active_record.models.scrumbler_sprint_tracker.priority" %></th>
       </tr>
     </thead>
@@ -15,11 +20,7 @@
         <% existing_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.find_by_tracker_id(tracker.id) %>
         <tr class="<%= cycle 'odd', 'even' %>">
           <td><%=  tracker.name%></td>
-          <td>
-    <%#= text_field_tag "scrumbler_sprint[scrumbler_sprint_trackers][][color]",  existing_tracker.try(:settings).try("[]", :color) || "FFFFFF"%>
-
-            <%=  select_color_tag({:id => tracker.id,:name => "scrumbler_sprint[scrumbler_sprint_trackers][][color]", :value => existing_tracker.try(:settings).try("[]", :color) || "FFFFFF"}) %>
-          </td>
+          <td><%=  select_color_tag({:id => tracker.id, :name => "scrumbler_sprint[scrumbler_sprint_trackers][][color]", :value => existing_tracker.try(:settings).try("[]", :color) || "FFFFFF"}) %></td>
 
           <td>
             <%= check_box_tag "scrumbler_sprint[scrumbler_sprint_trackers][][tracker_id]", 
