@@ -107,13 +107,22 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue
+    
     @issue = Issue.find(params[:issue_id])
     
-    if @issue.update_attributes(params[:issue])
-    render :text => 'ok'
+    @message = if @issue.new_statuses_allowed_to(User.current).map(&:id).include?(params[:issue][:status_id].to_i)
+      if @issue.update_attributes(params[:issue])
+        {:success => true}
+      else
+        {:success => false}
+      end
     else
-      1
+      new_status = IssueStatus.find(params[:issue][:status_id])
+      {:success => false, :text => l(:error_scrumbler_issue_status_change, :status_name => new_status.name)}
     end
+    
+
+    render :json => @message
   end
   
   private
