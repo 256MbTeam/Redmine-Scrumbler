@@ -106,6 +106,16 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     
   end
   
+  def update_issue
+    @issue = Issue.find(params[:issue_id])
+    
+    if @issue.update_attributes(params[:issue])
+    render :text => 'ok'
+    else
+      1
+    end
+  end
+  
   private
   def find_scrumbler_sprint
     @scrumbler_sprint = @project.scrumbler_sprints.find(params[:id])

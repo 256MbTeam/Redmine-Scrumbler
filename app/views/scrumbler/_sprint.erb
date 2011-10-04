@@ -1,146 +1,175 @@
 <script>
+    var xxx;
     var ScrumblerDashboard = (function() {
-    var Status = Class.create({
-        initialize: function(status) {
-            this.status = status;
-        },
-        getElement: function() {
-            
-        }
-    });
 
-    var Issue = Class.create({
-        initialize: function(issue_config, statuses) {
-           this.el = new Element('tr');
-           this.config = issue_config;
-           this.id = "scrumbler_dashboard_issue_" + issue_config.id;
-           
-           
-           this.issueEl = new Element('div', {
-               'class': 'scrumbler_dashboard_issue',
-               id: this.id
-           });
-           this.issueEl.update(this.config.subject);
-           
-           this.statuses = this.makeStatuses(statuses);
-           this.drawStatuses();
-           console.log(this.config.status_id)
-           console.log(statuses)
-           this.statuses.get(this.config.status_id).appendChild(this.issueEl);
-
-           this.make_Drag_N_Drop();
-        },
-        makeStatuses: function(statuses) {
-            var statusElements = {};
-            
-            statuses.each(function(status){
-                statusElements[status.issue_status_id] = new Element('td');
-            })
-            return $H(statusElements);
-        },
-        drawStatuses: function() {
-            this.statuses.each(function(pair) {
-                this.el.appendChild(pair.value);
-                pair.value.update('&nbsp;')
-            }, this);
-        },
-        make_Drag_N_Drop: function() {
-            this.draggable = new Draggable(this.issueEl, { 
-                revert: true,
-                constraint: 'horizontal',
-                onDrop: function(dragged, dropped, event) {
-                    this.statuses.each(function(pair) {
-                        console.log(pair.value == dropped)
+        var Issue = Class.create({
+            initialize: function(config, statuses, url) {
+                // -
+                // private
+                var issue = this;
+                var id = "scrumbler_dashboard_issue_" + config.id;
+                var url = url+'/issue/'+config.id;
+                var row = new Element('tr');
+                var issueEl = new Element('div', {
+                    'class': 'scrumbler_dashboard_issue',
+                    id: id
+                });
+                var makeStatusElements = function() {
+                    var statusElements = {};
+                    statuses.each(function(status){
+                        statusElements[status.issue_status_id] = new Element('td');
+                        statusElements[status.issue_status_id].scrumbler_status = status;
                     })
-                }.bind(this)
-            });
-            this.statuses.each(function(pair) {
+                    return $H(statusElements); 
+                };
                 
-                Droppables.add(pair.value, {
-                    accept: 'scrumbler_dashboard_issue',
-                    onDrop: function(dragged, dropped, event) {
-                        if(dragged == this.issueEl) {
-                            dropped.appendChild(dragged)
-                        }
-                    }.bind(this)
+                
+                // +
+                // public
+                this.getID      = function() { return id };
+                this.getRow     = function() { return row };
+                this.getIssueEl = function() { return issueEl };
+                this.getConfig  = function() { return config };
+                this.statuses   = makeStatusElements(statuses);
+                this.getURL     = function() { return url };
+          
+                this.render();
+                this.makeInteractive();
+
+
+            },
+            render: function() {
+                this.getIssueEl().update(this.getConfig().subject);
+                
+                // Draw statuses
+                this.statuses.each(function(pair) {
+                    this.getRow().appendChild(pair.value);
+                    pair.value.update('&nbsp;')
+                }, this);
+
+                this.statuses.get(this.getConfig().status_id).appendChild(this.getIssueEl());
+                
+            },
+            makeInteractive: function() {
+                // -
+                // private
+                var issue = this;
+                var draggable = new Draggable(this.getIssueEl(), {
+                    revert : true,
+                    constraint: 'horizontal'
                 });
                 
-            }, this);
-        }
-    });
+                function makeDroppableEl (status) {
+                    function onDrop(dragEl, dropEl, event) {
+                        if((dragEl != issue.getIssueEl()) || 
+                            !dropEl.scrumbler_status) return;
+                        
+                        issue.getIssueEl().hide();
+                        var status = dropEl.scrumbler_status;
+                        console.log(status)
+                        new Ajax.Request(issue.getURL(),
+                        {
+                            method:'post',
+                            parameters: {
+                                'issue[status_id]': status.issue_status_id
+                            },
+                            onSuccess: function(transport){
+                                dropEl.appendChild(issue.getIssueEl());
+                            },
+                            onFailure: function(){ 
+                                alert('Something went wrong...') 
+                            },
+                            onComplete: function() {
+                                issue.getIssueEl().show()
+                            }
+                        });
+                        
+                        
+                    }
+                    
+                    Droppables.add(status, {
+                        accept: 'scrumbler_dashboard_issue',
+                        onDrop: onDrop
+                    });
+                };
+                
+                // Create droppables
+                this.statuses.each(function(pair) { makeDroppableEl(pair.value); });
+            }
+        });
 
 
-    var DashboardModule = {
-       drawStatuses: function() {
-            var tr = this.table.appendChild(new Element('tr'));
-            var colWidth = 100/this.statuses.length;
-            this.statuses.each(function(status){
-                var th = tr.appendChild(new Element('th', {
-                    width: ''+colWidth+'%'
-                }));
-                th.update(status.name);
-            }, this);
-        },
-        makeIssues: function() {
-            var issues = [];
-            this.config.issues.each(function(issue) {
-                issues.push(new Issue(issue, this.statuses));
-            }, this);
-            return issues;
-        },
-        drawIssues: function() {
-            this.issues.each(function(issue) {
-                this.table.appendChild(issue.el)
-            }, this)
-        } 
-    }
-    var Dashboard = Class.create(DashboardModule, {
-        initialize: function(dashboard, config) {
-            // private
-        
-            
-        
-            // public
-            this.config = config;
-            this.statuses = config.statuses;
-            
-            this.table = new Element('table', {'width': '100%'}, {
-            });
-            
-            
-            this.drawStatuses();
-     
-            this.issues = this.makeIssues();
-            this.drawIssues();
-
-            console.log(1)
-            this.dashboard = $(dashboard);
-            this.dashboard.appendChild(this.table);
-        }
-        
-    });
     
-    return Dashboard;
-})();
+        var Dashboard = Class.create({
+            initialize: function(dashboard, config) {
+                // -
+                // private
+                function makeIssues(config) {
+                    var issues = [];
+                    config.issues.each(function(issue) {
+                        issues.push(new Issue(issue, config.statuses, config.url));
+                    });
+                    return issues;
+                }
+            
+        
+                // +
+                // public
+                this.dashboard = $(dashboard);
+                this.config = config;
+                this.statuses = config.statuses;
+                this.issues = makeIssues(config);
+            
+                this.render();
+            },
+            render: function() {
+                // -
+                // private
+                var drawStatuses = function () {
+                    var tr = this.table.appendChild(new Element('tr'));
+                    var colWidth = 100/this.statuses.length;
+                    this.statuses.each(function(status){
+                        var th = tr.appendChild(new Element('th', { width: ''+colWidth+'%' }));
+                        th.update(status.name);
+                    }, this);
+                }.bind(this)
+            
+                // +
+                // public
+                this.table = new Element('table', {'width': '100%'}, {});
+                
+                drawStatuses();
+                
+                // drawIssues
+                this.issues.each(function(issue) { this.table.appendChild(issue.getRow()) }, this)
+                
+                // Append table to dashboard
+                this.dashboard.appendChild(this.table);
+            }
+        });
+    
+        return Dashboard;
+    })();
 
 </script>
 
 <div id="scrumbler_sprint">
     <% if sprint %>
-    <div class="contextual">
-        <%= link_to "Настройки спринта", settings_project_scrumbler_sprint_url(@project, sprint) %>
-    </div>
-    <h3><%= sprint.name %></h3>
-    <div id="dashboard_for_sprint_<%=  sprint.id%>"></div>
-    <script>
-        var d = new ScrumblerDashboard('dashboard_for_sprint_<%= sprint.id %>', 
-                                <%= {
-                                    :sprint => sprint,
-                                    :project => @project,
-                                    :statuses => sprint.scrumbler_sprint_statuses,
-                                    :issues => sprint.issues
-                                    }.to_json %>);
-    </script>
+        <div class="contextual">
+            <%= link_to "Настройки спринта", settings_project_scrumbler_sprint_url(@project, sprint) %>
+        </div>
+        <h3><%= sprint.name %></h3>
+        <div id="dashboard_for_sprint_<%=  sprint.id%>"></div>
+        <script>
+            var d = new ScrumblerDashboard('dashboard_for_sprint_<%= sprint.id %>', 
+    <%= {
+        :sprint => sprint,
+        :project => @project,
+        :statuses => sprint.scrumbler_sprint_statuses,
+        :issues => sprint.issues,
+        :url => project_scrumbler_sprint_url(@project, sprint)
+    }.to_json %>);
+        </script>
     <% else %>
         <p id="errorExplanation"><%=l :error_sprint_not_found_in_project %></p>
     <% end %>
