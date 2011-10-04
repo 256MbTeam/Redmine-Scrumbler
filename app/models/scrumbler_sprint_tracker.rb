@@ -25,4 +25,13 @@ class ScrumblerSprintTracker < ActiveRecord::Base
   validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id, :if => :new_record?
 
   serialize :settings, Hash
+  
+  def color=(value)
+    self.settings[:color] = value
+  end
+  
+  def after_initialize
+    self.settings ||= {}
+    self.settings[:color] ||= '000000'
+  end
 end

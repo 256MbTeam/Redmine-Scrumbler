@@ -2,8 +2,20 @@ module ScrumberHelper
 
 
   def select_color_tag(params)
-    out = "<input type='text' id='#{params[:id]}' name='#{params[:name]}' class='color_input' value='#{params[:value]}' size='6'> <div id='#{params[:id]}_preview' class='color_preview' style='background-color: #{params[:value]};'></div>"
-    out << javascript_tag("new colorPicker('#{params[:id]}',{color:'#{params[:value]}', previewElement:'#{params[:id]}_preview'})")
+    x_id = "color_#{params[:id]}"
+    previev_element_id = "#{params[:id]}_preview"
+    out = text_field_tag params[:name], params[:value], {
+      :class => 'color_input',
+      :x_id => x_id,
+      :size => 6
+    }
+    out << "<div id='#{previev_element_id}' class='color_preview' style='background-color: #{params[:value]};'></div>"
+    picker_config = {
+      :color => params[:value],
+      :previewElement => previev_element_id
+    }.to_json
+    
+    out << javascript_tag("new colorPicker($$('input[x_id=#{x_id}]')[0], #{picker_config})")
   end
   
   def draw_scrumbler_dashboard(sprint)
