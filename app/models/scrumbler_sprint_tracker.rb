@@ -27,6 +27,8 @@ class ScrumblerSprintTracker < ActiveRecord::Base
     end
   end
   
+  default_scope :include => [:tracker]
+  
   serialize :settings, Hash
  
   has_setting :color, :default => "000000"
