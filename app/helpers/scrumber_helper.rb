@@ -40,7 +40,7 @@ module ScrumberHelper
       :sprint => sprint,
       :project => sprint.project,
       :statuses => sprint.scrumbler_sprint_statuses,
-      :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.id,t]}.flatten],
+      :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
       :issues => sprint.issues,
       :url => project_url(sprint.project)
     }.to_json
