@@ -1,26 +1,29 @@
 <h3><%=l :label_issue_statuses%></h3>
 
 <% form_tag update_issue_statuses_project_scrumbler_sprint_url(@project, @project_sprint) do%>
-    <table class="list">
-        <thead>
-            <tr>
-                <th><%=l :label_issue_status_plural %></th>
-                <th width="100px"><%=l :maintracker_use?%></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @issue_statuses.each do |issue_status| %>
-                <tr class="<%= cycle 'odd', 'even' %>">
-                    <td><%=  issue_status.name%></td>
-                    <td>
-                        <%= check_box_tag "scrumbler_issue_statuses[]", 
-                                          issue_status.id, 
-                                          @enabled_issue_statuses_ids.include?(issue_status.id)  
-                        %>
-                    </td>
-                </tr>
-            <% end %>
-        </tbody>
-    </table>
-    <p><%= submit_tag(l(:button_update)) %></p>
+  <table class="list">
+    <thead>
+      <tr>
+        <th align="left"><%=l :label_issue_status_plural %></th>
+        <th width="100px"><%=l :maintracker_use?%></th>
+        <th width="100px"><%=t "active_record.models.scrumbler_sprint_status.priority" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @issue_statuses.each do |issue_status| %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td><%=  issue_status.name%></td>
+          <td align="center">
+            <%= check_box_tag "scrumbler_issue_statuses[][issue_status_id]", 
+              issue_status.id, 
+              @enabled_issue_statuses.has_key?(issue_status.id)
+          %>
+          </td>
+          <td>
+            <%= text_field_tag "scrumbler_issue_statuses[][priority]",  @enabled_issue_statuses[issue_status.id].try(:priority) || 500, :size => 3%> </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p><%= submit_tag(l(:button_update)) %></p>
 <% end %>
