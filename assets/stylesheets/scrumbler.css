@@ -1,13 +1,14 @@
 div.scrumbler_dashboard_issue {
-    border: 1px solid red;
+    border: 1px solid #333333;
     height: 50px;
     background: white;
 }
 
-td.xxx {
-    border: 5px dashed red !important;
+div.scrumbler_dashboard_issue_color{
+/*    border: 1px solid black;*/
+    width:100%;
+    height:15px;
 }
-
 
 div#scrumbler_sprint table {
     border-collapse:collapse;

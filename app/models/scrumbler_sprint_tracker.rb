@@ -33,7 +33,7 @@ class ScrumblerSprintTracker < ActiveRecord::Base
   
   belongs_to :scrumbler_sprint
   
-  has_many :trackers
+  belongs_to :tracker
 
   validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id, :if => :new_record?
 
@@ -42,6 +42,10 @@ class ScrumblerSprintTracker < ActiveRecord::Base
     self.settings ||= {}
   end
   
-   
+   def as_json(*args)
+    json = super
+    json[:name] = self.tracker.name
+    json
+  end
   
 end

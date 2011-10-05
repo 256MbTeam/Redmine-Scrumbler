@@ -22,7 +22,7 @@
           <td><%=  tracker.name%></td>
           <td><%=  select_color_tag({:id => tracker.id, :name => "scrumbler_sprint[scrumbler_sprint_trackers][][color]", :value => existing_tracker.try(:settings).try("[]", :color) || "FFFFFF"}) %></td>
 
-          <td>
+          <td align="center">
             <%= check_box_tag "scrumbler_sprint[scrumbler_sprint_trackers][][tracker_id]", 
               tracker.id, 
               @enabled_trackers_ids.include?(tracker.id)  
