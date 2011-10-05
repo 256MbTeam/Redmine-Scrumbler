@@ -14,3 +14,5 @@ ru:
       scrumbler_sprint_tracker:
         priority: "Приоритет"
         color: "Цвет"
+      scrumbler_sprint_status:
+        priority: "Приоритет"

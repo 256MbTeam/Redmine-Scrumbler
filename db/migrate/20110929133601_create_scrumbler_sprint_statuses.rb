@@ -3,7 +3,7 @@ class CreateScrumblerSprintStatuses < ActiveRecord::Migration
     create_table :scrumbler_sprint_statuses do |t|
       t.references :scrumbler_sprint
       t.references :issue_status
-      t.integer :priority, :nil => false
+      t.integer :priority, :default => 500, :nil => false
     end
     
     add_index :scrumbler_sprint_statuses, :priority

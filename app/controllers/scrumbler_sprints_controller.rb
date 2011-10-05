@@ -24,7 +24,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     @trackers = @project.trackers
     @enabled_trackers_ids = @scrumbler_sprint.scrumbler_sprint_trackers.map(&:tracker_id)
     @issue_statuses = IssueStatus.all
-    @enabled_issue_statuses_ids = @scrumbler_sprint.scrumbler_sprint_statuses.map(&:issue_status_id)
+    @enabled_issue_statuses = Hash[*@scrumbler_sprint.scrumbler_sprint_statuses.map{|s| [s.issue_status_id, s] }.flatten]
   end
   
   def update_trackers
@@ -75,24 +75,35 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue_statuses
-    @scrumbler_issue_statuses = params[:scrumbler_issue_statuses].map(&:to_i)
+    params[:scrumbler_issue_statuses].delete_if { |o|  !o[:issue_status_id]}
     
-    @enabled_issue_statuses = @scrumbler_sprint.scrumbler_sprint_statuses.map(&:issue_status_id)
+    @scrumbler_issue_statuses_ids = params[:scrumbler_issue_statuses].map{|o| o[:issue_status_id].to_i}
+    
+    @enabled_issue_statuses_ids = @scrumbler_sprint.scrumbler_sprint_statuses.map(&:issue_status_id)
        
-    @to_create_issue_statuses = @scrumbler_issue_statuses.find_all { |e| !@enabled_issue_statuses.include? e.to_i }
+    @to_create_issue_statuses = params[:scrumbler_issue_statuses].find_all { |e| !@enabled_issue_statuses_ids.include? e[:issue_status_id].to_i }
     
-    @to_destroy_issue_statuses = @enabled_issue_statuses - @scrumbler_issue_statuses
+    @to_update_issue_statuses = params[:scrumbler_issue_statuses] - @to_create_issue_statuses
+    
+    @to_destroy_issue_statuses_ids = @enabled_issue_statuses_ids - @scrumbler_issue_statuses_ids
     
     ScrumblerSprintStatus.transaction do
       begin
         if @to_create_issue_statuses.any?
-          @to_create_issue_statuses.each {|status_id| 
-            @scrumbler_sprint.scrumbler_sprint_statuses.create({:issue_status_id => status_id.to_i})
+          @to_create_issue_statuses.each {|status| 
+            @scrumbler_sprint.scrumbler_sprint_statuses.create(status)
+          }
+        end
+        
+        if @to_update_issue_statuses.any?
+          @to_update_issue_statuses.each {|status_params|
+            sprint_tracker = @scrumbler_sprint.scrumbler_sprint_statuses.first(:conditions => {:issue_status_id => status_params[:issue_status_id]})
+            sprint_tracker.update_attributes!(status_params)
           }
         end
       
-        if @to_destroy_issue_statuses.any?
-          ScrumblerSprintStatus.delete_all(["issue_status_id in(?) and scrumbler_sprint_id = ?", @to_destroy_issue_statuses, @scrumbler_sprint.id])
+        if @to_destroy_issue_statuses_ids.any?
+          ScrumblerSprintStatus.delete_all(["issue_status_id in(?) and scrumbler_sprint_id = ?", @to_destroy_issue_statuses_ids, @scrumbler_sprint.id])
         end
       rescue Exception => e  
         puts e.message  
