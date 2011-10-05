@@ -22,6 +22,7 @@ class ScrumblerController < ScrumblerAbstractController
   
   def index
     @scrumbler_sprints = @project.scrumbler_sprints
+    @scrumbler_sprint = ScrumblerSprint.find(params[:scrumbler_sprint_id]) rescue @scrumbler_sprints.last
   end
   
   def sprint
