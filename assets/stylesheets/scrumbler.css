@@ -28,3 +28,36 @@ div#scrumbler_sprint table, div#scrumbler_sprint table th, div#scrumbler_sprint 
 div#scrumbler_sprint table tr td{
     height: 50px;
 }
+
+div.Growler-notice {
+	background-color: 		#000;
+	color: 					#fff;
+	opacity: 				.85;
+	filter: 				alpha(opacity = 85);
+	zoom: 					1;
+	width: 					235px;
+	padding: 				10px;
+	margin-top: 			5px;
+	margin-bottom: 			5px;
+	margin-left: 			auto;
+	margin-right: 			auto;
+	font-family: 			Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 				12px;
+	text-align: 			left;
+	display: 				none;
+	-moz-border-radius: 	5px;
+	-webkit-border-radius:	5px;
+	min-height: 			40px;
+}
+
+div.Growler-notice-head {
+	font-weight: 			bold;
+	font-size:				10px;
+}
+
+div.Growler-notice-exit {
+	float: 					right;
+	font-weight: 			bold;
+	font-size: 				12px;
+	cursor:					pointer;
+}

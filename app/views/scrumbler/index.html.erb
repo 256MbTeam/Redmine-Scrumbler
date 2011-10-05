@@ -1,5 +1,7 @@
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+    <%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
+    <%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
     <%= javascript_include_tag 'dashboard', :plugin => 'redmine_scrumbler' %>
 <% end %>
 

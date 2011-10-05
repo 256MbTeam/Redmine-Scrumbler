@@ -117,7 +117,9 @@ var ScrumblerDashboard = (function() {
                                         issue.status_id = status.issue_status_id;
                                         dropEl.appendChild(issue.getIssueEl());
                                     } else {
-                                        alert(resp.text);
+                                        console.log($growler.growl(resp.text, {
+                                            header: 'Ошибка'
+                                        }));
                                     }
                                 
                                 },
