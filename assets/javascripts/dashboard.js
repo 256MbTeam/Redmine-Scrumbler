@@ -17,14 +17,16 @@ var ScrumblerDashboard = (function() {
      <a href='#{issue_url}'>#{issue_subject}</a>");
 
     var Issue = Class.create({
-        initialize: function(sprint, config, statuses, trackers, url) {
+        initialize: function(sprint, config, statuses, trackers, url, css_class) {
             // -
             // private
             var id = "scrumbler_dashboard_issue_" + config.id;
             var issue_url = '/issues/'+config.id;
             var tracker_url = url+'/issues?tracker_id='+config.tracker_id;
             var sprint_url = url+'/scrumbler_sprints/'+sprint.id+'/issue/'+config.id;
-            var row = new Element('tr');
+            var row = new Element('tr', {
+                'class' : css_class
+            });
             var issueEl = new Element('div', {
                 'class': 'scrumbler_dashboard_issue',
                 id: id
@@ -161,13 +163,20 @@ var ScrumblerDashboard = (function() {
             // private
             function makeIssues(config) {
                 var issues = [];
+                var css_class = ['odd','even'];
+                var css_selector = 0;
                 config.issues.each(function(issue) {
-                    issues.push(new Issue(config.sprint , issue, config.statuses, config.trackers, config.url));
+                    if(css_selector==0)
+                        css_selector = 1
+                    else
+                        css_selector = 0
+                    issues.push(new Issue(config.sprint , issue, config.statuses, config.trackers, config.url, css_class[css_selector]));
                 });
                 return issues;
             }
             var table  = new Element('table', {
-                'width': '100%'
+                'width': '100%',
+                'class': 'list'
             }, {})
             var issues = makeIssues(config);
             
