@@ -1,7 +1,7 @@
 module ScrumberSprintsHelper
   def scrumbler_sprint_settings_tabs
-    tabs = [{:name => 'trackers', :action => :edit_project, :partial => 'trackers', :label => :label_information_plural},
-            {:name => 'issue-statuses', :action => :select_project_modules, :partial => 'issue_statuses', :label => :label_module_plural},
+    tabs = [{:name => 'trackers', :action => :update_trackers, :partial => 'trackers', :label => :label_tracker_plural},
+            {:name => 'issue_statuses', :action => :update_issue_statuses, :partial => 'issue_statuses', :label => :label_issue_statuses},
             ]
   end
 end

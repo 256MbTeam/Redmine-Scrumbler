@@ -70,7 +70,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     end
       
     flash[:notice] = t :notice_successful_update unless flash[:error]
-    redirect_to settings_project_scrumbler_sprint_url(@project, @scrumbler_sprint)
+    redirect_to project_scrumbler_sprint_settings_url(@project, @scrumbler_sprint, :trackers)
 
   end
   
@@ -111,7 +111,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     end
       
     flash[:notice] = t :notice_successful_update unless flash[:error]
-    redirect_to settings_project_scrumbler_sprint_url(@project, @scrumbler_sprint)
+    redirect_to project_scrumbler_sprint_settings_url(@project, @scrumbler_sprint, :issue_statuses)
     
   end
   

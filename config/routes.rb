@@ -7,10 +7,12 @@ ActionController::Routing::Routes.draw do |map|
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler'
     
     project.resources :scrumbler_sprints, :member => {
-      :settings => :get,
       :update_trackers => :post,
       :update_issue_statuses => :post,
     } do |sprint|
+    sprint.settings     'settings/:tab', :tab => nil,
+                                         :path_prefix => '/projects/:project_id/scrumbler_sprints/:id',
+                                         :controller => :scrumbler_sprints, :action => :settings, :method => :get
     sprint.update_issue 'issue/:issue_id', :path_prefix => '/projects/:project_id/scrumbler_sprints/:id',
                                             :controller => :scrumbler_sprints, :action => :update_issue, :method => :post
     end
