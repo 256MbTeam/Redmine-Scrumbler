@@ -7,11 +7,14 @@ var ScrumblerDashboard = (function() {
 
     var ISSUE_TEMPLATE = new Template(
         "<div class='scrumbler_dashboard_issue_heading' >\n\
-        <div class='scrumbler_dashboard_issue_color' style='background: ##{color};'>&nbsp;\n\
-        <a href='#{tracker_url}'>#{tracker_name}</a>\n\
+            <div class='scrumbler_dashboard_issue_color' style='background: ##{color};'>&nbsp;\n\
+                <a href='#{tracker_url}'>#{tracker_name}</a>\n\
+                <div class='scrumbler_dashboard_issue_id'>\n\
+                    <a href='#{issue_url}'>##{issue_id}</a>\n\
+                </div>\n\
+            </div>\n\
         </div>\n\
-     </div>\n\
-     <a href='#{issue_url}'>#{subject}</a>");
+     <a href='#{issue_url}'>#{issue_subject}</a>");
 
     var Issue = Class.create({
         initialize: function(sprint, config, statuses, trackers, url) {
@@ -73,7 +76,8 @@ var ScrumblerDashboard = (function() {
                 issue_url: this.getIssueURL(),
                 tracker_url: this.getTrackerURL(),
                 tracker_name: this.getTrackers()[this.getConfig().tracker_id].name,
-                subject: this.getConfig().subject,
+                issue_subject: this.getConfig().subject,
+                issue_id: this.getConfig().id,
                 //description: this.getConfig().description, 
                 color: this.getTrackers()[this.getConfig().tracker_id].settings.color
             }));
@@ -102,34 +106,34 @@ var ScrumblerDashboard = (function() {
                     var status = dropEl.scrumbler_status;
                     
                     if(issue.status_id != status.issue_status_id) {
-                    issue.getIssueEl().hide();
-                    new Ajax.Request(issue.getURL(),
-                            {
-                                method:'post',
-                                parameters: {
-                                    'issue[status_id]': status.issue_status_id
-                                },
-                                onSuccess: function(transport){
-                                    var resp = transport.responseJSON;
-                                    if(!resp) return;
+                        issue.getIssueEl().hide();
+                        new Ajax.Request(issue.getURL(),
+                        {
+                            method:'post',
+                            parameters: {
+                                'issue[status_id]': status.issue_status_id
+                            },
+                            onSuccess: function(transport){
+                                var resp = transport.responseJSON;
+                                if(!resp) return;
 
-                                    if(resp.success) {
-                                        issue.status_id = status.issue_status_id;
-                                        dropEl.appendChild(issue.getIssueEl());
-                                    } else {
-                                        $growler.growl(resp.text, {
-                                            header: 'Ошибка'
-                                        });
-                                    }
-                                
-                                },
-                                onFailure: function(){ 
-                                    alert('Something went wrong...') 
-                                },
-                                onComplete: function() {
-                                    issue.getIssueEl().show()
+                                if(resp.success) {
+                                    issue.status_id = status.issue_status_id;
+                                    dropEl.appendChild(issue.getIssueEl());
+                                } else {
+                                    $growler.growl(resp.text, {
+                                        header: 'Ошибка'
+                                    });
                                 }
-                            });
+                                
+                            },
+                            onFailure: function(){ 
+                                alert('Something went wrong...') 
+                            },
+                            onComplete: function() {
+                                issue.getIssueEl().show()
+                            }
+                        });
                         
                     }
                         
