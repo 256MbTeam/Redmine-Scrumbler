@@ -19,7 +19,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   unloadable
 
   before_filter :find_scrumbler_sprint
-  
+  helper ScrumberSprintsHelper
   def settings
     @trackers = @project.trackers
     @enabled_trackers_ids = @scrumbler_sprint.scrumbler_sprint_trackers.map(&:tracker_id)
