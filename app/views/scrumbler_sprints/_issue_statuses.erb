@@ -14,13 +14,13 @@
         <tr class="<%= cycle 'odd', 'even' %>">
           <td><%=  issue_status.name%></td>
           <td align="center">
-            <%= check_box_tag "scrumbler_issue_statuses[][issue_status_id]", 
-              issue_status.id, 
+            <%= check_box_tag "scrumbler_issue_statuses[#{issue_status.id}][enabled]", 
+              true, 
               @enabled_issue_statuses.has_key?(issue_status.id)
           %>
           </td>
           <td>
-            <%= text_field_tag "scrumbler_issue_statuses[][priority]",  @enabled_issue_statuses[issue_status.id].try(:priority) || 500, :size => 3%> </td>
+            <%= text_field_tag "scrumbler_issue_statuses[#{issue_status.id}][priority]",  @enabled_issue_statuses[issue_status.id].try(:priority) || 500, :size => 3%> </td>
         </tr>
       <% end %>
     </tbody>

@@ -75,13 +75,13 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue_statuses
-    params[:scrumbler_issue_statuses].delete_if { |o|  !o[:issue_status_id]}
-    
-    @scrumbler_issue_statuses_ids = params[:scrumbler_issue_statuses].map{|o| o[:issue_status_id].to_i}
+    params[:scrumbler_issue_statuses].delete_if {|k, v| !v[:enabled]}
+
+    @scrumbler_issue_statuses_ids = params[:scrumbler_issue_statuses].keys.map &:to_i
     
     @enabled_issue_statuses_ids = @scrumbler_sprint.scrumbler_sprint_statuses.map(&:issue_status_id)
        
-    @to_create_issue_statuses = params[:scrumbler_issue_statuses].find_all { |e| !@enabled_issue_statuses_ids.include? e[:issue_status_id].to_i }
+    @to_create_issue_statuses = Hash[*params[:scrumbler_issue_statuses].find_all { |status_id, val| !@enabled_issue_statuses_ids.include? status_id.to_i }.flatten]
     
     @to_update_issue_statuses = params[:scrumbler_issue_statuses] - @to_create_issue_statuses
     
