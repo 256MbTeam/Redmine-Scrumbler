@@ -28,43 +28,39 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_trackers
-    # delete empty data
-    params[:scrumbler_sprint][:scrumbler_sprint_trackers].delete_if { |obj|  !obj[:tracker_id]}
-    
-    # select existing trackers id
-    @existing_sprint_trackers_ids = @scrumbler_sprint.scrumbler_sprint_trackers.map &:tracker_id
-    
-    # trackers id from params
-    @new_sprint_trackers_ids =  params[:scrumbler_sprint][:scrumbler_sprint_trackers].map {|obj| obj[:tracker_id].to_i}
+    @trackers = {
+      :enabled => @scrumbler_sprint.scrumbler_sprint_trackers.map(&:tracker_id),
+      :update => [],
+      :create => [],
+      :destroy => []
+    }
+    params[:scrumbler_sprint][:scrumbler_sprint_trackers].each {|tracker_id, val| 
+      tracker_id = tracker_id.to_i
+      
+      if val.delete(:enabled)
+        key = @trackers[:enabled].include?(tracker_id) ? :update : :create
+        @trackers[key] << val.merge({:tracker_id => tracker_id})
+      else
+        @trackers[:destroy] << tracker_id
+      end
+    }
 
-    # select trackers for create
-    @to_create_trackers = params[:scrumbler_sprint][:scrumbler_sprint_trackers].find_all { |e| !@existing_sprint_trackers_ids.include? e[:tracker_id].to_i }
-    
-    # select trackers for update
-    @to_update_trackers = params[:scrumbler_sprint][:scrumbler_sprint_trackers] - @to_create_trackers
-    
-    # select trackers for destroy
-    @to_destroy_trackers_ids = @existing_sprint_trackers_ids - @new_sprint_trackers_ids
 
     ScrumblerSprintTracker.transaction do
       begin
-        if @to_create_trackers.any?
-          @to_create_trackers.each {|tracker_params| @scrumbler_sprint.scrumbler_sprint_trackers.create(tracker_params) }
-        end
+        @trackers[:create].each {|tracker|
+          @scrumbler_sprint.scrumbler_sprint_trackers.create(tracker)
+        }
       
-        if @to_update_trackers.any?
-          @to_update_trackers.each {|tracker_params|
-            sprint_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.first(:conditions => {:tracker_id => tracker_params[:tracker_id]})
-            sprint_tracker.update_attributes!(tracker_params)
-          }
-        end
+        @trackers[:update].each {|tracker|
+          sprint_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.first(:conditions => {:tracker_id => tracker[:tracker_id]})
+          sprint_tracker.update_attributes!(tracker)
+        }
         
-        if @to_destroy_trackers_ids.any?
-          ScrumblerSprintTracker.delete_all(["tracker_id in(?) and scrumbler_sprint_id = ?", @to_destroy_trackers_ids, @scrumbler_sprint.id])
+        if @trackers[:destroy].any?
+          ScrumblerSprintTracker.delete_all(["tracker_id in(?) and scrumbler_sprint_id = ?", @trackers[:destroy], @scrumbler_sprint.id])
         end
       rescue Exception => e  
-        puts e.message  
-        puts e.backtrace.inspect
         flash[:error] = t :error_scrumbler_maintrackers_update
       end
     end

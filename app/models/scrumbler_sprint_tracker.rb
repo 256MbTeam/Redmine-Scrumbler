@@ -21,6 +21,7 @@ class ScrumblerSprintTracker < ActiveRecord::Base
   class << self
     def has_setting attr_name, args = {}
       self.send :define_method, "#{attr_name}=" do |value|
+        self.settings ||= {}
         self.settings[attr_name] ||= args[:default]
         self.settings[attr_name] = value
       end
@@ -39,11 +40,6 @@ class ScrumblerSprintTracker < ActiveRecord::Base
 
   validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id, :if => :new_record?
 
-
-  def after_initialize
-    self.settings ||= {}
-  end
-  
    def as_json(*args)
     json = super
     json[:name] = self.tracker.name
