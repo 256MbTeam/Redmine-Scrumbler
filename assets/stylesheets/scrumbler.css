@@ -31,8 +31,8 @@ div.scrumbler_dashboard_issue_id > a{
     border-collapse:collapse;
 }*/
 div#scrumbler_sprint table, div#scrumbler_sprint table th, div#scrumbler_sprint table.list td {
-    border-left: 1px solid #EEE;
-    border-right: 1px solid #EEE;
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
 }
 
 div#scrumbler_sprint table tr td{
