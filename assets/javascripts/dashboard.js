@@ -74,6 +74,10 @@ var ScrumblerDashboard = (function() {
             });
         },
         render: function() {
+            var color = '507AAA';
+            if(this.getTrackers()[this.getConfig().tracker_id].settings) {
+            color = this.getTrackers()[this.getConfig().tracker_id].settings.color
+            }
             this.getIssueEl().update(ISSUE_TEMPLATE.evaluate({
                 issue_url: this.getIssueURL(),
                 tracker_url: this.getTrackerURL(),
@@ -81,7 +85,7 @@ var ScrumblerDashboard = (function() {
                 issue_subject: this.getConfig().subject,
                 issue_id: this.getConfig().id,
                 //description: this.getConfig().description, 
-                color: this.getTrackers()[this.getConfig().tracker_id].settings.color
+                color: color
             }));
 
             // Draw statuses

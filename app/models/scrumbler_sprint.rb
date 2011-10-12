@@ -46,7 +46,7 @@ ORDER BY scrumbler_sprint_trackers.priority DESC, issues.id ASC), :readonly => t
   
   def after_create
     scrumbler_project_setting.maintrackers.each {|tracker_id|
-      self.scrumbler_sprint_trackers.create(:tracker_id => tracker_id)
+      self.scrumbler_sprint_trackers.create(:tracker_id => tracker_id, :color => 'FF0000')
     }
     scrumbler_project_setting.settings[:issue_statuses].each {|issue_status_id|
       self.scrumbler_sprint_statuses.create(:issue_status_id => issue_status_id)

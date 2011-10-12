@@ -40,7 +40,11 @@ class ScrumblerSprintTracker < ActiveRecord::Base
 
   validates_uniqueness_of :tracker_id, :scope => :scrumbler_sprint_id, :if => :new_record?
 
-   def as_json(*args)
+  def after_initialize
+    
+  end
+  
+  def as_json(*args)
     json = super
     json[:name] = self.tracker.name
     json
