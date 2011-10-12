@@ -22,11 +22,9 @@ module Scrumbler
 
       module InstanceMethods
         def version_created
-          Redmine::Hook.call_hook(:create_version, :version => self)
-        end
-        
-        def version_destroed
-          Redmine::Hook.call_hook(:destroy_version, :version => self)
+          Infectors::integration_module_for(self.project) do
+            create_scrumbler_sprint(:project => self.project)
+          end
         end
       end
       

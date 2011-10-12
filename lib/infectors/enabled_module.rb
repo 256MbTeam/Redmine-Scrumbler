@@ -22,11 +22,16 @@ module Scrumbler
 
       module InstanceMethods
         def enable_module
-          Redmine::Hook.call_hook(:enable_module, {:module => self, :project => project})
+          if self.name == Scrumbler::MODULE_NAME
+            self.project.create_scrumbler_project_setting(:maintrackers => self.project.trackers.map(&:id))
+            self.project.create_scrumbler_sprints
+          end
         end
         
         def disable_module
-          Redmine::Hook.call_hook(:disable_module, {:module => self, :project => project})
+          if self.name == Scrumbler::MODULE_NAME
+            self.project.scrumbler_sprints.destroy_all
+          end
         end
         
       end

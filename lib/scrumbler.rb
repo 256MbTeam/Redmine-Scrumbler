@@ -17,5 +17,11 @@
 
 module Scrumbler
   MODULE_NAME = "redmine_scrumbler"
-  module Infectors;end
+  module Infectors
+    def self.integration_module_for(project)
+      if project.module_enabled?(Scrumbler::MODULE_NAME)
+        yield
+      end 
+    end
+  end
 end
