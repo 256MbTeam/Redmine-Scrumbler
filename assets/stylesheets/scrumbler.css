@@ -20,18 +20,21 @@ div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color {
 div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color > a{
     background-color: white;
     padding: 0 1em;
+    border-radius: 5px;
 }
+
 div.scrumbler_issue_body {
     padding: 0 0.5em 0.25em;
 }
 
 div.scrumbler_dashboard_issue_id{
-    padding: 0 .5em;
+    margin: 0 1em;
     float: right;
+    border-radius: 5px;
+    padding: 0 .5em;
+    background-color: white;
 }
 div.scrumbler_dashboard_issue_id > a{
-    background-color: white;
-    padding: 0 .5em;
 }
 div#scrumbler_sprint table, div#scrumbler_sprint table th, div#scrumbler_sprint table.list td {
     border-left: 1px solid #DDD;
