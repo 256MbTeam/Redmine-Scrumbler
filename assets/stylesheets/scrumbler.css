@@ -18,7 +18,7 @@ div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color > a{
     padding: 0 1em;
 }
 div.scrumbler_issue_body {
-    padding: 0.25em 0.5em 0;
+    padding: 0 0.5em 0.25em;
 }
 
 div.scrumbler_dashboard_issue_id{
