@@ -45,7 +45,7 @@ module ScrumberHelper
       :url => project_url(sprint.project)
     }.to_json
     out = "<div id='#{div_id}'></div>"
-    out << javascript_tag("new ScrumblerDashboard(#{div_id}, #{config})")
+    out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
   end
   
 end
