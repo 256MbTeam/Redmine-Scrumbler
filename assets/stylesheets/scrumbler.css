@@ -1,7 +1,10 @@
 div.scrumbler_dashboard_issue {
-    border: 1px solid #333333;
+    border: 2px solid #ccc;
     height: 100%;
     background: white;
+    box-shadow: 0px 6px 25px #777;
+    margin: .5em;
+    border-radius: 12px;
 }
 
 div.scrumbler_dashboard_issue_heading{
@@ -12,6 +15,7 @@ div.scrumbler_dashboard_issue_heading{
 div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color {
     width: 100%;
     padding: 2px 0;
+    border-radius: 10px 10px 0 0;
 }
 div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color > a{
     background-color: white;
