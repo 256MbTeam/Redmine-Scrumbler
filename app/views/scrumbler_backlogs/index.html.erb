@@ -1,0 +1,8 @@
+<h2><%=l(:label_backlog)%></h2>
+<div id="project_backlogs">
+    <% @project.issues.without_version.each do |issue| %>
+        <div class="circle">
+            <p><%= issue.subject %></p>
+        </div>    
+    <% end %>
+</div>

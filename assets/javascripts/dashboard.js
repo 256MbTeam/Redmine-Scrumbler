@@ -14,7 +14,9 @@ var ScrumblerDashboard = (function() {
                 </div>\n\
             </div>\n\
         </div>\n\
-     <a href='#{issue_url}'>#{issue_subject}</a>");
+        <div class='scrumbler_issue_body'>\n\
+            <a href='#{issue_url}'>#{issue_subject}</a>\n\
+        </div>");
 
     var Issue = Class.create({
         initialize: function(sprint, config, statuses, trackers, url, css_class) {
@@ -76,7 +78,7 @@ var ScrumblerDashboard = (function() {
         render: function() {
             var color = '507AAA';
             if(this.getTrackers()[this.getConfig().tracker_id].settings) {
-            color = this.getTrackers()[this.getConfig().tracker_id].settings.color
+                color = this.getTrackers()[this.getConfig().tracker_id].settings.color
             }
             this.getIssueEl().update(ISSUE_TEMPLATE.evaluate({
                 issue_url: this.getIssueURL(),

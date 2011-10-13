@@ -9,6 +9,7 @@ ru:
   label_issue_statuses: "Основные статусы задач"
   error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
   label_sprint_back: "Вернуться в спринт"
+  label_backlog: "Бэклог"
   active_record:
     models:
       scrumbler_sprint_tracker:
