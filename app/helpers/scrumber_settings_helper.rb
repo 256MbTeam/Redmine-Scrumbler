@@ -15,27 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class ScrumblerProjectSetting < ActiveRecord::Base
-  unloadable
-  belongs_to :project
-  
-  serialize :settings, Hash
-    
-  def after_initialize
-    self.settings ||= {}
-    unless self.settings[:issue_statuses]
-      IssueStatus.all.each{|status|
-        self.settings[:issue_statuses][status.id] = {:use => status.is_default, :priority => status.position}
-      }
-    end
-    
-    unless self.settings[:trackers]
-      Tracker.all.each{|tracker|
-        self.settings[:trackers][tracker.id] = {}
-      }
-      
-    end
+module ScrumberSettingsHelper
+  def scrumbler_settings_tabs
+    [
+      {:name => 'trackers', :action => :update_maintrackers, :partial => 'maintrackers', :label => :label_tracker_plural},
+      {:name => 'issue_statuses', :action => :update_issue_statuses, :partial => 'issue_statuses', :label => :label_issue_statuses},
+    ]
   end
-  
- 
 end

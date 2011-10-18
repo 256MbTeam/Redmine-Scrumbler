@@ -17,10 +17,12 @@
 
 class ScrumblerSettingsController < ScrumblerAbstractController
   unloadable
-
+  
+  helper ScrumberSettingsHelper
   #  before_filter :authorize, :only => [:settings]
   
   def show
+    @issue_statuses = IssueStatus.all
   end
   
   def update_maintrackers

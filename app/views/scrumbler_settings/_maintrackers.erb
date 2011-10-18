@@ -1,11 +1,11 @@
-<h3><%=l :label_maintrackers%></h3>
-
 <% form_tag update_maintrackers_project_scrumbler_settings_url(@project) do%>
     <table class="list">
         <thead>
             <tr>
                 <th><%=l :label_tracker_plural %></th>
+                 <th width="100px"><%=l "active_record.models.scrumbler_sprint_tracker.color"%></th>
                 <th width="100px"><%=l :maintracker_use?%></th>
+                <th width="100px"><%=t "active_record.models.scrumbler_sprint_tracker.priority" %></th>
             </tr>
         </thead>
         <tbody>
