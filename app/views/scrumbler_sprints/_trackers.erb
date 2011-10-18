@@ -18,8 +18,9 @@
       <% @trackers.each do |tracker| %>
         <% existing_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.find_by_tracker_id(tracker.id) %>
         <tr class="<%= cycle 'odd', 'even' %>">
-          <td><%=  tracker.name%></td>
-          <td><%=  select_color_tag({:id => tracker.id, :name => "scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][color]", :value => existing_tracker.try(:settings).try("[]", :color) || "FFFFFF"}) %></td>
+          <td><%= tracker.name%></td>
+          <td><%= select_color_tag("scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][color]", existing_tracker.try(:settings).try("[]", :color), {:default_color=>"FAA"}) %>
+          </td>
 
           <td align="center">
             <%= check_box_tag "scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][enabled]", 
