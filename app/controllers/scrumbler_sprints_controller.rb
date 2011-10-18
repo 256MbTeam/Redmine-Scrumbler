@@ -136,15 +136,16 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def change_issue_assignment_to_me
-    p params
+    @issue = Issue.find(params[:issue_id])
+    @issue.assigned_to = User.current
+    render :json => {:success => @issue.save, :issue => issue_for_json(@issue)}
   end
   
   def drop_issue_assignment
     @issue = Issue.find(params[:issue_id])
     if @issue.assigned_to == User.current
       @issue.assigned_to = nil
-      #@issue.save
-      render :json => {:success => true, :issue => issue_for_json(@issue)}
+      render :json => {:success => @issue.save, :issue => issue_for_json(@issue)}
     else
       render :status => 403
     end
