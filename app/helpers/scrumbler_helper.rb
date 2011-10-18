@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module ScrumberHelper
+module ScrumblerHelper
 
   #  def select_color_tag(params)
   #    x_id = "color_#{params[:id]}"
@@ -39,10 +39,8 @@ module ScrumberHelper
     out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");
   end
   
-  def draw_scrumbler_dashboard(sprint)
-    div_id = "dashboard_for_sprint_#{sprint.id}"
-    prepared_issues = sprint.issues.map {|issue|
-      out = {
+  def issue_for_json(issue)
+    out = {
         :id => issue.id,
         :status_id => issue.status_id,
         :tracker_id => issue.tracker_id,
@@ -53,7 +51,11 @@ module ScrumberHelper
       out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
       
       out
-    }
+  end
+  
+  def draw_scrumbler_dashboard(sprint)
+    div_id = "dashboard_for_sprint_#{sprint.id}"
+    prepared_issues = sprint.issues.map {|issue| issue_for_json(issue) }
     puts "sdafasdfsa\n"*88
     p User.current.id
     config = {

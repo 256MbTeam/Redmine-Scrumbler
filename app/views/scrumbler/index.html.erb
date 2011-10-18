@@ -24,7 +24,9 @@
                 this.issue = issue;
                 this.el =  new Element('div');
                 this.statusEl = new Element('div');
-                this.statusLink = new Element('a');
+                this.statusLink = new Element('a', {
+                    href: '#'
+                });
                 this.infoEl = new Element('div');
                
                 this.el.appendChild(this.infoEl);
@@ -32,7 +34,6 @@
                 this.statusEl.appendChild(this.statusLink);
                 
                 
-               
                 this.generateStatus();
                 this.generateInfo();
                
@@ -43,9 +44,9 @@
                     
             },
             render: function() {
-              this.generateInfo();
-              this.generateStatus();
-              this.rendered = true;
+                this.generateInfo();
+                this.generateStatus();
+                this.rendered = true;
             },
             generateInfo: function() {
                 var assigned_to = this.issue.getConfig().assigned_to;
@@ -57,17 +58,47 @@
             },
             generateStatus: function() {
                 var assigned_to = this.issue.getConfig().assigned_to;
-
+                var issue_url = this.issue.getURL();
+                var self = this;
+                
+                function makeAssign(link) {
+                    link.stopObserving('click');
+                    link.update('Снять ответсвенность');
+                    link.observe('click', function() {
+                        new Ajax.Request(issue_url + '/drop_issue_assignment', {
+                            onSuccess: function(response) {
+                                var json = response.responseJSON;
+                                makeNOTAssign(link)
+                            }
+                        })
+                        return false;
+                    });
+                }
+                
+                function makeNOTAssign(link) {
+                    link.stopObserving('click');
+                    link.update('Стать ответственным');
+                    link.observe('click', function() {
+                        var url = issue_url + '/change_assignment_to_me';
+                        
+                        return false;
+                    })
+                }
+                
+                
+                
                 if(assigned_to && assigned_to.id == $current_user_id) {
-                    this.statusLink.update('Снять ответсвенность');
+                    makeAssign(this.statusLink)
                 } else {
-                    this.statusLink.update('Стать ответственным');
+                    makeNOTAssign(this.statusLink)
+                    
                 }
             }
         });
         
         var Issue = Class.create({
             initialize: function(sprint, config, statuses, trackers, url, css_class) {
+
                 // -
                 // private
                 var id = "scrumbler_dashboard_issue_" + config.id;
@@ -111,6 +142,11 @@
                 this.getTrackers        = $from(trackers);
                 this.status_id          = config.status_id;
                 
+                this.setConfig = function(conf) {
+                    config = conf;
+                    return config;
+                }
+                
                 var assn = new AssignmentStatus(this);
                 this.getAssn            = $from(assn);
                 
@@ -146,7 +182,7 @@
                            
                 
                 
-                this.getIssueEl().appendChild(this.getAssn());
+                this.getIssueEl().appendChild(this.getAssn().getEl());
                 
                 // Draw statuses
                 this.getSortedStatuses().each(function(status) {
