@@ -19,7 +19,12 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   unloadable
 
   before_filter :find_scrumbler_sprint
-  helper ScrumberSprintsHelper
+  helper :scrumbler_sprints
+  include ScrumblerSprintsHelper
+  helper :scrumbler
+  include ScrumblerHelper
+
+
   def settings
     @trackers = @project.trackers
     @enabled_trackers_ids = @scrumbler_sprint.scrumbler_sprint_trackers.map(&:tracker_id)
@@ -128,6 +133,23 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     
 
     render :json => @message
+  end
+  
+  def change_issue_assignment_to_me
+    @issue = Issue.find(params[:issue_id])
+    @issue.assigned_to = User.current
+    render :json => {:success => @issue.save, :issue => issue_for_json(@issue)}
+  end
+  
+  def drop_issue_assignment
+    @issue = Issue.find(params[:issue_id])
+    if @issue.assigned_to == User.current
+      @issue.assigned_to = nil
+      render :json => {:success => @issue.save, :issue => issue_for_json(@issue)}
+    else
+      render :status => 403
+    end
+    
   end
   
   private

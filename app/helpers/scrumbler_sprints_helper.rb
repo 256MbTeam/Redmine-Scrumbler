@@ -1,3 +1,4 @@
+
 # Scrumbler - Add scrum functionality to any Redmine installation
 # Copyright (C) 2011 256Mb Team
 #
@@ -15,24 +16,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-module ScrumberHelper
-  def select_color_tag(name, value=nil, options={})
-    out = hidden_field_tag(name, value, options)
-    out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");
+module ScrumberSprintsHelper
+
+  def scrumbler_sprint_settings_tabs
+    [
+      {:name => 'trackers', :action => :update_trackers, :partial => 'trackers', :label => :label_tracker_plural},
+      {:name => 'issue_statuses', :action => :update_issue_statuses, :partial => 'issue_statuses', :label => :label_issue_statuses},
+    ]
   end
-  
-  def draw_scrumbler_dashboard(sprint)
-    div_id = "dashboard_for_sprint_#{sprint.id}"
-    config = {
-      :sprint => sprint,
-      :project => sprint.project,
-      :statuses => sprint.scrumbler_sprint_statuses,
-      :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
-      :issues => sprint.issues,
-      :url => project_url(sprint.project)
-    }.to_json
-    out = "<div id='#{div_id}'></div>"
-    out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
-  end
-  
 end

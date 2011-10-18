@@ -38,7 +38,7 @@ issues.tracker_id = scrumbler_sprint_trackers.tracker_id
 and versions.id = scrumbler_sprints.version_id
 and scrumbler_sprint_statuses.issue_status_id = issues.status_id
 and scrumbler_sprints.id = #{self.id}
-ORDER BY scrumbler_sprint_trackers.priority DESC, issues.id ASC), :readonly => true, :uniq => true
+ORDER BY scrumbler_sprint_trackers.priority DESC, issues.id ASC), :readonly => true, :uniq => true, :include => :assigned_to 
   
   delegate :name, :to => :version
   
