@@ -36,13 +36,29 @@ module ScrumberHelper
   
   def draw_scrumbler_dashboard(sprint)
     div_id = "dashboard_for_sprint_#{sprint.id}"
+    prepared_issues = sprint.issues.map {|issue|
+      out = {
+        :id => issue.id,
+        :status_id => issue.status_id,
+        :tracker_id => issue.tracker_id,
+        :project_id => issue.project_id,
+        :subject => issue.subject
+        
+      }
+      out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
+      
+      out
+    }
+    puts "sdafasdfsa\n"*88
+    p User.current.id
     config = {
       :sprint => sprint,
       :project => sprint.project,
       :statuses => sprint.scrumbler_sprint_statuses,
       :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
-      :issues => sprint.issues,
-      :url => project_url(sprint.project)
+      :issues => prepared_issues,
+      :url => project_url(sprint.project),
+      :current_user_id => User.current.id
     }.to_json
     out = "<div id='#{div_id}'></div>"
     out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
