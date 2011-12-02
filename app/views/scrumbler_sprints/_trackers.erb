@@ -16,20 +16,20 @@
     </thead>
     <tbody>
       <% @trackers.each do |tracker| %>
-        <% existing_tracker = @scrumbler_sprint.scrumbler_sprint_trackers.find_by_tracker_id(tracker.id) %>
+        <% existing_tracker = @enabled_trackers[tracker.id.to_s] %>
         <tr class="<%= cycle 'odd', 'even' %>">
           <td><%= tracker.name%></td>
-          <td><%= select_color_tag("scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][color]", existing_tracker.try(:settings).try("[]", :color), {:default_color=>"FAA"}) %>
+          <td><%= select_color_tag("scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][color]", existing_tracker.try("[]", :color), {:default_color=>"FAA"}) %>
           </td>
 
           <td align="center">
             <%= check_box_tag "scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][enabled]", 
               true, 
-              @enabled_trackers_ids.include?(tracker.id)  
+              !!existing_tracker  
           %>
           </td>
           <td>
-            <%= text_field_tag "scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][priority]",  existing_tracker.try(:priority) || 500, :size => 3%>
+            <%= text_field_tag "scrumbler_sprint[scrumbler_sprint_trackers][#{tracker.id}][priority]",  existing_tracker.try("[]", :priority) || 500, :size => 3%>
           </td>
         </tr>
       <% end %>

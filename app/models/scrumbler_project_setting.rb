@@ -16,25 +16,51 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ScrumblerProjectSetting < ActiveRecord::Base
+  
+  #  Default colors, uses for color_chooser
+  DEFAULT_COLOR_MAP = %w(faf faa afa aaf ffa aff)
+  
   unloadable
   belongs_to :project
   
   serialize :settings, Hash
     
+  def find_tracker(id)
+    self.settings[:trackers][id.to_s] || {}
+  end
+  
+  def find_issue_status(id)
+    self.settings[:issue_statuses][id.to_s] || {}
+  end
+  
+  #    create default settings for dashboard
   def after_initialize
     self.settings ||= {}
-    unless self.settings[:issue_statuses]
-      IssueStatus.all.each{|status|
-        self.settings[:issue_statuses][status.id] = {:use => status.is_default, :priority => status.position}
+  
+    if !self.settings[:issue_statuses] || self.settings[:issue_statuses].empty?
+      self.settings[:issue_statuses] = {}
+
+      IssueStatus.all.each {|status|
+        self.settings[:issue_statuses][status.id] = {:id=>status.id,
+          :use => true, 
+          :position => status.position}
       }
-    end
+    end 
     
-    unless self.settings[:trackers]
-      Tracker.all.each{|tracker|
-        self.settings[:trackers][tracker.id] = {}
+    if !self.settings[:trackers] || self.settings[:trackers].empty?
+      self.settings[:trackers] = {}
+      self.project.trackers.each {|tracker|
+        self.settings[:trackers][tracker.id] = {:id=>tracker.id,
+          :use => true, 
+          :position => tracker.position, 
+          :color => DEFAULT_COLOR_MAP[(tracker.id % DEFAULT_COLOR_MAP.size)]}
       }
-      
     end
+  end
+  
+  private
+  def put_default_statuses_if_not_exist
+    
   end
   
  

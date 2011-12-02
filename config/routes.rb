@@ -1,10 +1,15 @@
 ActionController::Routing::Routes.draw do |map|
   
   map.resources :projects do |project|
+    
+    
     project.resource :scrumbler_settings, :member => {
-      :update_maintrackers => :post,
+      :update_trackers => :post,
       :update_issue_statuses => :post
+      
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler'
+    
+    project.scrumbler_settings 'scrumbler_settings/:tab', :tab => nil , :controller => :scrumbler_settings, :action => :show
     
     project.resources :scrumbler_sprints, :member => {
       :update_trackers => :post,

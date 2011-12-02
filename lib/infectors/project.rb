@@ -23,7 +23,7 @@ module Scrumbler
       module InstanceMethods
         def create_scrumbler_sprints
           versions.each do |version|
-            version.create_scrumbler_sprint(:project_id => id)
+            version.create_scrumbler_sprint(:project_id => self.id)
           end
         end
       
@@ -32,8 +32,9 @@ module Scrumbler
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
+        
         receiver.class_eval {
-          has_one :scrumbler_project_setting, :dependent => :destroy
+          has_one  :scrumbler_project_setting, :dependent => :destroy
           has_many :scrumbler_sprints
         }
       end

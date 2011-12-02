@@ -3,18 +3,25 @@
         <thead>
             <tr>
                 <th><%=l :label_issue_status_plural %></th>
-                <th width="100px"><%=l :maintracker_use?%></th>
+                <th width="100px"><%=l :tracker_use?%></th>
                 <th width="100px"><%=t "active_record.models.scrumbler_sprint_status.priority" %></th>
             </tr>
         </thead>
         <tbody>
             <% @issue_statuses.each do |issue_status| %>
+                <% issue_status_settings = @scrumbler_project_setting.find_issue_status(issue_status.id) %>
                 <tr class="<%= cycle 'odd', 'even' %>">
-                    <td><%=  issue_status.name%></td>
+                    <td><%=  issue_status.name %></td>
                     <td>
-                        <%= check_box_tag "scrumbler_issue_statuses[]", 
+                        <%= check_box_tag "scrumbler_project_setting[issue_statuses][#{issue_status.id}][use]", 
                                           issue_status.id, 
-                                          @scrumbler_project_setting.settings[:issue_statuses].include?(issue_status.id)  
+                                          issue_status_settings[:use]
+                        %>
+                    </td>
+                    <td>
+                        <%=text_field_tag "scrumbler_project_setting[issue_statuses][#{issue_status.id}][position]",
+                                          issue_status_settings[:position] || 500,
+                                          :size => 3
                         %>
                     </td>
                 </tr>

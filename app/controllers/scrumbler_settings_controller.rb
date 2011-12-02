@@ -25,29 +25,27 @@ class ScrumblerSettingsController < ScrumblerAbstractController
     @issue_statuses = IssueStatus.all
   end
   
-  def update_maintrackers
-    params[:scrumbler_maintrackers] ||= []
-    ScrumblerProjectSetting.transaction do
-      unless @scrumbler_project_setting.update_attributes(:maintrackers => params[:scrumbler_maintrackers].map(&:to_i))
-        flash[:error] = t :error_scrumbler_maintrackers_update
-      end
-    end
-    
-    flash[:notice] = t :notice_successful_update unless flash[:error]
-    redirect_to project_scrumbler_settings_url(@project)
+  def update_trackers
+    update_setting :trackers, :error_scrumbler_trackers_update
   end
   
   def update_issue_statuses
-    params[:scrumbler_issue_statuses] ||= []
-    ScrumblerProjectSetting.transaction do
-      @scrumbler_project_setting.settings[:issue_statuses] = params[:scrumbler_issue_statuses].map(&:to_i)
-      unless @scrumbler_project_setting.save
-        flash[:error] = t :error_scrumbler_maintrackers_update
-      end
+    update_setting :issue_statuses, :error_scrumbler_issue_statuses_update
+  end
+  
+  
+  private
+  def update_setting(setting_name, error_message_link)
+    params[:scrumbler_project_setting][setting_name] ||= {}
+    @scrumbler_project_setting.settings[setting_name] = {}
+
+    params[:scrumbler_project_setting][setting_name].each do |key, value|
+      @scrumbler_project_setting.settings[setting_name][key] = value if value[:use]
     end
     
+    flash[:error] = t error_message_link unless @scrumbler_project_setting.save
     flash[:notice] = t :notice_successful_update unless flash[:error]
-    redirect_to project_scrumbler_settings_url(@project)
+    redirect_to project_scrumbler_settings_url(@project, setting_name)
   end
   
 end
