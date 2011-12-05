@@ -1,5 +1,10 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag    'tiny-color-chooser', :plugin => 'redmine_scrumbler' %>
+  <%= javascript_include_tag 'tiny-color-chooser', :plugin => 'redmine_scrumbler' %>
+<% end %>
+
 <h2><%=l :label_settings%></h2>
-<div id="scrumbler_maintrackers_settings">
-    <%= render :partial => "maintrackers" %>
-    <%= render :partial => "issue_statuses" %>
+
+<div id="scrumbler_trackers_settings">
+    <%= render_tabs scrumbler_settings_tabs %>
 </div>

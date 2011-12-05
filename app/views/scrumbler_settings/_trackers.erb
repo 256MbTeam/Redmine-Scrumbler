@@ -1,0 +1,37 @@
+<% form_tag update_trackers_project_scrumbler_settings_url(@project) do%>
+    <table class="list">
+        <thead>
+            <tr>
+                <th><%=l :label_tracker_plural %></th>
+                 <th width="100px"><%=l "active_record.models.scrumbler_sprint_tracker.color"%></th>
+                <th width="100px"><%=l :tracker_use?%></th>
+                <th width="100px"><%=t "active_record.models.scrumbler_sprint_tracker.priority" %></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @project.trackers.each do |tracker| %>
+                <tr class="<%= cycle 'odd', 'even' %>">
+                    <%  tracker_settings = @scrumbler_project_setting.find_tracker(tracker.id)%>
+                    <td><%= tracker.name %></td>
+                    <td><%= select_color_tag "scrumbler_project_setting[trackers][#{tracker.id}][color]", 
+                                              tracker_settings[:color], 
+                                              {:default_color=>"FAA"}
+                        %> 
+                    </td>
+                    <td>
+                        <%= check_box_tag "scrumbler_project_setting[trackers][#{tracker.id}][use]", 
+                                          tracker.id, 
+                                          tracker_settings[:use]
+                        %>
+                    </td>
+                    <td><%=text_field_tag "scrumbler_project_setting[trackers][#{tracker.id}][position]",
+                                          tracker_settings[:position] || 500,
+                                          :size => 3
+                        %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <p><%= submit_tag(l(:button_update)) %></p>
+<% end %>

@@ -17,23 +17,6 @@
 
 module ScrumblerHelper
 
-  #  def select_color_tag(params)
-  #    x_id = "color_#{params[:id]}"
-  #    previev_element_id = "#{params[:id]}_preview"
-  #    out = text_field_tag params[:name], params[:value], {
-  #      :class => 'color_input',
-  #      :x_id => x_id,
-  #      :size => 6
-  #    }
-  #    out << "<div id='#{previev_element_id}' class='color_preview' style='background-color: #{params[:value]};'></div>"
-  #    picker_config = {
-  #      :color => params[:value],
-  #      :previewElement => previev_element_id
-  #    }.to_json
-  #    
-  #    out << javascript_tag("new colorPicker($$('input[x_id=#{x_id}]')[0], #{picker_config})")
-  #  end
- 
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)
     out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");
@@ -41,28 +24,44 @@ module ScrumblerHelper
   
   def issue_for_json(issue)
     out = {
-        :id => issue.id,
-        :status_id => issue.status_id,
-        :tracker_id => issue.tracker_id,
-        :project_id => issue.project_id,
-        :subject => issue.subject
-        
-      }
-      out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
+      :id => issue.id,
+      :status_id => issue.status_id,
+      :tracker_id => issue.tracker_id,
+      :project_id => issue.project_id,
+      :subject => issue.subject
+    }
+    out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
       
-      out
+    out
+  end
+  
+  def prepare_issue_statuses(issue_statuses_settings, issue_statuses)
+    r_issue_statuses = {}
+    issue_statuses_settings.each{|id,issue_setting|
+      r_issue_statuses[id.to_i] = issue_setting.merge({:name => issue_statuses.detect {|status| status.id == id.to_i}.try(:name)})
+    }
+    r_issue_statuses
+  end
+  
+  def prepare_trackers(trackers_settings, trackers)
+    r_trackers = {}
+    trackers_settings.each{|id,tracker_setting|
+      r_trackers[id.to_i]=tracker_setting.merge({:name => trackers.detect {|tracker| tracker.id == id.to_i}.try(:name)})
+    }
+    r_trackers
   end
   
   def draw_scrumbler_dashboard(sprint)
     div_id = "dashboard_for_sprint_#{sprint.id}"
     prepared_issues = sprint.issues.map {|issue| issue_for_json(issue) }
-    puts "sdafasdfsa\n"*88
-    p User.current.id
+    #    prepared_issues_statuses = sprint.issue_statuses.map{|issue_status| issue_status_for_json(issue_status)}
     config = {
       :sprint => sprint,
       :project => sprint.project,
-      :statuses => sprint.scrumbler_sprint_statuses,
-      :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
+      #      :statuses => sprint.scrumbler_sprint_statuses,
+      #      :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
+      :statuses => prepare_issue_statuses(sprint.issue_statuses, IssueStatus.all),
+      :trackers => prepare_trackers(sprint.trackers, sprint.project.trackers),
       :issues => prepared_issues,
       :url => project_url(sprint.project),
       :current_user_id => User.current.id

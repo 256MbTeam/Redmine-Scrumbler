@@ -25,31 +25,57 @@ class ScrumblerSprint < ActiveRecord::Base
   
   delegate :scrumbler_project_setting, :to => :project
   
-  has_many :scrumbler_sprint_trackers, :dependent => :destroy
-  has_many :scrumbler_sprint_statuses, :dependent => :destroy
+  serialize :settings, Hash
   
-  has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints inner join projects on scrumbler_sprints.project_id = projects.id
+  #  has_many :scrumbler_sprint_trackers, :dependent => :destroy
+  #  has_many :scrumbler_sprint_statuses, :dependent => :destroy
+  
+  #TODO CHANGE SQL
+#  has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints inner join projects on scrumbler_sprints.project_id = projects.id
+#inner join issues on issues.project_id = projects.id
+#join scrumbler_sprint_trackers on scrumbler_sprint_trackers.scrumbler_sprint_id = scrumbler_sprints.id
+#join versions on versions.id = issues.fixed_version_id
+#join scrumbler_sprint_statuses on scrumbler_sprint_statuses.scrumbler_sprint_id = scrumbler_sprints.id
+#where 
+#issues.tracker_id = scrumbler_sprint_trackers.tracker_id
+#and versions.id = scrumbler_sprints.version_id
+#and scrumbler_sprint_statuses.issue_status_id = issues.status_id
+#and scrumbler_sprints.id = #{self.id}
+#ORDER BY scrumbler_sprint_trackers.priority DESC, issues.id ASC), :readonly => true, :uniq => true, :include => :assigned_to 
+
+#TODO PRIORITY
+has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints
+inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
-join scrumbler_sprint_trackers on scrumbler_sprint_trackers.scrumbler_sprint_id = scrumbler_sprints.id
-join versions on versions.id = issues.fixed_version_id
-join scrumbler_sprint_statuses on scrumbler_sprint_statuses.scrumbler_sprint_id = scrumbler_sprints.id
-where 
-issues.tracker_id = scrumbler_sprint_trackers.tracker_id
-and versions.id = scrumbler_sprints.version_id
-and scrumbler_sprint_statuses.issue_status_id = issues.status_id
-and scrumbler_sprints.id = #{self.id}
-ORDER BY scrumbler_sprint_trackers.priority DESC, issues.id ASC), :readonly => true, :uniq => true, :include => :assigned_to 
+where issues.tracker_id in (#{self.trackers.keys.join(',')})
+and issues.status_id in (#{self.issue_statuses.keys.join(',')})
+and scrumbler_sprints.version_id = issues.fixed_version_id
+and scrumbler_sprints.id = #{self.id}),:readonly => true, :uniq => true, :include => :assigned_to 
   
   delegate :name, :to => :version
   
-  has_and_belongs_to_many :trackers, :join_table  => :scrumbler_sprint_trackers
-  
-  def after_create
-    scrumbler_project_setting.maintrackers.each {|tracker_id|
-      self.scrumbler_sprint_trackers.create(:tracker_id => tracker_id, :color => 'FF0000')
-    }
-    scrumbler_project_setting.settings[:issue_statuses].each {|issue_status_id|
-      self.scrumbler_sprint_statuses.create(:issue_status_id => issue_status_id)
-    }
+  def before_create
+    self.settings ||={}
   end
+  
+  def trackers
+    self.settings[:trackers] || scrumbler_project_setting.settings[:trackers]
+  end 
+  
+  def issue_statuses
+    self.settings[:issue_statuses] || scrumbler_project_setting.settings[:issue_statuses]
+  end
+  
+  #  has_and_belongs_to_many :trackers, :join_table  => :scrumbler_sprint_trackers
+
+  #  def after_create
+  #    scrumbler_project_setting.settings[:trackers].each {|tracker_id, tracker|
+  #      if(tracker[:use])
+  #        self.scrumbler_sprint_trackers.create(:tracker_id => tracker_id, :color => 'FF0000')
+  #      end
+  #    }
+  #    scrumbler_project_setting.settings[:issue_statuses].each {|issue_status_id, issue_status|
+  #      self.scrumbler_sprint_statuses.create(:issue_status_id => issue_status_id)
+  #    }
+  #  end
 end

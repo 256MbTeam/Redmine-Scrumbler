@@ -15,19 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-class ScrumblerSprintStatus < ActiveRecord::Base
-  unloadable
-  
-  belongs_to :scrumbler_sprint
-  belongs_to :issue_status
-  
-  default_scope :include => [:issue_status], :order => 'priority DESC'
-
-  delegate :name, :to => :issue_status
-  
-  def as_json(*args)
-    json = super
-    json[:name] = self.name
-    json
+module ScrumberSettingsHelper
+  def scrumbler_settings_tabs
+    [
+      {:name => 'trackers', :action => :update_trackers, :partial => 'trackers', :label => :label_tracker_plural},
+      {:name => 'issue_statuses', :action => :update_issue_statuses, :partial => 'issue_statuses', :label => :label_issue_statuses},
+    ]
   end
 end

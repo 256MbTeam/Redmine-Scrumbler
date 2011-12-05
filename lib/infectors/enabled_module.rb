@@ -23,7 +23,9 @@ module Scrumbler
       module InstanceMethods
         def enable_module
           if self.name == Scrumbler::MODULE_NAME
-            self.project.create_scrumbler_project_setting(:maintrackers => self.project.trackers.map(&:id))
+            unless self.project.scrumbler_project_setting
+              self.project.create_scrumbler_project_setting
+            end
             self.project.create_scrumbler_sprints
           end
         end
@@ -31,6 +33,7 @@ module Scrumbler
         def disable_module
           if self.name == Scrumbler::MODULE_NAME
             self.project.scrumbler_sprints.destroy_all
+            self.project.scrumbler_project_setting.destroy
           end
         end
         
