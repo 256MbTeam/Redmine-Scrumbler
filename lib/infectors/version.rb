@@ -34,7 +34,6 @@ module Scrumbler
         receiver.class_eval {
           has_one :scrumbler_sprint, :dependent => :destroy
           after_create :version_created
-          before_destroy :version_destroed
         }
       end
     end
