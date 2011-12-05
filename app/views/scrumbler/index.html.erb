@@ -43,42 +43,43 @@
         if(!this.rendered) {this.render() }
         return this.el;
                     
-      },
-      render: function() {
-        this.generateInfo();
-        this.generateStatus();
-        this.rendered = true;
-      },
-      generateInfo: function() {
-        var assigned_to = this.issue.getConfig().assigned_to;
-        if(assigned_to) {
-          this.infoEl.update(assigned_to.name)
-        } else {
-          this.infoEl.update('Неназначена')
-        }  
-      },
-      generateStatus: function() {
-        var assigned_to = this.issue.getConfig().assigned_to;
-        var issue_url = this.issue.getURL();
-        var self = this;
-        var issue = this.issue;
-        // TODO
-        // Rfactor please
-        //
-        function makeAssign(link) {
-          link.stopObserving('click');
-          link.update('Снять ответсвенность');
-          link.observe('click', function() {
-            new Ajax.Request(issue_url + '/drop_issue_assignment', {
-              onSuccess: function(response) {
-                makeNOTAssign(link)
-                issue.setConfig(response.responseJSON.issue);
-                self.generateInfo();
-              }
-            })
-            return false;
-          });
-        }
+            },
+            render: function() {
+                this.generateInfo();
+                this.generateStatus();
+                this.rendered = true;
+            },
+            generateInfo: function() {
+                var assigned_to = this.issue.getConfig().assigned_to;
+                if(assigned_to) {
+                    this.infoEl.update(assigned_to.name)
+                } else {
+                    this.infoEl.update('Неназначена')
+                }  
+            },
+            generateStatus: function() {
+                var assigned_to = this.issue.getConfig().assigned_to;
+                var issue_url = this.issue.getURL();
+                var self = this;
+                var issue = this.issue;
+                // TODO
+                // Rfactor please
+                //
+                function makeAssign(link) {
+                    link.stopObserving('click');
+                    link.update('Снять ответственность');
+                    link.observe('click', function() {
+                        new Ajax.Request(issue_url + '/drop_issue_assignment', {
+                            onSuccess: function(response) {
+                                makeNOTAssign(link)
+                                issue.setConfig(response.responseJSON.issue);
+                                self.generateInfo();
+                            }
+                        })
+                        return false;
+                    });
+                }
+
                 
         function makeNOTAssign(link) {
           link.stopObserving('click');
