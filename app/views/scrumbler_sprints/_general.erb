@@ -1,13 +1,3 @@
-<%# %>
-<%#= text_field_tag "scrumbler_sprint[name]",  @scrumbler_sprint.version.name%>
-<%#= text_field_tag "scrumbler_sprint[description]",  @scrumbler_sprint.version.description%>
-<%#=select_tag "people", options_from_collection_for_select(@scrumbler_sprint.version, "id", "name")%>
-<%#= submit_tag(l(:button_update)) %></p>
-
-<%# end %>
-<%= back_url_hidden_field_tag %>
-<%= error_messages_for 'version' %>
-
 <%form_tag update_general_project_scrumbler_sprint_url(@project, @scrumbler_sprint), :method=> :post, :class => :tabular do%>
   <div class="box">
     <p><%=label("scrumbler_sprint","name") %> <%= text_field_tag "scrumbler_sprint[name]",  @scrumbler_sprint.version.name, :size => 60, :required => true %></p>
