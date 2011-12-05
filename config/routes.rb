@@ -12,6 +12,7 @@ ActionController::Routing::Routes.draw do |map|
     project.scrumbler_settings 'scrumbler_settings/:tab', :tab => nil , :controller => :scrumbler_settings, :action => :show
     
     project.resources :scrumbler_sprints, :member => {
+      :update_general => :post,
       :update_trackers => :post,
       :update_issue_statuses => :post,
     } do |sprint|

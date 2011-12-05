@@ -29,11 +29,19 @@ class ScrumblerSprintsController < ScrumblerAbstractController
 
   def settings
     @trackers = @project.trackers
-    #    This is Hash    
-    @enabled_trackers = @scrumbler_sprint.trackers
     @issue_statuses = IssueStatus.all
-    #    This is Hash
+    
+    # Hashes
+    @enabled_trackers = @scrumbler_sprint.trackers
     @enabled_statuses = @scrumbler_sprint.issue_statuses
+  end
+  
+  def update_general
+    @version = @scrumbler_sprint.version
+    flash[:error] = t :error_scrumbler_general_update unless @version.update_attributes(params[:scrumbler_sprint]) 
+          
+    flash[:notice] = t :notice_successful_update unless flash[:error]
+    redirect_to project_scrumbler_sprint_settings_url(@project, @scrumbler_sprint, :general)
   end
   
   def update_trackers
