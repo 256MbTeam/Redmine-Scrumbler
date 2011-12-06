@@ -1,5 +1,9 @@
-class ScrumblerCustomField < IssueCustomField
+class ScrumblerIssueCustomField < IssueCustomField
   unloadable
+  
+  def type
+    "IssueCustomField"
+  end
   
   class << self
   
@@ -15,7 +19,7 @@ class ScrumblerCustomField < IssueCustomField
   
     private
     def create_points
-      ScrumblerCustomField.create :name => ScrumPointsName,
+      create :name => ScrumPointsName,
         :field_format => "list", 
         :possible_values => %w(? 0 1/2 1 2 3 5 8 13 20 40 100),
         :is_required => true,

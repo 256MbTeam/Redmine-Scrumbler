@@ -25,7 +25,7 @@ module Scrumbler
           if self.name == Scrumbler::MODULE_NAME
             unless self.project.scrumbler_project_setting
               self.project.create_scrumbler_project_setting
-              ScrumblerCustomField.points.projects << self.project
+              ScrumblerIssueCustomField.points.projects << self.project
             end
             self.project.create_scrumbler_sprints
           end
@@ -35,7 +35,7 @@ module Scrumbler
           if self.name == Scrumbler::MODULE_NAME
             self.project.scrumbler_sprints.destroy_all
             self.project.scrumbler_project_setting.destroy
-            ScrumblerCustomField.points.projects.delete(self.project)
+            ScrumblerIssueCustomField.points.projects.delete(self.project)
           end
         end
         
