@@ -21,23 +21,16 @@ class ScrumblerController < ScrumblerAbstractController
   #  before_filter :authorize, :only => [:settings]
   
   def index
-    params[:show_all] ||= "false"
     if(params[:show_all] == "true")
       @scrumbler_sprints = @project.scrumbler_sprints
     else
       @scrumbler_sprints = @project.scrumbler_sprints.opened
     end
+    
     @scrumbler_sprint = ScrumblerSprint.find(params[:scrumbler_sprint_id]) rescue @scrumbler_sprints.last
-    @show_all = params[:show_all] == "true"
+    @show_all = params[:show_all]
   end
-  
-  def update_dashboard
-    index
-    render :update do |page|
-      page.replace_html 'scrumbler_dashboard', :partial => 'dashboard'
-    end
-  end
-  
+    
   def sprint
     @sprint = @project.scrumbler_sprints.find(params[:sprint_id])
     render :update do |page|
