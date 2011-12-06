@@ -1,0 +1,10 @@
+<%form_tag update_general_project_scrumbler_sprint_url(@project, @scrumbler_sprint), :method=> :post, :class => :tabular do%>
+  <div class="box">
+    <p><%=label("scrumbler_sprint","name") %> <%= text_field_tag "scrumbler_sprint[name]",  @scrumbler_sprint.version.name, :size => 60, :required => true %></p>
+    <p><%=label("scrumbler_sprint", "description")%> <%= text_field_tag "scrumbler_sprint[description]", @scrumbler_sprint.version.description, :size => 60 %></p>
+    <p><%=label("scrumbler_sprint", "status")%> <%= select_tag "scrumbler_sprint[status]", options_for_select(Version::VERSION_STATUSES.collect {|s| [l("version_status_#{s}"), s]},@scrumbler_sprint.version.status) %></p>
+    <p><%=label("scrumbler_sprint","effective_date") %> <%= text_field_tag "scrumbler_sprint[effective_date]",  @scrumbler_sprint.version.effective_date, :size => 10 %> <%= calendar_for('scrumbler_sprint_effective_date') %></p>
+
+  </div>
+  <%= submit_tag l(:button_save) %>
+<% end %>

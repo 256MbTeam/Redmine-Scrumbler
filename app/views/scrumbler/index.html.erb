@@ -346,7 +346,6 @@
 <% end %>
 <div class="contextual">
   <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
-  <%= link_to l(:label_backlog), project_backlog_url(@project),  :class => 'icon icon-package'  %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
 <% if @scrumbler_sprints.any? %>

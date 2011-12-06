@@ -2,15 +2,20 @@
 ru:
   scrumbler_menu: "Скрамблер"
   scrumbler_sprint: "Спринт"
-  label_trackers: "Основные трекеры"
-  tracker_use?: "Использовать?"
-  error_scrumbler_trackers_update: "Трекеры не удалось обновить"
-  error_scrumbler_issue_statuses_update: "Статусы задач не удалось обновить"
-  error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
-  label_issue_statuses: "Основные статусы задач"
-  error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
+  
+  label_general: "Основные"
+  label_trackers: "Трекеры"
+  label_issue_statuses: "Статусы задач"
   label_sprint_back: "Вернуться в спринт"
   label_backlog: "Бэклог"
+  
+  tracker_use?: "Использовать?"
+  error_scrumbler_general_update: "Не удалось обновить настройки "
+  error_scrumbler_trackers_update: "Не удалось обновить трекеры "
+  error_scrumbler_issue_statuses_update: "Не удалось обновить статусы задач"
+  error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
+  error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
+  
   active_record:
     models:
       scrumbler_sprint_tracker:
