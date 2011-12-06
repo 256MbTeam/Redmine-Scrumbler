@@ -17,39 +17,28 @@
 
 module Scrumbler
   module Infectors
-    module EnabledModule
+    module Tracker
       module ClassMethods;end
 
       module InstanceMethods
-        def enable_module
-          if self.name == Scrumbler::MODULE_NAME
-            unless self.project.scrumbler_project_setting
-              self.project.create_scrumbler_project_setting
-              ScrumblerIssueCustomField.points.projects << self.project
-            end
-            self.project.create_scrumbler_sprints
-          end
+        private
+        def add_self_to_scrumbler_points
+          ScrumblerIssueCustomField.points.trackers << self
         end
         
-        def disable_module
-          if self.name == Scrumbler::MODULE_NAME
-            self.project.scrumbler_sprints.destroy_all
-            self.project.scrumbler_project_setting.destroy
-            ScrumblerIssueCustomField.points.projects.delete(self.project)
-          end
+        def remove_self_from_scrumbler_points
+          ScrumblerIssueCustomField.points.trackers.delete(self)
         end
-        
       end
       
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval {
-          after_create :enable_module
-          before_destroy :disable_module
+          after_create :add_self_to_scrumbler_points
+          before_destroy :remove_self_from_scrumbler_points
         }
       end
     end
   end
 end
-
