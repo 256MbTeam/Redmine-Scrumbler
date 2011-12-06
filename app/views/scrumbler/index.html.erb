@@ -43,42 +43,42 @@
         if(!this.rendered) {this.render() }
         return this.el;
                     
-            },
-            render: function() {
-                this.generateInfo();
-                this.generateStatus();
-                this.rendered = true;
-            },
-            generateInfo: function() {
-                var assigned_to = this.issue.getConfig().assigned_to;
-                if(assigned_to) {
-                    this.infoEl.update(assigned_to.name)
-                } else {
-                    this.infoEl.update('Неназначена')
-                }  
-            },
-            generateStatus: function() {
-                var assigned_to = this.issue.getConfig().assigned_to;
-                var issue_url = this.issue.getURL();
-                var self = this;
-                var issue = this.issue;
-                // TODO
-                // Rfactor please
-                //
-                function makeAssign(link) {
-                    link.stopObserving('click');
-                    link.update('Снять ответственность');
-                    link.observe('click', function() {
-                        new Ajax.Request(issue_url + '/drop_issue_assignment', {
-                            onSuccess: function(response) {
-                                makeNOTAssign(link)
-                                issue.setConfig(response.responseJSON.issue);
-                                self.generateInfo();
-                            }
-                        })
-                        return false;
-                    });
-                }
+      },
+      render: function() {
+        this.generateInfo();
+        this.generateStatus();
+        this.rendered = true;
+      },
+      generateInfo: function() {
+        var assigned_to = this.issue.getConfig().assigned_to;
+        if(assigned_to) {
+          this.infoEl.update(assigned_to.name)
+        } else {
+          this.infoEl.update('Неназначена')
+        }  
+      },
+      generateStatus: function() {
+        var assigned_to = this.issue.getConfig().assigned_to;
+        var issue_url = this.issue.getURL();
+        var self = this;
+        var issue = this.issue;
+        // TODO
+        // Rfactor please
+        //
+        function makeAssign(link) {
+          link.stopObserving('click');
+          link.update('Снять ответственность');
+          link.observe('click', function() {
+            new Ajax.Request(issue_url + '/drop_issue_assignment', {
+              onSuccess: function(response) {
+                makeNOTAssign(link)
+                issue.setConfig(response.responseJSON.issue);
+                self.generateInfo();
+              }
+            })
+            return false;
+          });
+        }
 
                 
         function makeNOTAssign(link) {
@@ -173,7 +173,7 @@
 
       },
       getSortedStatuses: function() {
-      function sortFn(a, b) {
+        function sortFn(a, b) {
           return a.position - b.position
         }
         return this.statuses.values().sort(sortFn);
@@ -243,8 +243,8 @@
                 onFailure: function(){ 
                   
                   $growler.growl('Something went wrong...', {
-                      header: 'Error'
-                    });
+                    header: 'Error'
+                  });
                 },
                 onComplete: function() {
                   issue.getIssueEl().show()
@@ -348,23 +348,5 @@
   <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
-<% if @scrumbler_sprints.any? %>
-  <p>
-    <%= label_tag :scrumbler_sprint_id, l(:scrumbler_sprint) %>
-    <%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name, 
-      {
-      :selected => @scrumbler_sprint.id
-    },
-      {
-      :onchange => "#{remote_function :url => {
-      :controller => :scrumbler,
-      :action => :sprint,
-      :project_id => @project
-      }, :with => "'sprint_id='+value"}"
-    }
-  %>
-  </p>
-  <%= render :partial => 'sprint', :object =>  @scrumbler_sprint %>
-<% else %>
-  <p class="nodata"><%= l(:label_no_data) %></p>
-<% end %>
+
+<%= render :partial => 'dashboard' %>

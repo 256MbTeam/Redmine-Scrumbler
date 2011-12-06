@@ -3,6 +3,7 @@ ru:
   scrumbler_menu: "Скрамблер"
   scrumbler_sprint: "Спринт"
   
+  label_scrumbler_show_all_sprint: "Отображать закрытые спринты"
   label_general: "Основные"
   label_trackers: "Трекеры"
   label_issue_statuses: "Статусы задач"

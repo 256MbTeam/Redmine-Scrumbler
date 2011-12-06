@@ -18,17 +18,30 @@
 class ScrumblerController < ScrumblerAbstractController
   unloadable
 
-#  before_filter :authorize, :only => [:settings]
+  #  before_filter :authorize, :only => [:settings]
   
   def index
-    @scrumbler_sprints = @project.scrumbler_sprints
+    params[:show_all] ||= "false"
+    if(params[:show_all] == "true")
+      @scrumbler_sprints = @project.scrumbler_sprints
+    else
+      @scrumbler_sprints = @project.scrumbler_sprints.opened
+    end
     @scrumbler_sprint = ScrumblerSprint.find(params[:scrumbler_sprint_id]) rescue @scrumbler_sprints.last
+    @show_all = params[:show_all] == "true"
+  end
+  
+  def update_dashboard
+    index
+    render :update do |page|
+      page.replace_html 'scrumbler_dashboard', :partial => 'dashboard'
+    end
   end
   
   def sprint
     @sprint = @project.scrumbler_sprints.find(params[:sprint_id])
     render :update do |page|
-        page.replace_html 'scrumbler_sprint', :partial => 'sprint', :object => @sprint
+      page.replace_html 'scrumbler_sprint', :partial => 'sprint', :object => @sprint
     end
   end
   

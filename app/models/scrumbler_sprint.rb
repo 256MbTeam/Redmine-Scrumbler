@@ -18,7 +18,9 @@
 class ScrumblerSprint < ActiveRecord::Base
   unloadable
   
-  default_scope :include => [:version]
+  default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, status, name"
+  
+  named_scope :opened, :conditions => ["status = ?", "open"]
   
   belongs_to :project
   belongs_to :version
@@ -27,22 +29,6 @@ class ScrumblerSprint < ActiveRecord::Base
   
   serialize :settings, Hash
   
-  #  has_many :scrumbler_sprint_trackers, :dependent => :destroy
-  #  has_many :scrumbler_sprint_statuses, :dependent => :destroy
-  
-  #TODO CHANGE SQL
-#  has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints inner join projects on scrumbler_sprints.project_id = projects.id
-#inner join issues on issues.project_id = projects.id
-#join scrumbler_sprint_trackers on scrumbler_sprint_trackers.scrumbler_sprint_id = scrumbler_sprints.id
-#join versions on versions.id = issues.fixed_version_id
-#join scrumbler_sprint_statuses on scrumbler_sprint_statuses.scrumbler_sprint_id = scrumbler_sprints.id
-#where 
-#issues.tracker_id = scrumbler_sprint_trackers.tracker_id
-#and versions.id = scrumbler_sprints.version_id
-#and scrumbler_sprint_statuses.issue_status_id = issues.status_id
-#and scrumbler_sprints.id = #{self.id}
-#ORDER BY scrumbler_sprint_trackers.priority DESC, issues.id ASC), :readonly => true, :uniq => true, :include => :assigned_to 
-
 #TODO PRIORITY
 has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
@@ -52,7 +38,6 @@ and issues.status_id in (#{self.issue_statuses.keys.join(',')})
 and scrumbler_sprints.version_id = issues.fixed_version_id
 and scrumbler_sprints.id = #{self.id}),:readonly => true, :uniq => true, :include => :assigned_to 
   
-  delegate :name, :to => :version
   
   def before_create
     self.settings ||={}

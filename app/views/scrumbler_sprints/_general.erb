@@ -1,3 +1,5 @@
+<%= error_messages_for 'version' %>
+
 <%form_tag update_general_project_scrumbler_sprint_url(@project, @scrumbler_sprint), :method=> :post, :class => :tabular do%>
   <div class="box">
     <p><%=label("scrumbler_sprint","name") %> <%= text_field_tag "scrumbler_sprint[name]",  @scrumbler_sprint.version.name, :size => 60, :required => true %></p>

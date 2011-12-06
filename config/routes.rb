@@ -29,6 +29,7 @@ ActionController::Routing::Routes.draw do |map|
     end
     
     project.sprint 'sprint/:sprint_id', :controller => 'scrumbler', :action => :sprint, :method => :post
+    project.sprint 'sprint/sprint_select', :controller => 'scrumbler', :action => :update_dashboard, :method => :post
     project.backlog 'backlog', :controller => 'scrumbler_backlogs', :action => :index
   end
 
