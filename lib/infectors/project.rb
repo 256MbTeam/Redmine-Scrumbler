@@ -22,11 +22,7 @@ module Scrumbler
       
       module InstanceMethods
         
-        
-        
-        
-       
-
+        # Overriding standart system method
         
         
         def create_scrumbler_sprints
@@ -38,17 +34,17 @@ module Scrumbler
       end
       
       def self.included(receiver)
+        receiver.module_eval {
+          alias_method :issue_custom_fields_without_points, :issue_custom_fields
+          
+          def issue_custom_fields
+            p 666
+            (issue_custom_fields_without_points + [ScrumblerCustomField.points]).uniq.sort
+          end
+        }
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         
-        # Overriding standart system method
-        receiver.module_eval {
-          alias_method :issue_custom_fields_without_points, :issue_custom_fields
-        
-          def issue_custom_fields
-            (issue_custom_fields_without_points + [ScrumblerIssueCustomField.points]).uniq.sort
-          end
-        }
         
         receiver.class_eval {
           has_one  :scrumbler_project_setting, :dependent => :destroy

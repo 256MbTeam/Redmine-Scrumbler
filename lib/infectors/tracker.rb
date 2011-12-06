@@ -23,11 +23,11 @@ module Scrumbler
       module InstanceMethods
         private
         def add_self_to_scrumbler_points
-          ScrumblerIssueCustomField.points.trackers << self
+          ScrumblerCustomField.points.trackers << self
         end
         
         def remove_self_from_scrumbler_points
-          ScrumblerIssueCustomField.points.trackers.delete(self)
+          ScrumblerCustomField.points.trackers.delete(self)
         end
       end
       
