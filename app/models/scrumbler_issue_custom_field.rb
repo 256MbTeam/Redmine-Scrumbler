@@ -3,8 +3,9 @@ class ScrumblerIssueCustomField < IssueCustomField
   
   class << self
     ScrumPointsName = "Scrum Points"
+    
     def points
-      find(:first, :conditions => {:name => ScrumPointsName}) || create_points
+      first(:conditions => {:name => ScrumPointsName}) || create_points
     end
     
     private

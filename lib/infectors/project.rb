@@ -21,6 +21,14 @@ module Scrumbler
       module ClassMethods;end
       
       module InstanceMethods
+        
+        
+        
+        
+       
+
+        
+        
         def create_scrumbler_sprints
           versions.each do |version|
             version.create_scrumbler_sprint(:project_id => self.id)
@@ -32,6 +40,15 @@ module Scrumbler
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
+        
+        # Overriding standart system method
+        receiver.module_eval {
+          alias_method :issue_custom_fields_without_points, :issue_custom_fields
+        
+          def issue_custom_fields
+            (issue_custom_fields_without_points + [ScrumblerIssueCustomField.points]).uniq.sort
+          end
+        }
         
         receiver.class_eval {
           has_one  :scrumbler_project_setting, :dependent => :destroy
