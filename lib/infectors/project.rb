@@ -38,8 +38,11 @@ module Scrumbler
           alias_method :issue_custom_fields_without_points, :issue_custom_fields
           
           def issue_custom_fields
-            p 666
-            (issue_custom_fields_without_points + [ScrumblerCustomField.points]).uniq.sort
+            if ScrumblerCustomField.points.projects.include? self
+              (issue_custom_fields_without_points + [ScrumblerCustomField.points]).uniq
+            else
+              issue_custom_fields_without_points
+            end
           end
         }
         receiver.extend         ClassMethods
