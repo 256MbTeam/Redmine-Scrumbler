@@ -19,7 +19,7 @@ class ScrumblerSettingsController < ScrumblerAbstractController
   unloadable
   
   helper ScrumberSettingsHelper
-  #  before_filter :authorize, :only => [:settings]
+  before_filter :authorize, :only => [:show, :update_trackers, :update_issue_statuses]
   
   def show
     @issue_statuses = IssueStatus.all

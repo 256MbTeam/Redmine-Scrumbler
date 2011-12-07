@@ -18,7 +18,7 @@
 class ScrumblerController < ScrumblerAbstractController
   unloadable
 
-  #  before_filter :authorize, :only => [:settings]
+#  before_filter :authorize, :only => [:sprint, :index]
   
   def index
     if(params[:show_all] == "true")

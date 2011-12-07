@@ -19,6 +19,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   unloadable
 
   before_filter :find_scrumbler_sprint
+  before_filter :authorize, :only => [:settings, :update_general, :update_trackers, :update_issue_statuses]
   
   helper :scrumbler_sprints
   include ScrumblerSprintsHelper
@@ -65,7 +66,6 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue
-    
     @issue = Issue.find(params[:issue_id])
     @message = if @issue.new_statuses_allowed_to(User.current).map(&:id).include?(params[:issue][:status_id].to_i)
       if @issue.update_attributes(params[:issue])

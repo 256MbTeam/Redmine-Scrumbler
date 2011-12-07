@@ -30,10 +30,10 @@ Redmine::Plugin.register :redmine_scrumbler do
   description 'This is a scrum plugin for Redmine'
   version '0.0.2'
   project_module :redmine_scrumbler do
-    permission :scrumbler, :scrumbler => :index
-    permission :scrumbler_settings, :scrumbler => :settings, :public => false
+    permission :scrumbler, :scrumbler => :index, :public => true
+    permission :scrumbler_settings, :scrumbler_settings => [:show, :update_trackers, :update_issue_statuses], :scrumbler_sprints => [:settings, :update_general, :update_trackers, :update_issue_statuses], :public => true
   end
   
-  menu :project_menu, :redmine_scrumbler, { :controller => 'scrumbler', :action => 'index' }, :caption => :scrumbler_menu, :after => :activity, :param => :project_id
+  menu :project_menu, :redmine_scrumbler, { :controller => 'scrumbler', :action => "index" }, :caption => :scrumbler_menu, :after => :activity, :param => :project_id
   
 end
