@@ -29,7 +29,6 @@ class ScrumblerSprint < ActiveRecord::Base
   
   serialize :settings, HashWithIndifferentAccess
   
-#TODO PRIORITY
 has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id

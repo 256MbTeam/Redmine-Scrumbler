@@ -22,7 +22,7 @@ ru:
   active_record:
     models:
       scrumbler_sprint_tracker:
-        priority: "Приоритет"
+        position: "Приоритет"
         color: "Цвет"
       scrumbler_sprint_status:
-        priority: "Приоритет"
+        position: "Приоритет"

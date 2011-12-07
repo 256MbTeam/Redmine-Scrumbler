@@ -1,5 +1,5 @@
 # Russian strings go here for Rails i18n
-ru:
+en:
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
   
@@ -22,7 +22,7 @@ ru:
   active_record:
     models:
       scrumbler_sprint_tracker:
-        priority: "Priority"
+        position: "Position"
         color: "Color"
       scrumbler_sprint_status:
-        priority: "Priority"
+        position: "Position"

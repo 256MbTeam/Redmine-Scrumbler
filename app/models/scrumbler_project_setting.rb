@@ -57,11 +57,5 @@ class ScrumblerProjectSetting < ActiveRecord::Base
       }
     end
   end
-  
-  private
-  def put_default_statuses_if_not_exist
-    
-  end
-  
  
 end

@@ -281,7 +281,7 @@
     var Dashboard = Class.create({
       sort_hash: function(hash) {
         return hash.values().sort(function(a, b) {
-          return a.priority - b.priority;
+          return a.position - b.position;
         });
       },
       initialize: function(dashboard, config) {

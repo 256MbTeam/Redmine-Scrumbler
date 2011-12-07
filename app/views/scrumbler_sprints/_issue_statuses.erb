@@ -4,7 +4,7 @@
       <tr>
         <th align="left"><%=l :label_issue_status_plural %></th>
         <th width="100px"><%=l :tracker_use?%></th>
-        <th width="100px"><%=t "active_record.models.scrumbler_sprint_status.priority" %></th>
+        <th width="100px"><%=t "active_record.models.scrumbler_sprint_status.position" %></th>
       </tr>
     </thead>
     <tbody>
@@ -18,7 +18,7 @@
           %>
           </td>
           <td>
-            <%= text_field_tag "scrumbler_issue_statuses[#{issue_status.id}][priority]",  @enabled_statuses[issue_status.id.to_s].try("[]", :priority) || 500, :size => 3%> </td>
+            <%= text_field_tag "scrumbler_issue_statuses[#{issue_status.id}][position]",  @enabled_statuses[issue_status.id.to_s].try("[]", :position), :size => 3%> </td>
         </tr>
       <% end %>
     </tbody>
