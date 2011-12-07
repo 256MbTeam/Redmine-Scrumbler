@@ -5,6 +5,20 @@ class ScrumblerIssueCustomField < IssueCustomField
     "IssueCustomField"
   end
   
+  def find_value_by_issue(issue)
+    CustomValue.first(:conditions => {
+      :customized_id => issue.id,
+      :custom_field_id => self.id,
+      :customized_type => issue.to_s
+      })
+  end
+  
+  def find_all_values
+    CustomValue.first(:conditions => {
+      :custom_field_id => self.id
+      })
+  end
+  
   class << self
   
     ScrumPointsName = "Scrum Points"
@@ -21,7 +35,7 @@ class ScrumblerIssueCustomField < IssueCustomField
     def create_points
       create :name => ScrumPointsName,
         :field_format => "list", 
-        :possible_values => %w(? 0 1/2 1 2 3 5 8 13 20 40 100),
+        :possible_values => %w(? 0 0.5 1 2 3 5 8 13 20 40 100),
         :is_required => true,
         :is_filter => true,
         :default_value => "?",

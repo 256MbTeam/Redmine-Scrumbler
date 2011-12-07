@@ -148,7 +148,6 @@
             };
             
             statusElements[status.status_id].element.scrumbler_status = status;
-            <%#*statusElements[status.status_id].element.scrumbler_status.status_id = status[0];%>
           })
           return $H(statusElements); 
         };
@@ -239,6 +238,8 @@
                   if(resp.success) {
                     issue.status_id = status.status_id;
                     dropEl.appendChild(issue.getIssueEl());
+                    console.log(resp)
+                    $('scrumbler_sprint_header_name').update(resp.sprint_name);
                   } else {
                     $growler.growl(resp.text, {
                       header: 'Ошибка'

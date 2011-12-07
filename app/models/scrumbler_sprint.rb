@@ -29,14 +29,44 @@ class ScrumblerSprint < ActiveRecord::Base
   
   serialize :settings, HashWithIndifferentAccess
   
-has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints
+  
+  has_many :issues, :readonly => true, :uniq => true, :include => :assigned_to,
+    :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
 where issues.tracker_id in (#{self.trackers.keys.join(',')})
 and issues.status_id in (#{self.issue_statuses.keys.join(',')})
 and scrumbler_sprints.version_id = issues.fixed_version_id
-and scrumbler_sprints.id = #{self.id}), :readonly => true, :uniq => true, :include => :assigned_to 
+and scrumbler_sprints.id = #{self.id})
   
+  
+  def points_total
+    connection.select_value("select count(value) from custom_values where 
+custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
+custom_values.customized_type = 'Issue' and
+custom_values.customized_id in (#{(self.issues.map(&:id) << 0).join(",")}) and
+custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_f
+  end
+  
+  def points_completed
+    connection.select_value("select count(value) from custom_values where 
+custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
+custom_values.customized_type = 'Issue' and
+custom_values.customized_id in (select issues.id from scrumbler_sprints
+inner join projects on scrumbler_sprints.project_id = projects.id
+inner join issues on issues.project_id = projects.id
+inner join issue_statuses on issue_statuses.id = issues.status_id 
+where issues.tracker_id in (#{self.trackers.keys.join(',')})
+and issues.status_id in (#{self.issue_statuses.keys.join(',')})
+and issue_statuses.is_closed = true
+and scrumbler_sprints.version_id = issues.fixed_version_id
+and scrumbler_sprints.id = #{self.id}) and
+custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_f
+  end
+  
+  def name_with_points
+   "#{name} (#{points_completed}/#{points_total})"
+  end
   
   def before_create
     self.settings ||= HashWithIndifferentAccess.new
@@ -50,16 +80,4 @@ and scrumbler_sprints.id = #{self.id}), :readonly => true, :uniq => true, :inclu
     self.settings[:issue_statuses] || scrumbler_project_setting.settings[:issue_statuses]
   end
   
-  #  has_and_belongs_to_many :trackers, :join_table  => :scrumbler_sprint_trackers
-
-  #  def after_create
-  #    scrumbler_project_setting.settings[:trackers].each {|tracker_id, tracker|
-  #      if(tracker[:use])
-  #        self.scrumbler_sprint_trackers.create(:tracker_id => tracker_id, :color => 'FF0000')
-  #      end
-  #    }
-  #    scrumbler_project_setting.settings[:issue_statuses].each {|issue_status_id, issue_status|
-  #      self.scrumbler_sprint_statuses.create(:issue_status_id => issue_status_id)
-  #    }
-  #  end
 end
