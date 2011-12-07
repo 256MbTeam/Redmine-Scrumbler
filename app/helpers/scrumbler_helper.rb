@@ -17,6 +17,24 @@
 
 module ScrumblerHelper
 
+  def backlog_issue_filter_link
+    link_to "backlog", 
+      :controller => :issues, 
+      :action => :index, 
+      :project_id => @project,
+      :f => %w(status_id fixed_version_id),
+      :v => {
+        :status_id => %W(5 6)
+      },
+      :op => {
+        :fixed_version_id => "!*", 
+        :status_id => "!"
+        },
+      :group_by => :priority,
+      :set_filter => 1,
+      :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
+  end
+  
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)
     out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");

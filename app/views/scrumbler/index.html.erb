@@ -377,6 +377,7 @@
 <% end %>
 <div class="contextual">
     <%= link_to l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
+    <%= backlog_issue_filter_link %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
 
