@@ -1,15 +1,24 @@
-# English strings go here for Rails i18n
-en:
+# Russian strings go here for Rails i18n
+ru:
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
-  label_maintrackers: "Main trackers"
-  maintracker_use?: "Use?"
-  error_scrumbler_maintrackers_update: "Основные трекеры не удалось обновить"
-  error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
-  label_issue_statuses: "Main issue statuses"
-  error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
+  
+  show_opened: "Show Opened"
+  show_all: "All Sprints"
+  label_general: "General"
+  label_trackers: "Trackers"
+  label_issue_statuses: "Issue statuses"
   label_sprint_back: "Back to sprint"
   label_backlog: "Backlog"
+  label_sprint_settings: "Sprint settings"
+  
+  tracker_use?: "Use?"
+  error_scrumbler_general_update: "Settings update failed"
+  error_scrumbler_trackers_update: "Trackers update failed"
+  error_scrumbler_issue_statuses_update: "Issue statuses update failed"
+  error_sprint_not_found_in_project: "Sprint not found in project"
+  error_scrumbler_issue_status_change: "You dont have permissions to change status \"%{status_name}\" for this issue"
+  
   active_record:
     models:
       scrumbler_sprint_tracker:
@@ -17,4 +26,3 @@ en:
         color: "Color"
       scrumbler_sprint_status:
         priority: "Priority"
-
