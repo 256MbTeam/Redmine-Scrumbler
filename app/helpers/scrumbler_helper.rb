@@ -46,7 +46,8 @@ module ScrumblerHelper
       :status_id => issue.status_id,
       :tracker_id => issue.tracker_id,
       :project_id => issue.project_id,
-      :subject => issue.subject
+      :subject => issue.subject,
+      :points => issue.scrumbler_points
     }
     out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
       

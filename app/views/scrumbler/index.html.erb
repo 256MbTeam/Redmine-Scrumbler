@@ -1,29 +1,3 @@
-<style>
-    .scrumbler-assignment-status {
-        font-size: 75%;
-        height: 16px; 
-        padding: 0 0.5em;
-    }
-    .scrumbler-assignment-status-info {
-        float: left;  
-        margin-left: 20px;
-        position: relative;
-        top: 1px;
-    }
-    .scrumbler-assignee-link {
-        width: 16px;
-        height: 16px;
-        background: url(/images/link_break.png);
-    }
-    .scrumbler-assignee-link:hover {
-        cursor: pointer;
-    }
-
-    .scrumbler-not-assigned-issue {
-        background-image: url("/images/link.png") !important;
-    }
-</style>
-
 <script>
     var ScrumblerDashboard = (function() {
         $from = function(v) {
@@ -43,7 +17,8 @@
             </div>\n\
         </div>\n\
         <div class='scrumbler_issue_body'>\n\
-            <a href='#{issue_url}'>#{issue_subject}</a>\n\
+            <div class='scrumbler_points'>#{points}</div>\n\
+            #{issue_subject}\n\
         </div>");
         
         var AssignmentStatus = Class.create({
@@ -218,7 +193,8 @@
                     tracker_name: tracker.name,
                     issue_subject: this.getConfig().subject,
                     issue_id: this.getConfig().id,
-                    color: tracker.color || '507AAA'
+                    color: tracker.color || '507AAA',
+                    points: this.getConfig().points
                 }));
 
                            
