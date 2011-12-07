@@ -27,6 +27,16 @@ div.scrumbler_issue_body {
     padding: 0 0.5em 0.25em;
 }
 
+    div.scrumbler_points{
+    margin-right: 1em;
+    font-size: 80%;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+}
+
 div.scrumbler_dashboard_issue_id{
     margin: 0 1em;
     float: right;
@@ -77,3 +87,28 @@ div.Growler-notice-exit {
     font-size: 				12px;
     cursor:					pointer;
 }
+
+.scrumbler-assignment-status {
+    font-size: 75%;
+    height: 16px; 
+    padding: 0 0.5em;
+}
+.scrumbler-assignment-status-info {
+    float: left;  
+    margin-left: 20px;
+    position: relative;
+    top: 1px;
+}
+.scrumbler-assignee-link {
+    width: 16px;
+    height: 16px;
+    background: url(/images/link_break.png);
+}
+.scrumbler-assignee-link:hover {
+    cursor: pointer;
+}
+
+.scrumbler-not-assigned-issue {
+    background-image: url("/images/link.png") !important;
+}
+

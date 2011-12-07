@@ -17,22 +17,28 @@
             </div>\n\
         </div>\n\
         <div class='scrumbler_issue_body'>\n\
-            <a href='#{issue_url}'>#{issue_subject}</a>\n\
+            <div class='scrumbler_points'>#{points}</div>\n\
+            #{issue_subject}\n\
         </div>");
         
     var AssignmentStatus = Class.create({
       initialize: function(issue) {
         this.issue = issue;
         this.el =  new Element('div');
-        this.statusEl = new Element('div');
-        this.statusLink = new Element('a', {
-          href: 'javascript:void();'
+        var body = new Element('div', {
+          "class": "scrumbler-assignment-status"
         });
-        this.infoEl = new Element('div');
+        this.statusLink = new Element('div', {
+          "class": 'scrumbler-assignee-link'
+        }).update("&nbsp;");
+        this.infoEl = new Element('span', {
+          "class": 'scrumbler-assignment-status-info'
+        });
                
-        this.el.appendChild(this.infoEl);
-        this.el.appendChild(this.statusEl);
-        this.statusEl.appendChild(this.statusLink);
+        this.el.appendChild(body);
+
+        body.appendChild(this.infoEl);
+        body.appendChild(this.statusLink);
                 
                 
         this.generateStatus();
@@ -67,7 +73,7 @@
         //
         function makeAssign(link) {
           link.stopObserving('click');
-          link.update('Снять ответственность');
+          link.removeClassName('scrumbler-not-assigned-issue')
           link.observe('click', function() {
             new Ajax.Request(issue_url + '/drop_issue_assignment', {
               onSuccess: function(response) {
@@ -83,7 +89,7 @@
                 
         function makeNOTAssign(link) {
           link.stopObserving('click');
-          link.update('Стать ответственным');
+          link.addClassName('scrumbler-not-assigned-issue')
           link.observe('click', function() {
             new Ajax.Request(issue_url + '/change_assignment_to_me', {
               onSuccess: function(response) {
@@ -187,7 +193,8 @@
           tracker_name: tracker.name,
           issue_subject: this.getConfig().subject,
           issue_id: this.getConfig().id,
-          color: tracker.color || '507AAA'
+          color: tracker.color || '507AAA',
+          points: this.getConfig().points
         }));
 
                            
@@ -346,6 +353,7 @@
 <% end %>
 <div class="contextual">
   <%= link_to_if_authorized l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
+  <%= backlog_issue_filter_link %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
 
