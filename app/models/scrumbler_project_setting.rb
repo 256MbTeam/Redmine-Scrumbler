@@ -23,34 +23,34 @@ class ScrumblerProjectSetting < ActiveRecord::Base
   unloadable
   belongs_to :project
   
-  serialize :settings, Hash
+  serialize :settings, HashWithIndifferentAccess
     
   def find_tracker(id)
-    self.settings[:trackers][id.to_s] || {}
+    self.settings[:trackers][id.to_s] ||  HashWithIndifferentAccess.new
   end
   
   def find_issue_status(id)
-    self.settings[:issue_statuses][id.to_s] || {}
+    self.settings[:issue_statuses][id.to_s] ||  HashWithIndifferentAccess.new
   end
   
   #    create default settings for dashboard
   def after_initialize
-    self.settings ||= {}
+    self.settings ||= HashWithIndifferentAccess.new
   
     if !self.settings[:issue_statuses] || self.settings[:issue_statuses].empty?
-      self.settings[:issue_statuses] = {}
+      self.settings[:issue_statuses] =  HashWithIndifferentAccess.new
 
       IssueStatus.all.each {|status|
-        self.settings[:issue_statuses][status.id] = {:id=>status.id,
+        self.settings[:issue_statuses][status.id.to_s] = {:id=>status.id,
           :use => true, 
           :position => status.position}
       }
     end 
     
     if !self.settings[:trackers] || self.settings[:trackers].empty?
-      self.settings[:trackers] = {}
+      self.settings[:trackers] =  HashWithIndifferentAccess.new
       self.project.trackers.each {|tracker|
-        self.settings[:trackers][tracker.id] = {:id=>tracker.id,
+        self.settings[:trackers][tracker.id.to_s] = {:id=>tracker.id,
           :use => true, 
           :position => tracker.position, 
           :color => DEFAULT_COLOR_MAP[(tracker.id % DEFAULT_COLOR_MAP.size)]}

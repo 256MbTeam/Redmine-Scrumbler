@@ -40,7 +40,7 @@ class ScrumblerSettingsController < ScrumblerAbstractController
     @scrumbler_project_setting.settings[setting_name] = {}
 
     params[:scrumbler_project_setting][setting_name].each do |key, value|
-      @scrumbler_project_setting.settings[setting_name][key] = value if value[:use]
+      @scrumbler_project_setting.settings[setting_name][key.to_s] = value if value[:use]
     end
     
     flash[:error] = t error_message_link unless @scrumbler_project_setting.save

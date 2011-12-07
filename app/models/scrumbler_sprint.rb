@@ -27,7 +27,7 @@ class ScrumblerSprint < ActiveRecord::Base
   
   delegate :scrumbler_project_setting, :to => :project
   
-  serialize :settings, Hash
+  serialize :settings, HashWithIndifferentAccess
   
 #TODO PRIORITY
 has_many :issues, :finder_sql => %q(select issues.* from scrumbler_sprints
@@ -40,7 +40,7 @@ and scrumbler_sprints.id = #{self.id}), :readonly => true, :uniq => true, :inclu
   
   
   def before_create
-    self.settings ||={}
+    self.settings ||= HashWithIndifferentAccess.new
   end
   
   def trackers

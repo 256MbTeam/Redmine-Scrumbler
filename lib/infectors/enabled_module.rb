@@ -34,7 +34,7 @@ module Scrumbler
         def disable_module
           if self.name == Scrumbler::MODULE_NAME
             self.project.scrumbler_sprints.destroy_all
-            self.project.scrumbler_project_setting.destroy
+            self.project.scrumbler_project_setting.try(:destroy)
             ScrumblerIssueCustomField.points.projects.delete(self.project)
           end
         end
