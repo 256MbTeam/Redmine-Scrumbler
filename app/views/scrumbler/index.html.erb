@@ -137,19 +137,18 @@
           'class': 'scrumbler_dashboard_issue',
           id: id
         });
-                
         function makeStatusElements() {
           var statusElements = {};
           var i = 0;
           statuses.each(function(status){
-            statusElements[status[0]] = {
+            statusElements[status.status_id] = {
               element: new Element('td'),
               position: i++,
-              status: status[1]
+              status: status
             };
-                        
-            statusElements[status[0]].element.scrumbler_status = status[1];
-            statusElements[status[0]].element.scrumbler_status.status_id = status[0];
+            
+            statusElements[status.status_id].element.scrumbler_status = status;
+            <%#*statusElements[status.status_id].element.scrumbler_status.status_id = status[0];%>
           })
           return $H(statusElements); 
         };
@@ -171,7 +170,7 @@
         var assn = new AssignmentStatus(this);
         this.getAssn            = $from(assn);
                 
-        this.statuses = makeStatusElements(statuses);
+        this.statuses = makeStatusElements();
         this.render();
 
         this.makeInteractive();
@@ -280,29 +279,31 @@
 
     
     var Dashboard = Class.create({
+      sort_hash: function(hash) {
+        return hash.values().sort(function(a, b) {
+          return a.priority - b.priority;
+        });
+      },
       initialize: function(dashboard, config) {
         $current_user_id = config.current_user_id;
                 
-        config.statuses = $H(config.statuses)
-        config.trackers = $H(config.trackers)
-        // -
-        // private
-        function makeIssues(config) {
-          var issues = [];
-          var css_class = ['odd','even'];
-          var css_selector = 0;
-          config.issues.each(function(issue) {
-            if(css_selector==0) { css_selector = 1 }
-            else { css_selector = 0 }
-            issues.push(new Issue(config.sprint , issue, config.statuses, config.trackers, config.url, css_class[css_selector]));
-          });
-          return issues;
-        }
+        config.statuses = $H(config.statuses);
+        config.trackers = $H(config.trackers);
+        
+        var sorted_statuses = this.sort_hash(config.statuses);
+        
         var table  = new Element('table', {
           'width': '100%',
           'class': 'list'
         }, {})
-        var issues = makeIssues(config);
+        var issues = [];
+        var css_class = ['odd','even'];
+        var css_selector = 0;
+        config.issues.each(function(issue) {
+          if(css_selector==0) { css_selector = 1 }
+          else { css_selector = 0 }
+          issues.push(new Issue(config.sprint, issue, sorted_statuses, config.trackers, config.url, css_class[css_selector]));
+        });
         // +
         // public
         this.getDashboard = $from($(dashboard));
@@ -311,6 +312,8 @@
         this.getTrackers  = $from(config.trackers);
         this.getIssues    = $from(issues);
         this.getTable     = $from(table);
+        this.getSortedStatuses = $from(sorted_statuses);
+        
         this.render();
       },
       render: function() {
@@ -320,7 +323,7 @@
           var tr = this.getTable().appendChild(new Element('tr'));
                     
           var colWidth = 100/this.getStatuses().keys().length;
-          this.getStatuses().values().each(function(status){
+          this.getSortedStatuses().each(function(status){
                       
             var th = tr.appendChild(new Element('th', {
               width: ''+colWidth+'%'

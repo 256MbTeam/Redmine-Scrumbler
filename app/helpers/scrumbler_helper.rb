@@ -57,7 +57,7 @@ module ScrumblerHelper
   def prepare_issue_statuses(issue_statuses_settings, issue_statuses)
     r_issue_statuses = {}
     issue_statuses_settings.each{|id,issue_setting|
-      r_issue_statuses[id.to_i] = issue_setting.merge({:name => issue_statuses.detect {|status| status.id == id.to_i}.try(:name)})
+      r_issue_statuses[id.to_i] = issue_setting.merge({:status_id => id.to_i, :name => issue_statuses.detect {|status| status.id == id.to_i}.try(:name)})
     }
     r_issue_statuses
   end
@@ -72,13 +72,11 @@ module ScrumblerHelper
   
   def draw_scrumbler_dashboard(sprint)
     div_id = "dashboard_for_sprint_#{sprint.id}"
-    prepared_issues = sprint.issues.map {|issue| issue_for_json(issue) }
-    #    prepared_issues_statuses = sprint.issue_statuses.map{|issue_status| issue_status_for_json(issue_status)}
+    prepared_issues = sprint.issues.sort(){|a,b| sprint.trackers[a.tracker_id.to_s]["priority"].to_i <=> sprint.trackers[b.tracker_id.to_s]["priority"].to_i }.map {|issue| issue_for_json(issue) }
     config = {
       :sprint => sprint,
       :project => sprint.project,
-      #      :statuses => sprint.scrumbler_sprint_statuses,
-      #      :trackers => Hash[*sprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
+      #      :statuses => sprisprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
       :statuses => prepare_issue_statuses(sprint.issue_statuses, IssueStatus.all),
       :trackers => prepare_trackers(sprint.trackers, sprint.project.trackers),
       :issues => prepared_issues,

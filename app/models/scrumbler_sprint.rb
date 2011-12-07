@@ -36,7 +36,7 @@ inner join issues on issues.project_id = projects.id
 where issues.tracker_id in (#{self.trackers.keys.join(',')})
 and issues.status_id in (#{self.issue_statuses.keys.join(',')})
 and scrumbler_sprints.version_id = issues.fixed_version_id
-and scrumbler_sprints.id = #{self.id}),:readonly => true, :uniq => true, :include => :assigned_to 
+and scrumbler_sprints.id = #{self.id}), :readonly => true, :uniq => true, :include => :assigned_to 
   
   
   def before_create
