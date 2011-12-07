@@ -18,7 +18,7 @@
 module ScrumblerHelper
 
   def backlog_issue_filter_link
-    link_to "backlog", 
+    link_to l(:label_backlog), 
       :controller => :issues, 
       :action => :index, 
       :project_id => @project,
