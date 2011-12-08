@@ -9,12 +9,12 @@ class ScrumblerIssueCustomField < IssueCustomField
     CustomValue.first(:conditions => {
       :customized_id => issue.id,
       :custom_field_id => self.id,
-      :customized_type => issue.to_s
+      :customized_type => issue.class.to_s
       })
   end
   
   def find_all_values
-    CustomValue.first(:conditions => {
+    CustomValue.all(:conditions => {
       :custom_field_id => self.id
       })
   end
