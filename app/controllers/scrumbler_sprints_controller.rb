@@ -69,7 +69,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     @issue = Issue.find(params[:issue_id])
     @message = if @issue.new_statuses_allowed_to(User.current).map(&:id).include?(params[:issue][:status_id].to_i)
       if @issue.update_attributes(params[:issue])
-        {:success => true}
+        {:success => true, :sprint_name => @scrumbler_sprint.name_with_points}
       else
         {:success => false}
       end
