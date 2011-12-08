@@ -74,7 +74,6 @@ module ScrumblerHelper
     div_id = "dashboard_for_sprint_#{sprint.id}"
     
     prepared_issues = sprint.issues.sort(){|a,b| sprint.trackers[a.tracker_id.to_s][:position].to_i <=> sprint.trackers[b.tracker_id.to_s][:position].to_i }.map {|issue| issue_for_json(issue) }
-    p prepared_issues
     config = {
       :sprint => sprint,
       :project => sprint.project,
