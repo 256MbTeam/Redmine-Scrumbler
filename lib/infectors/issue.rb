@@ -26,7 +26,6 @@ module Scrumbler
         
         
         def scrumbler_points
-          p ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value)
           ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value) || 
             ScrumblerIssueCustomField.points.default_value
         end
