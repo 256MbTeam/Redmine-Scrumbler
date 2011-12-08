@@ -142,9 +142,11 @@
           var i = 0;
           statuses.each(function(status){
             statusElements[status.status_id] = {
-              element: new Element('td'),
+              element: new Element('td', {
+                  "class": 'scrumbler_status_'+status.status_id
+              }),
               position: i++,
-              status: status
+              status: status              
             };
             
             statusElements[status.status_id].element.scrumbler_status = status;
@@ -238,7 +240,6 @@
                   if(resp.success) {
                     issue.status_id = status.status_id;
                     dropEl.appendChild(issue.getIssueEl());
-                    console.log(resp)
                     $('scrumbler_sprint_header_name').update(resp.sprint_name);
                   } else {
                     $growler.growl(resp.text, {
@@ -325,10 +326,26 @@
                     
           var colWidth = 100/this.getStatuses().keys().length;
           this.getSortedStatuses().each(function(status){
-                      
             var th = tr.appendChild(new Element('th', {
-              width: ''+colWidth+'%'
+              width: ''+colWidth+'%',
+              "class": 'scrumbler_status_'+status.status_id
             }));
+            var uniq_class_name = th.className;
+            
+            th.observe('click', function(event) {
+                var disabled_class = 'scrumler-dashboard-status-inactive';
+                var rows_scope = $$('.'+uniq_class_name+' > div.scrumbler_dashboard_issue');
+                console.log(rows_scope)
+                console.log(th.className)
+                if(th.hasClassName(disabled_class)) {
+                    th.removeClassName(disabled_class);
+                    rows_scope.each(function(el) { el.parentNode.parentNode.show(); });
+                } else {
+                    th.addClassName(disabled_class);
+                    rows_scope.each(function(el) { el.parentNode.parentNode.hide(); }); 
+                }
+                
+            });
             th.update(status.name);
           }, this);
         }.bind(this)

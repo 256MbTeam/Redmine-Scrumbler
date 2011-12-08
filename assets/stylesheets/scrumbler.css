@@ -27,7 +27,7 @@ div.scrumbler_issue_body {
     padding: 0 0.5em 0.25em;
 }
 
-    div.scrumbler_points{
+div.scrumbler_points{
     margin-right: 1em;
     font-size: 80%;
     font-weight: bold;
@@ -51,7 +51,9 @@ div#scrumbler_sprint table, div#scrumbler_sprint table th, div#scrumbler_sprint 
     border-left: 1px solid #DDD;
     border-right: 1px solid #DDD;
 }
-
+div#scrumbler_sprint table th:hover {
+    cursor: pointer;
+}
 div#scrumbler_sprint table tr td{
 }
 
@@ -113,3 +115,6 @@ div.Growler-notice-exit {
     background-image: url("/images/link.png") !important;
 }
 
+.scrumler-dashboard-status-inactive {
+    text-decoration: line-through;
+}
