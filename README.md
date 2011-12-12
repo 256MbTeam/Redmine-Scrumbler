@@ -21,6 +21,11 @@ Scrumbler supports the following:
 * Automatically set the due date for each issue, when it status changed to closed
 * Easy to change assignee for issue on the dashboard
 
+Requirements
+------------
+
+# Redmine 1.2.x
+
 Installation
 ------------
 
