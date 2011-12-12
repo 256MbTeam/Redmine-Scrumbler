@@ -73,11 +73,11 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_
   end
   
   def trackers
-    self.settings[:trackers] || scrumbler_project_setting.settings[:trackers]
+    self.settings[:trackers] || scrumbler_project_setting.trackers
   end 
   
   def issue_statuses
-    self.settings[:issue_statuses] || scrumbler_project_setting.settings[:issue_statuses]
+    self.settings[:issue_statuses] || scrumbler_project_setting.issue_statuses
   end
   
 end

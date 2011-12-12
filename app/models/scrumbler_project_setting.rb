@@ -16,11 +16,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ScrumblerProjectSetting < ActiveRecord::Base
+  unloadable
   
   #  Default colors, uses for color_chooser
   DEFAULT_COLOR_MAP = %w(faf faa afa aaf ffa aff)
   
-  unloadable
+  validates_presence_of :project
   belongs_to :project
   
   serialize :settings, HashWithIndifferentAccess
@@ -33,8 +34,16 @@ class ScrumblerProjectSetting < ActiveRecord::Base
     self.settings[:issue_statuses][id.to_s] ||  HashWithIndifferentAccess.new
   end
   
+  def trackers
+    self.settings[:trackers]
+  end 
+  
+  def issue_statuses
+    self.settings[:issue_statuses]
+  end
+  
   #    create default settings for dashboard
-  def after_initialize
+  def before_save
     self.settings ||= HashWithIndifferentAccess.new
   
     if !self.settings[:issue_statuses] || self.settings[:issue_statuses].empty?
