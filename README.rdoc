@@ -1,5 +1,0 @@
-= Scrumbler
-
-Redmine plugin for scrum
-
-Development version
