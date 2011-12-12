@@ -25,15 +25,15 @@ Installation
 
 To install the Scrumbler please follow the steps outlined below.
 
-1. Install the plugin in your Redmine plugins directory
+1. Install the plugin in your Redmine plugins directory:
 
     git clone git://github.com/256MbTeam/Redmine-Scrumbler.git vendor/plugins/redmine_scrumbler
 
-1. Run migrations
+1. Run migrations:
 
     rake db:migrate:plugins
 
-1. Restart the Redmine
+1. Restart the Redmine:
 
     You should now be able to see the plugin list in Administration -> Plugins and configure the Scrumbler plugin.
 
