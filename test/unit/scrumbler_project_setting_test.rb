@@ -19,8 +19,6 @@ class ScrumblerProjectSettingTest < ActiveSupport::TestCase
   end
   
   test "should create settings" do
-
-    assert_not_nil @project_setting.settings
     assert_instance_of(HashWithIndifferentAccess, @project_setting.settings)
   end
   
