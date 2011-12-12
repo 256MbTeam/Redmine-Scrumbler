@@ -9,7 +9,6 @@ en:
   label_trackers: "Trackers"
   label_issue_statuses: "Issue statuses"
   label_sprint_back: "Back to sprint"
-  label_backlog: "Backlog"
   label_sprint_settings: "Sprint settings"
   
   tracker_use?: "Use?"

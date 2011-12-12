@@ -72,7 +72,6 @@ module ScrumblerHelper
   
   def draw_scrumbler_dashboard(sprint)
     div_id = "dashboard_for_sprint_#{sprint.id}"
-    p sprint.trackers
     prepared_issues = sprint.issues.sort(){|a,b| sprint.trackers[a.tracker_id.to_s][:position].to_i <=> sprint.trackers[b.tracker_id.to_s][:position].to_i }.map {|issue| issue_for_json(issue) }
     config = {
       :sprint => sprint,
@@ -84,7 +83,7 @@ module ScrumblerHelper
       :url => project_url(sprint.project),
       :current_user_id => User.current.id
     }.to_json
-    out = "<div id='#{div_id}'></div>"
+    out = "<div id='#{div_id}' style='width:100%;height=100%;'>&nbsp;</div>"
     out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
   end
   
