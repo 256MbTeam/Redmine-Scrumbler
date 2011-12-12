@@ -1,4 +1,5 @@
-= Scrumbler
+Scrumbler
+=========
 
 Easy to use plugin for (Redmine)[http://http://www.redmine.org/]. It allows users to use the Scrum process in projects.
 Scrumbler have interactive dashboard with the ability to configure for each sprint. 
@@ -6,7 +7,8 @@ Plugin adds Scrum Points field in every issue in project.
 Scrambler as possible using the standard redmine structure of projects.
 Plugin tested in many browsers, it's not working only in IE.
 
-== Features
+Features
+--------
 
 Scrumbler supports the following:
 - Drag & Drop to change the status of an issue, following the workflow
@@ -18,7 +20,8 @@ Scrumbler supports the following:
 - Automatically set the due date for each issue, when it status changed to closed
 - Easy to change assignee for issue on the dashboard
 
-== Installation
+Installation
+------------
 
 To install the Scrumbler please follow the steps outlined below.
 
@@ -34,7 +37,8 @@ To install the Scrumbler please follow the steps outlined below.
 
     You should now be able to see the plugin list in Administration -> Plugins and configure the Scrumbler plugin.
 
-== TODO
+TODO
+----
 
 * Burndown chart
 * Sprint states 
@@ -42,18 +46,20 @@ To install the Scrumbler please follow the steps outlined below.
 * Daily reporting for issue assignments
 * Template customization
 
----
 
-== Authors
+Authors
+-------
 
 * [Andrianov Alexandr](http://github.com/zloydadka)
 * [Kotenko Ivan](http://github.com/xeta)
 
-== Sponsors
+Sponsors
+--------
 
 * [RDTEX](http://rdtex.ru/)
 
-== License
+License
+-------
 
 This project is licensed under GNU General Public License version 2.
 
