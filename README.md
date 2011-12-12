@@ -1,7 +1,7 @@
 Scrumbler
 =========
 
-Easy to use plugin for (Redmine)[http://http://www.redmine.org/]. It allows users to use the Scrum process in projects.
+Easy to use plugin for [Redmine](http://http://www.redmine.org/). It allows users to use the Scrum process in projects.
 Scrumbler have interactive dashboard with the ability to configure for each sprint. 
 Plugin adds Scrum Points field in every issue in project.
 Scrambler as possible using the standard redmine structure of projects.
