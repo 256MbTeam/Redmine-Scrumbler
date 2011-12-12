@@ -24,7 +24,7 @@ Scrumbler supports the following:
 Requirements
 ------------
 
-* Redmine 1.2.x
+* Redmine 1.2.x or 1.3.0
 
 Installation
 ------------
