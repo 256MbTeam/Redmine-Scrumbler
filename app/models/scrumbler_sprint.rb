@@ -41,7 +41,7 @@ and scrumbler_sprints.id = #{self.id})
   
   
   def points_total
-    connection.select_value("select count(value) from custom_values where 
+    connection.select_value("select sum(value) from custom_values where 
 custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
 custom_values.customized_type = 'Issue' and
 custom_values.customized_id in (#{(self.issues.map(&:id) << 0).join(",")}) and
@@ -49,7 +49,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_
   end
   
   def points_completed
-    connection.select_value("select count(value) from custom_values where 
+    connection.select_value("select sum(value) from custom_values where 
 custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
 custom_values.customized_type = 'Issue' and
 custom_values.customized_id in (select issues.id from scrumbler_sprints

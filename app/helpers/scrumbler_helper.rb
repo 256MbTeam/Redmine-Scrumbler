@@ -76,7 +76,6 @@ module ScrumblerHelper
     config = {
       :sprint => sprint,
       :project => sprint.project,
-      #      :statuses => sprisprint.scrumbler_sprint_trackers.map{|t| [t.tracker_id,t]}.flatten],
       :statuses => prepare_issue_statuses(sprint.issue_statuses, IssueStatus.all),
       :trackers => prepare_trackers(sprint.trackers, sprint.project.trackers),
       :issues => prepared_issues,

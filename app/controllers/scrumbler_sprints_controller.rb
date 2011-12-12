@@ -68,11 +68,16 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   def update_issue
     @issue = Issue.find(params[:issue_id])
     @message = if @issue.new_statuses_allowed_to(User.current).map(&:id).include?(params[:issue][:status_id].to_i)
-      if @issue.update_attributes(params[:issue])
-        {:success => true, :sprint_name => @scrumbler_sprint.name_with_points}
-      else
-        {:success => false}
-      end
+      # Set start date if issue is new
+      params[:issue][:start_date] = Date.today if @issue.status == IssueStatus.default
+      params[:issue][:due_date] = nil if @issue.due_date && @issue.due_date < Date.today
+      
+      # Set due date if issue closed
+      params[:issue][:due_date] = Date.today if IssueStatus.exists?(:is_closed => true, :id => params[:issue][:status_id])
+
+      
+      {:success => @issue.update_attributes(params[:issue]), :sprint_name => @scrumbler_sprint.name_with_points}
+
     else
       new_status = IssueStatus.find(params[:issue][:status_id])
       {:success => false, :text => l(:error_scrumbler_issue_status_change, :status_name => new_status.name)}
