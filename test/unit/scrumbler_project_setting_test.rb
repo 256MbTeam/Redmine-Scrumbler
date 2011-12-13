@@ -18,10 +18,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ScrumblerProjectSettingTest < ActiveSupport::TestCase
-  fixtures :projects
-  fixtures :issue_statuses
-  fixtures :trackers
-  fixtures :projects_trackers
+  fixtures :projects,
+           :issue_statuses,
+           :trackers,
+           :projects_trackers
 
   def setup
     @project_setting = ScrumblerProjectSetting.new(:project => projects(:projects_001))

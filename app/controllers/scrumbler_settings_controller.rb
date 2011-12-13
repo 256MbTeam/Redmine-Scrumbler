@@ -36,6 +36,7 @@ class ScrumblerSettingsController < ScrumblerAbstractController
   
   private
   def update_setting(setting_name, error_message_link)
+    params[:scrumbler_project_setting] ||= {}
     params[:scrumbler_project_setting][setting_name] ||= {}
     @scrumbler_project_setting.settings[setting_name] = {}
 
