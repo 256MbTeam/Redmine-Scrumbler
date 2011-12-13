@@ -1,18 +1,32 @@
+# Scrumbler - Add scrum functionality to any Redmine installation
+# Copyright (C) 2011 256Mb Team
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ScrumblerProjectSettingTest < ActiveSupport::TestCase
   fixtures :projects
   fixtures :issue_statuses
+  fixtures :trackers
+  fixtures :projects_trackers
 
   def setup
     @project_setting = ScrumblerProjectSetting.new(:project => projects(:projects_001))
     @project_setting.save
   end
-  
-#  test "should not save without project" do
-#    @project_setting = ScrumblerProjectSetting.new
-#    assert !@project_setting.save
-#  end
   
   test "should associate with project" do
     assert_equal projects(:projects_001).name, @project_setting.project.name
@@ -47,6 +61,11 @@ class ScrumblerProjectSettingTest < ActiveSupport::TestCase
     assert_equal issue_status.id, issue_status_setting[:id]
     assert_equal issue_status.position, issue_status_setting[:position]
     assert issue_status_setting[:use]
+  end
+  
+  test "should not save without project" do
+    @project_setting = ScrumblerProjectSetting.new
+    assert !@project_setting.save
   end
   
 end

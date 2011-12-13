@@ -1,5 +1,39 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+project_settings_001:
   id: 1
-two:
-  id: 2
+  project_id: 1
+  settings: !map:HashWithIndifferentAccess
+    trackers: !map:HashWithIndifferentAccess 
+      2: !map:HashWithIndifferentAccess 
+        position: 1
+        color: afa
+        use: true
+      3: !map:HashWithIndifferentAccess 
+        position: 3
+        color: aaf
+        use: true
+    issue_statuses: !map:HashWithIndifferentAccess 
+      6: !map:HashWithIndifferentAccess 
+        position: 6
+        id: 6
+        use: true
+      1: !map:HashWithIndifferentAccess 
+        position: 1
+        id: 1
+        use: true
+      2: !map:HashWithIndifferentAccess 
+        position: 2
+        id: 2
+        use: true
+      3: !map:HashWithIndifferentAccess 
+        position: 3
+        id: 3
+        use: true
+      4: !map:HashWithIndifferentAccess 
+        position: 4
+        id: 4
+        use: true
+      5: !map:HashWithIndifferentAccess 
+        position: 5
+        id: 5
+        use: true
