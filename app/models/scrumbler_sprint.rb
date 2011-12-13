@@ -37,8 +37,8 @@ class ScrumblerSprint < ActiveRecord::Base
     :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
-where issues.tracker_id in (#{self.trackers.keys.join(',')})
-and issues.status_id in (#{self.issue_statuses.keys.join(',')})
+where issues.tracker_id in (#{(self.trackers.keys << 0).join(',')})
+and issues.status_id in (#{(self.issue_statuses.keys<< 0).join(',')})
 and scrumbler_sprints.version_id = issues.fixed_version_id
 and scrumbler_sprints.id = #{self.id})
   
@@ -59,8 +59,8 @@ custom_values.customized_id in (select issues.id from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
 inner join issue_statuses on issue_statuses.id = issues.status_id 
-where issues.tracker_id in (#{self.trackers.keys.join(',')})
-and issues.status_id in (#{self.issue_statuses.keys.join(',')})
+where issues.tracker_id in (#{(self.trackers.keys << 0).join(',')})
+and issues.status_id in (#{(self.issue_statuses.keys << 0).join(',')})
 and issue_statuses.is_closed = true
 and scrumbler_sprints.version_id = issues.fixed_version_id
 and scrumbler_sprints.id = #{self.id}) and
