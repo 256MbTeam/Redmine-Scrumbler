@@ -33,7 +33,7 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
     @project = projects(:projects_001)
     @project.enable_module!(:redmine_scrumbler)
     
-    #    admin user
+    #    user with manager role
     @manager = users(:users_002)
     
     #     Infect manager role with scrumbler permission
@@ -42,22 +42,32 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
     @manager_role.permissions << :scrumbler_settings
     @manager_role.save
     
-    
     User.current = nil
   end
   
   test "should update trackers by admin" do 
-    new_tracker_setting = Hash.new()
-    new_tracker_setting["1"] = {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true}
-    new_tracker_setting["1"] = {"position"=>3, "id"=>2, "color"=>"faa", "use"=>true}
-    new_tracker_setting["3"] = {"position"=>2, "id"=>3, "color"=>"faa", "use"=>true}
-    
-    
-    post(:update_trackers, {:project_id => @project.id, :scrumbler_project_setting => {:trackers => new_tracker_setting}}, {:user_id => @manager.id})  
+    tracker_setting = {
+      "1" => {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true},
+      "2" => {"position"=>3, "id"=>2, "color"=>"faa", "use"=>true},
+      "3" => {"position"=>2, "id"=>3, "color"=>"faa", "use"=>true}
+    }
+    post(:update_trackers, {:project_id => @project.id, :scrumbler_project_setting => {:trackers => tracker_setting}}, {:user_id => @manager.id})  
     assert_redirected_to project_scrumbler_settings_url(@project, :trackers)
     assert_equal "Successful update.", flash[:notice]
-    assert_equal new_tracker_setting, ScrumblerProjectSetting.first.trackers
+    assert_equal tracker_setting, ScrumblerProjectSetting.first.trackers
   end
 
+  test "should update issue statuses by admin" do 
+    issue_statuses_settings = {
+      "1" => {"position"=>3, "id"=>1, "use"=>true},
+      "2" => {"position"=>1, "id"=>2, "use"=>true},
+      "3" => {"position"=>2, "id"=>3, "use"=>true}
+    }
+    post(:update_issue_statuses, {:project_id => @project.id, :scrumbler_project_setting => {:issue_statuses => issue_statuses_settings}}, {:user_id => @manager.id})  
+    assert_redirected_to project_scrumbler_settings_url(@project, :issue_statuses)
+    assert_equal "Successful update.", flash[:notice]
+    assert_equal issue_statuses_settings, ScrumblerProjectSetting.first.issue_statuses
+  end
+  
 end
   
