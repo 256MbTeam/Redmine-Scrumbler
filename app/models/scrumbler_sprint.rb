@@ -23,7 +23,10 @@ class ScrumblerSprint < ActiveRecord::Base
   named_scope :opened, :conditions => ["status = ?", "open"]
   
   belongs_to :project
+  validates_presence_of :project
+  
   belongs_to :version
+  validates_presence_of :version
   
   delegate :scrumbler_project_setting, :to => :project
   
