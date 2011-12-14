@@ -24,12 +24,13 @@ class ScrumblerProjectSettingTest < ActiveSupport::TestCase
     :projects_trackers
 
   def setup
-    @project_setting = ScrumblerProjectSetting.new(:project => projects(:projects_001))
+    @project = projects(:projects_001)
+    @project_setting = ScrumblerProjectSetting.new(:project => @project)
     @project_setting.save
   end
   
   test "should associate with project" do
-    assert_equal projects(:projects_001).name, @project_setting.project.name
+    assert_equal @project.name, @project_setting.project.name
   end
   
   test "should create settings" do
@@ -37,11 +38,11 @@ class ScrumblerProjectSettingTest < ActiveSupport::TestCase
   end
   
   test "should create trackers settings" do
-    assert_equal projects(:projects_001).trackers.count, @project_setting.trackers.count
+    assert_equal @project.trackers.count, @project_setting.trackers.count
   end
   
   test "should find tracker settings" do
-    tracker = projects(:projects_001).trackers.first
+    tracker = @project.trackers.first
     tracker_setting = @project_setting.find_tracker(tracker.id)
     assert_equal tracker.id, tracker_setting[:id]
     assert_equal tracker.position, tracker_setting[:position]
@@ -64,6 +65,18 @@ class ScrumblerProjectSettingTest < ActiveSupport::TestCase
   test "should not save without project" do
     @project_setting = ScrumblerProjectSetting.new
     assert !@project_setting.save
+  end
+  
+  test "should create setting after assign tracker for project" do
+    @project = projects(:projects_003)
+    @project_setting = ScrumblerProjectSetting.new(:project => @project)
+    @project_setting.save
+    @tracker = trackers(:trackers_001)
+    @project.trackers << @tracker
+    assert ScrumblerProjectSetting.find(@project_setting.id).find_tracker(@tracker.id)
+    
+    assert_equal @tracker.id, ScrumblerProjectSetting.find(@project_setting.id).find_tracker(@tracker.id)[:id]
+    assert ScrumblerProjectSetting.find(@project_setting.id).trackers[@tracker.id]
   end
   
 end

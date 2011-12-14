@@ -27,11 +27,11 @@ class ScrumblerProjectSetting < ActiveRecord::Base
   serialize :settings, HashWithIndifferentAccess
     
   def find_tracker(id)
-    self.settings[:trackers][id.to_s] ||  HashWithIndifferentAccess.new
+    self.settings[:trackers][id.to_s] || create_setting(Tracker.find(id))
   end
   
   def find_issue_status(id)
-    self.settings[:issue_statuses][id.to_s] ||  HashWithIndifferentAccess.new
+    self.settings[:issue_statuses][id.to_s] || create_setting(IssueStatus.find(id))
   end
   
   def trackers
@@ -50,21 +50,38 @@ class ScrumblerProjectSetting < ActiveRecord::Base
       self.settings[:issue_statuses] =  HashWithIndifferentAccess.new
 
       IssueStatus.all.each {|status|
-        self.settings[:issue_statuses][status.id.to_s] = {:id=>status.id,
-          :use => true, 
-          :position => status.position}
+        self.settings[:issue_statuses][status.id.to_s] = create_setting(status)
       }
     end 
     
     if !self.settings[:trackers] || self.settings[:trackers].empty?
       self.settings[:trackers] =  HashWithIndifferentAccess.new
       self.project.trackers.each {|tracker|
-        self.settings[:trackers][tracker.id.to_s] = {:id=>tracker.id,
-          :use => true, 
-          :position => tracker.position, 
-          :color => DEFAULT_COLOR_MAP[(tracker.id % DEFAULT_COLOR_MAP.size)]}
+        self.settings[:trackers][tracker.id.to_s] = create_setting(tracker)
       }
     end
   end
- 
+  
+  private
+  #  Create default setting
+  def create_setting(object)
+    if object.class == Tracker
+      HashWithIndifferentAccess.new(
+        {
+          :id=>object.id,
+          :use => true, 
+          :position => object.position, 
+          :color => DEFAULT_COLOR_MAP[(object.id % DEFAULT_COLOR_MAP.size)]
+        }
+      )
+    elsif object.class == IssueStatus
+      HashWithIndifferentAccess.new(
+        {
+          :id=>object.id,
+          :use => true, 
+          :position => object.position
+        }
+      )
+    end
+  end
 end
