@@ -46,6 +46,9 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_trackers
+    #    TODO change :enabled to :use (dont forget change tests and views)
+    #    TODO add id to settings[:trackers] (dont forget change tests and views)
+    #    TODO change params[:scrumbler_sprint][:scrumbler_sprint_trackers] to params[:scrumbler_sprint][:trackers] (dont forget change tests and views)
     params[:scrumbler_sprint][:scrumbler_sprint_trackers].delete_if { |k, v|  !v[:enabled]}
     @scrumbler_sprint.settings[:trackers] = params[:scrumbler_sprint][:scrumbler_sprint_trackers]
     
@@ -56,7 +59,8 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue_statuses
-    #TODO
+#    TODO change :enabled to :use (dont forget change tests and views)
+#    TODO change params[:scrumbler_issue_statuses] to params[:scrumbler_sprint][:issue_statuses] (dont forget change tests and views)
     params[:scrumbler_issue_statuses].delete_if { |k, v|  !v[:enabled]}
     @scrumbler_sprint.settings[:issue_statuses] =  params[:scrumbler_issue_statuses]
     flash[:error] = t :error_scrumbler_trackers_update unless @scrumbler_sprint.save

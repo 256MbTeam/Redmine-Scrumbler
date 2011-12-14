@@ -18,9 +18,9 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ScrumblerSprintTest < ActiveSupport::TestCase
-  fixtures :scrumbler_project_settings
-  fixtures :projects
-  fixtures :versions
+  fixtures :scrumbler_project_settings,
+    :projects,
+    :versions
 
   def setup
     @sprint = ScrumblerSprint.new(:project => projects(:projects_001), :version => versions(:versions_001))
