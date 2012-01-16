@@ -26,6 +26,7 @@ module Scrumbler
           ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value) || 
             ScrumblerIssueCustomField.points.default_value
         end
+        
       end
       
       def self.included(receiver)
