@@ -30,6 +30,10 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     @sprint.save
   end
 
+  test "should save with default status" do
+    assert_equal @sprint.status, ScrumblerSprint::PLANNING
+  end
+  
   test "should not save without project or version" do
     @sprint = ScrumblerSprint.new()
     assert !@sprint.save

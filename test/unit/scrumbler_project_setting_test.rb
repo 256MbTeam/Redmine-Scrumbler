@@ -76,7 +76,8 @@ class ScrumblerProjectSettingTest < ActiveSupport::TestCase
     assert ScrumblerProjectSetting.find(@project_setting.id).find_tracker(@tracker.id)
     
     assert_equal @tracker.id, ScrumblerProjectSetting.find(@project_setting.id).find_tracker(@tracker.id)[:id]
-    assert ScrumblerProjectSetting.find(@project_setting.id).trackers[@tracker.id]
+    #    Use find_tracker instead
+    #    assert ScrumblerProjectSetting.find(@project_setting.id).trackers[@tracker.id.to_s]
   end
   
 end

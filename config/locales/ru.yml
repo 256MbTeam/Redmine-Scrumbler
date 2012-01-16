@@ -24,5 +24,8 @@ ru:
       scrumbler_sprint_tracker:
         position: "Приоритет"
         color: "Цвет"
+        status:
+          opened: "Открыт" 
+          closed: "Закрыт"
       scrumbler_sprint_status:
         position: "Приоритет"
