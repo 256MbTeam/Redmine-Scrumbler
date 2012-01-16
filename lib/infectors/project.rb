@@ -22,9 +22,6 @@ module Scrumbler
       
       module InstanceMethods
         
-        # Overriding standart system method
-        
-        
         def create_scrumbler_sprints
           versions.each do |version|
             version.create_scrumbler_sprint(:project_id => self.id)
