@@ -31,16 +31,27 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
   end
 
   test "should save with default status" do
-    assert_equal @sprint.status, ScrumblerSprint::PLANNING
+    assert_equal @sprint.status, "planing"
+  end
+  
+  test "should save with status" do
+    sprint = ScrumblerSprint.new(:project => @project, :version => @version, :status=>"opened")
+    assert_equal sprint.status, "opened"
+  end
+  
+    
+  test "should not save with incorrect status" do
+    sprint = ScrumblerSprint.new(:project => @project, :version => @version, :status=>"abirabir")
+    assert !sprint.save
   end
   
   test "should not save without project or version" do
-    @sprint = ScrumblerSprint.new()
-    assert !@sprint.save
-    @sprint = ScrumblerSprint.new(:project => @project)
-    assert !@sprint.save
-    @sprint = ScrumblerSprint.new(:version => @version)
-    assert !@sprint.save
+    sprint = ScrumblerSprint.new()
+    assert !sprint.save
+    sprint = ScrumblerSprint.new(:project => @project)
+    assert !sprint.save
+    sprint = ScrumblerSprint.new(:version => @version)
+    assert !sprint.save
   end
 
   test "should return scrumbler project settings if own setting undefined" do

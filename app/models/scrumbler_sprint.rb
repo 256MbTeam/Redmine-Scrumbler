@@ -18,10 +18,9 @@
 class ScrumblerSprint < ActiveRecord::Base
   unloadable
   
-  OPENED = "opened"
-  PLANNING = "planing"
-  CLOSED = "closed"
-  
+  STATUSES = ["opened", "planing", "closed"]
+  validates_inclusion_of :status, :in => ScrumblerSprint::STATUSES
+    
   default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
   
   named_scope :opened, :conditions => ["status = ?", "open"]
@@ -75,9 +74,9 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_
     "#{name} (#{points_completed}/#{points_total})"
   end
   
-  def before_create
+  def after_initialize
+    self.status ||= "planing"
     self.settings ||= HashWithIndifferentAccess.new
-    self.status ||= ScrumblerSprint::PLANNING
   end
   
   def trackers
