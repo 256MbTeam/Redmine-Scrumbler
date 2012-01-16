@@ -22,9 +22,6 @@ module Scrumbler
       
       module InstanceMethods
         
-        # Overriding standart system method
-        
-        
         def scrumbler_points
           ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value) || 
             ScrumblerIssueCustomField.points.default_value
