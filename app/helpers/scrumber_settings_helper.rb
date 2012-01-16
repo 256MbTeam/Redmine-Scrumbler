@@ -18,6 +18,7 @@
 module ScrumberSettingsHelper
   def scrumbler_settings_tabs
     [
+      {:name => 'sprints', :action => :update_sprints, :partial => 'sprints', :label => :label_sprints},
       {:name => 'trackers', :action => :update_trackers, :partial => 'trackers', :label => :label_tracker_plural},
       {:name => 'issue_statuses', :action => :update_issue_statuses, :partial => 'issue_statuses', :label => :label_issue_statuses},
     ]

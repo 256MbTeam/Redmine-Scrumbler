@@ -43,6 +43,10 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
     User.current = nil
   end
   
+  test "should update sprint statuses by admin" do
+#    TODO
+  end
+  
   test "should update trackers by admin" do 
     tracker_setting = {
       "1" => {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true},

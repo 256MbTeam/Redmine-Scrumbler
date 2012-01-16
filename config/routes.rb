@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
     
     
     project.resource :scrumbler_settings, :member => {
+      :update_sprints => :post,
       :update_trackers => :post,
       :update_issue_statuses => :post
       

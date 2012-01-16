@@ -6,6 +6,7 @@ ru:
   show_opened: "Только открытые"
   show_all: "Все спринты"
   label_general: "Основные"
+  label_sprints: "Спринты"
   label_trackers: "Трекеры"
   label_issue_statuses: "Статусы задач"
   label_sprint_back: "Вернуться в спринт"

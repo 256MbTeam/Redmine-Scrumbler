@@ -86,4 +86,7 @@ module ScrumblerHelper
     out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
   end
   
+  def select_sprint_statuses_tag(name, selected)
+    select_tag name, options_for_select(ScrumblerSprint::STATUSES.collect {|s| [l("scrumbler_sprint_#{s}"), s]}, selected)
+  end
 end

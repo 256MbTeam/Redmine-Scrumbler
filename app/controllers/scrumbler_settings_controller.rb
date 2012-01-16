@@ -19,10 +19,22 @@ class ScrumblerSettingsController < ScrumblerAbstractController
   unloadable
   
   helper ScrumberSettingsHelper
-  before_filter :authorize, :only => [:show, :update_trackers, :update_issue_statuses]
+  before_filter :authorize, :only => [:show, :update_trackers, :update_issue_statuses, :update_sprints]
   
   def show
     @issue_statuses = IssueStatus.all
+  end
+  
+  def update_sprints
+    params[:scrumbler_sprint] ||= {}
+    ScrumblerSprint.connection.transaction do
+      params[:scrumbler_sprint].each{|id, sprint|
+        @sprint = ScrumblerSprint.find(id)      
+        flash[:error] = t error_message_link unless @sprint.update_attributes(sprint) 
+      }
+    end
+    flash[:notice] = t :notice_successful_update unless flash[:error]
+    redirect_to project_scrumbler_settings_url(@project, :sprints)
   end
   
   def update_trackers
