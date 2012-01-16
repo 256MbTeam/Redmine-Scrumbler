@@ -18,7 +18,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ScrumblerSettingsControllerTest < ActionController::TestCase
-  fixtures :projects, 
+  fixtures :projects,
+    :versions,
     :scrumbler_project_settings,
     :users,
     :roles,
@@ -39,12 +40,18 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
      
     #    user with manager role
     @manager = users(:users_002)
-    
     User.current = nil
   end
   
   test "should update sprint statuses by admin" do
-#    TODO
+    @scrumbler_sprint = @project.versions.first.scrumbler_sprint
+    sprint_settings = {
+      @scrumbler_sprint.id.to_s => {"status" => "opened"}
+    }
+    post(:update_sprints, {:project_id => @project.id, :scrumbler_sprint => sprint_settings}, {:user_id => @manager.id})  
+    assert_redirected_to project_scrumbler_settings_url(@project, :sprints)
+    assert_equal "Successful update.", flash[:notice]
+    assert_equal "opened", @project.versions.first.scrumbler_sprint.status
   end
   
   test "should update trackers by admin" do 
