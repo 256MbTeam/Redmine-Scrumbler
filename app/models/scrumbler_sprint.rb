@@ -18,7 +18,7 @@
 class ScrumblerSprint < ActiveRecord::Base
   unloadable
   
-  default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, status, name"
+  default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
   
   named_scope :opened, :conditions => ["status = ?", "open"]
   
