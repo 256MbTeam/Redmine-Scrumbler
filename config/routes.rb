@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :projects do |project|
     
+    project.resource :scrumbler_backlog, :prefix => '/projects/:project_id/scrumbler'
     
     project.resource :scrumbler_settings, :member => {
       :update_sprints => :post,
