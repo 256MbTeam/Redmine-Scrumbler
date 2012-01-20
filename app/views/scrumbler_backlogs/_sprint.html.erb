@@ -1,7 +1,18 @@
-<div class = "sprint-box"> 
-  <% sprint.issues.each do |issue| %>
-    <div class="issue">
-      <p><%= issue.subject %></p>
-    </div>    
-  <% end %>
+<div id="sprint_<%= sprint.id%>" class="sprint-box">
+	<% sprint.issues.each do |issue| %>
+	<div class="issue" id="issue_<%=issue.id%>">
+		<p>
+			<%= issue.subject %>
+		</p>
+	</div>
+	<script>
+		new Draggable($("issue_<%= issue.id%>"), {revert : true});
+	</script>
+	<% end %>
 </div>
+<script>
+	Droppables.add($("sprint_<%= sprint.id%>"), {
+		accept: 'issue',
+		onDrop: onDrop
+	});
+</script>

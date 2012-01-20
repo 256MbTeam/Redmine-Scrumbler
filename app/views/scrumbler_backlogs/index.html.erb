@@ -2,19 +2,20 @@
 	<div class ="box" >
 		<h2><%= l(:label_backlog)%></h2>
 		<% @project.issues.without_version.each do |issue| %>
-		<div class="issue">
+		<div id="issue_<%= issue.id%>" class="issue">
 			<p>
 				<%= issue.subject %>
 			</p>
 		</div>
+		<script>
+			new Draggable($("issue_<%= issue.id%>"), {revert : true});
+		</script>
 		<% end %>
 	</div>
 </div>
 <div id="splitcontentright" style="float:right; width:50%;">
-	<div id="sprints-tab">
-		<div class ="box">
-			<h2><%=l(:label_sprints)%></h2>
-			<%= render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints)%>
-		</div>
+	<div class ="box">
+		<h2><%= l(:label_sprints)%></h2>
+		<%= render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints)%>
 	</div>
 </div>
