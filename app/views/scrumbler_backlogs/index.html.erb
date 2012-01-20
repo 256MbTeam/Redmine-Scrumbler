@@ -1,5 +1,53 @@
+<script>
+ var onDrop = function(dragEl, dropEl, event) {
+            // if((dragEl != issue.getIssueEl()) || 
+              // !dropEl.scrumbler_status) return;
+            // var status = dropEl.scrumbler_status;
+
+            // if(issue.status_id != status.status_id) {
+              // issue.getIssueEl().hide();
+              dragEl.hide();
+              // new Ajax.Request(issue.getURL(),
+              // {
+                // method:'post',
+                // parameters: {
+                  // 'issue[status_id]': status.status_id
+                // },
+                // onSuccess: function(transport){
+                  // var resp = transport.responseJSON;
+                  // if(!resp) return;
+// 
+                  // if(resp.success) {
+                    // issue.status_id = status.status_id;
+                    // dropEl.appendChild(issue.getIssueEl());
+                    // $('scrumbler_sprint_header_name').update(resp.sprint_name);
+                  // } else {
+                    // $growler.growl(resp.text, {
+                      // header: 'Ошибка'
+                    // });
+                  // }
+//                                 
+                // },
+                // onFailure: function(){ 
+//                   
+                  // $growler.growl('Something went wrong...', {
+                    // header: 'Error'
+                  // });
+                // },
+                // onComplete: function() {
+                  // issue.getIssueEl().show()
+                // }
+              // });
+                        
+            // }
+                        
+                        
+          }
+</script>
+
 <div id="splitcontentleft" style="float:left;width:48%;">
 	<div class ="box" >
+		<div id="backlog" class="backlog">
 		<h2><%= l(:label_backlog)%></h2>
 		<% @project.issues.without_version.each do |issue| %>
 		<div id="issue_<%= issue.id%>" class="issue">
@@ -11,6 +59,13 @@
 			new Draggable($("issue_<%= issue.id%>"), {revert : true});
 		</script>
 		<% end %>
+		</div>
+		<script>
+		Droppables.add($("backlog"), {
+		accept: 'issue',
+		onDrop: onDrop
+		});
+	</script>
 	</div>
 </div>
 <div id="splitcontentright" style="float:right; width:50%;">
