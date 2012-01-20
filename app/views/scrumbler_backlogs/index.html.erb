@@ -1,13 +1,20 @@
-
-<h2><%=l(:label_backlog)%></h2>
-  <div class ="box" style="width:300px">
-  <% @project.issues.without_version.each do |issue| %>
-    <div class="issue">
-      <p><%= issue.subject %></p>
-    </div>    
-  <% end %>
-  </div>
-
-<div id="sprints-tab">
-  <%=render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints)%>
+<div id="splitcontentleft" style="float:left;width:48%;">
+	<div class ="box" >
+		<h2><%= l(:label_backlog)%></h2>
+		<% @project.issues.without_version.each do |issue| %>
+		<div class="issue">
+			<p>
+				<%= issue.subject %>
+			</p>
+		</div>
+		<% end %>
+	</div>
+</div>
+<div id="splitcontentright" style="float:right; width:50%;">
+	<div id="sprints-tab">
+		<div class ="box">
+			<h2><%=l(:label_sprints)%></h2>
+			<%= render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints)%>
+		</div>
+	</div>
 </div>
