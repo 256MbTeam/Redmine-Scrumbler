@@ -27,11 +27,21 @@ module Scrumbler
             ScrumblerIssueCustomField.points.default_value
         end
         
+        private
+        def validate_sprint_trackers
+          if @sprint = self.fixed_version.try(:scrumbler_sprint)
+              tracker_setting = @sprint.trackers[self.tracker_id.to_s]
+              errors.add_to_base(:tracker_error) unless tracker_setting && tracker_setting[:use]
+            end
+        end
       end
       
       def self.included(receiver)
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
+        receiver.class_eval {
+          validate :validate_sprint_trackers
+        }
       end
     end
   end

@@ -3,8 +3,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :projects do |project|
     
     project.resource :scrumbler_backlogs, :member=>{
-      :add_issue_to_sprint => :post,
-      :remove_issue_from_sprint => :post
+      # :add_issue_to_sprint => :post,
+      # :remove_issue_from_sprint => :post
+      :change_issue_version => :post
     },:prefix => '/projects/:project_id/scrumbler_backlogs'
     
     project.resource :scrumbler_settings, :member => {

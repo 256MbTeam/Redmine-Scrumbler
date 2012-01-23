@@ -1,89 +1,108 @@
-<script>var PROJECT_ID =<%= @project.id%>
-		function getRealId(id) {
-			var splitted = id.split("_");
-			return splitted.last();
-		}
+<script>
+	function getRealId(id) {
+		var splitted = id.split("_");
+		return splitted.last();
+	};
 
-		var onDrop = function(issue_div, target_div, event) {
+	function render(parent_div, issues) {
+		console.log("render",parent_div, issues);
+		parent_div.update("");
+		issues.each(function(issue) {
+			var issue_div = new Element("div", {
+				"id" : "issue_" + issue.id,
+				"class" : "issue"
+			});
+			issue_div.update("<p>" + issue.subject + "</p>");
+			new Draggable(issue_div, {
+				revert : true
+			});
+			parent_div.appendChild(issue_div);
+		});
+	};
+
+	var IssuesList = Class.create({
+
+		initialize : function(config) {
+			this.issues = config.issues;
+			this.parent = $(config.parent_id);
+			this.sprint_id = config.sprint_id;
+			this.url = config.url;
+			render(this.parent, config.issues);
+			Droppables.add(this.parent, {
+				accept : 'issue',
+				onDrop : this.onDrop.bind(this)
+			});
+		},
+		onDrop : function(issue_div, target_div, event) {
+			var issue_id = getRealId(issue_div.id);
 			var source_div = issue_div.parentNode
-
+			console.log(source_div);
 			if(source_div == target_div) {
 				return;
 			}
 
-			var issue_id = getRealId(issue_div.id);
-
-			// from backlog to sprint
-			if(source_div.id == "backlog") {
-				var sprint_id = getRealId(target_div.id);
-				console.log(target_div.id, sprint_id);
-				new Ajax.Request("/projects/" + PROJECT_ID + "/scrumbler_backlogs/add_issue_to_sprint", {
-					method : 'post',
-					parameters : {
-						'issue_id' : issue_id,
-						'sprint_id' : sprint_id,
-					},
-					onSuccess : function(transport) {
-						console.log(transport);
-						var resp = transport.responseText;
-						console.log(resp);
-						if(resp.success) {
-							console.log(resp);
-							target_div.update(resp);
-							// issue.status_id = status.status_id;
-							// dropEl.appendChild(issue.getIssueEl());
-							// $('scrumbler_sprint_header_name').update(resp.sprint_name);
-						} else {
-							$growler.growl(resp.text, {header : 'Ошибка'});
+			issue_div.hide();
+			console.log(this.url);
+			new Ajax.Request(this.url, {
+				method : 'post',
+				parameters : {
+					'issue_id' : issue_id,
+					'sprint_id' : this.sprint_id,
+				},
+				onSuccess : function(transport) { target_div
+					var resp = transport.responseJSON;
+					console.log(resp);
+					if(resp.success) {
+						// Move issue to backlog
+						if(this.sprint_id === undefined) {
+							render(target_div, resp.backlog);
+							render(source_div, resp.sprint);
 						}
-
-					},
-					onFailure : function() {
-
-						$growler.growl('Something went wrong...', {
-							header : 'Error'
+						// Move issue to sprint
+						else {
+							render(source_div, resp.backlog);
+							render(target_div, resp.sprint);
+						}
+					} else {
+						$growler.growl(resp.text, {
+							header : 'Ошибка'
 						});
-					},
-					onComplete : function() {
-						// issue.getIssueEl().show()
 					}
-				});
 
-				//
-				//from sprint to backlog
-			} else {
-
-			}
-
-			// if((dragEl != issue.getIssueEl()) ||
-			// !dropEl.scrumbler_status) return;
-			// var status = dropEl.scrumbler_status;
-
-			// if(issue.status_id != status.status_id) {
-			// issue.getIssueEl().hide();
-
+				}.bind(this),
+				onFailure : function() {
+					$growler.growl('Something went wrong...', {
+						header : 'Error'
+					});
+				},
+				onComplete : function() {
+					issue_div.show();
+				}
+			});
 		}
+	});
+
 </script>
+<% content_for :header_tags do %>
+<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
+<%end%>
 <div id="splitcontentleft" style="float:left;width:48%;">
 	<div class ="box" >
-		<div id="backlog" class="backlog">
+		<div id="backlog" class="baissuecklog">
 			<h2><%= l(:label_backlog)%></h2>
-			<% @project.issues.without_version.each do |issue| %>
-			<div id="issue_<%= issue.id%>" class="issue">
-				<p>
-					<%= issue.subject %>
-				</p>
-			</div>
-			<script>
-				new Draggable($("issue_<%= issue.id%>"), {revert : true});</script>
-			<% end %>
+			<div id="backlog_list"></div>
 		</div>
 		<script>
-			Droppables.add($("backlog"), {
-				accept : 'issue',
-				onDrop : onDrop
-			});
-
+			new IssuesList({
+issues :<%= @project.issues.without_version.map{|issue|
+    {:id => issue.id,
+      :subject => issue.subject }
+  }.to_json%>
+	, parent_id : "backlog_list",
+	url : "/projects/<%= @project.identifier%>/scrumbler_backlogs/change_issue_version"
+	});
 		</script>
 	</div>
 </div>

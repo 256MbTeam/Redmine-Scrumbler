@@ -1,18 +1,15 @@
-<div id="sprint_<%= sprint.id%>" class="sprint-box">
-	<% sprint.issues.each do |issue| %>
-	<div class="issue" id="issue_<%=issue.id%>">
-		<p>
-			<%= issue.subject %>
-		</p>
-	</div>
-	<script>
-		new Draggable($("issue_<%= issue.id%>"), {revert : true});
-	</script>
-	<% end %>
+<div id="sprint_<%= sprint.id%>" class="sprint-box" style="height:600px;">
 </div>
 <script>
-	Droppables.add($("sprint_<%= sprint.id%>"), {
-		accept: 'issue',
-		onDrop: onDrop
+	new IssuesList({
+		issues :<%= sprint.issues.map{|issue|
+    		{
+    		:id => issue.id,
+      		:subject => issue.subject 
+      		}
+  		}.to_json%>, 
+  		sprint_id : <%= sprint.id%>,
+  		parent_id : "sprint_<%= sprint.id%>",
+		url : "/projects/<%=@project.identifier%>/scrumbler_backlogs/change_issue_version"
 	});
 </script>
