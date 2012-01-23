@@ -1,71 +1,90 @@
-<script>
- var onDrop = function(dragEl, dropEl, event) {
-            // if((dragEl != issue.getIssueEl()) || 
-              // !dropEl.scrumbler_status) return;
-            // var status = dropEl.scrumbler_status;
+<script>var PROJECT_ID =<%= @project.id%>
+		function getRealId(id) {
+			var splitted = id.split("_");
+			return splitted.last();
+		}
 
-            // if(issue.status_id != status.status_id) {
-              // issue.getIssueEl().hide();
-              dragEl.hide();
-              // new Ajax.Request(issue.getURL(),
-              // {
-                // method:'post',
-                // parameters: {
-                  // 'issue[status_id]': status.status_id
-                // },
-                // onSuccess: function(transport){
-                  // var resp = transport.responseJSON;
-                  // if(!resp) return;
-// 
-                  // if(resp.success) {
-                    // issue.status_id = status.status_id;
-                    // dropEl.appendChild(issue.getIssueEl());
-                    // $('scrumbler_sprint_header_name').update(resp.sprint_name);
-                  // } else {
-                    // $growler.growl(resp.text, {
-                      // header: 'Ошибка'
-                    // });
-                  // }
-//                                 
-                // },
-                // onFailure: function(){ 
-//                   
-                  // $growler.growl('Something went wrong...', {
-                    // header: 'Error'
-                  // });
-                // },
-                // onComplete: function() {
-                  // issue.getIssueEl().show()
-                // }
-              // });
-                        
-            // }
-                        
-                        
-          }
+		var onDrop = function(issue_div, target_div, event) {
+			var source_div = issue_div.parentNode
+
+			if(source_div == target_div) {
+				return;
+			}
+
+			var issue_id = getRealId(issue_div.id);
+
+			// from backlog to sprint
+			if(source_div.id == "backlog") {
+				var sprint_id = getRealId(target_div.id);
+				console.log(target_div.id, sprint_id);
+				new Ajax.Request("/projects/" + PROJECT_ID + "/scrumbler_backlogs/add_issue_to_sprint", {
+					method : 'post',
+					parameters : {
+						'issue_id' : issue_id,
+						'sprint_id' : sprint_id,
+					},
+					onSuccess : function(transport) {
+						console.log(transport);
+						var resp = transport.responseText;
+						console.log(resp);
+						if(resp.success) {
+							console.log(resp);
+							target_div.update(resp);
+							// issue.status_id = status.status_id;
+							// dropEl.appendChild(issue.getIssueEl());
+							// $('scrumbler_sprint_header_name').update(resp.sprint_name);
+						} else {
+							$growler.growl(resp.text, {header : 'Ошибка'});
+						}
+
+					},
+					onFailure : function() {
+
+						$growler.growl('Something went wrong...', {
+							header : 'Error'
+						});
+					},
+					onComplete : function() {
+						// issue.getIssueEl().show()
+					}
+				});
+
+				//
+				//from sprint to backlog
+			} else {
+
+			}
+
+			// if((dragEl != issue.getIssueEl()) ||
+			// !dropEl.scrumbler_status) return;
+			// var status = dropEl.scrumbler_status;
+
+			// if(issue.status_id != status.status_id) {
+			// issue.getIssueEl().hide();
+
+		}
 </script>
-
 <div id="splitcontentleft" style="float:left;width:48%;">
 	<div class ="box" >
 		<div id="backlog" class="backlog">
-		<h2><%= l(:label_backlog)%></h2>
-		<% @project.issues.without_version.each do |issue| %>
-		<div id="issue_<%= issue.id%>" class="issue">
-			<p>
-				<%= issue.subject %>
-			</p>
+			<h2><%= l(:label_backlog)%></h2>
+			<% @project.issues.without_version.each do |issue| %>
+			<div id="issue_<%= issue.id%>" class="issue">
+				<p>
+					<%= issue.subject %>
+				</p>
+			</div>
+			<script>
+				new Draggable($("issue_<%= issue.id%>"), {revert : true});</script>
+			<% end %>
 		</div>
 		<script>
-			new Draggable($("issue_<%= issue.id%>"), {revert : true});
+			Droppables.add($("backlog"), {
+				accept : 'issue',
+				onDrop : onDrop
+			});
+
 		</script>
-		<% end %>
-		</div>
-		<script>
-		Droppables.add($("backlog"), {
-		accept: 'issue',
-		onDrop: onDrop
-		});
-	</script>
 	</div>
 </div>
 <div id="splitcontentright" style="float:right; width:50%;">
