@@ -22,7 +22,7 @@ en:
   error_scrumbler_issue_status_change: "You dont have permissions to change status \"%{status_name}\" for this issue"
   
   scrumbler_sprint_opened: "Opened"
-  scrumbler_sprint_planing: "Planning"
+  scrumbler_sprint_planning: "Planning"
   scrumbler_sprint_closed: "Closed"
   
   activerecord:

@@ -18,12 +18,14 @@
 class ScrumblerSprint < ActiveRecord::Base
   unloadable
   
-  STATUSES = ["opened", "planing", "closed"]
+  STATUSES = ["opened", "planning", "closed"]
   validates_inclusion_of :status, :in => ScrumblerSprint::STATUSES
     
   default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
   
   named_scope :opened, :conditions => ["scrumbler_sprints.status = ?", "opened"]
+  
+  named_scope :planning, :conditions => {:status => "planning"}
   
   belongs_to :project
   validates_presence_of :project

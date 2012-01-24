@@ -21,7 +21,7 @@ ru:
   error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
   
   scrumbler_sprint_opened: "Открыт"
-  scrumbler_sprint_planing: "Планирование"
+  scrumbler_sprint_planning: "Планирование"
   scrumbler_sprint_closed: "Закрыт"
   
   activerecord:

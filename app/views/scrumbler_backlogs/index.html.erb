@@ -90,9 +90,9 @@
 <%end%>
 <div id="splitcontentleft" style="float:left;width:48%;">
 	<div class ="box" >
-		<div id="backlog" class="baissuecklog">
+		<div id="backlog" class="backlog">
 			<h2><%= l(:label_backlog)%></h2>
-			<div id="backlog_list"></div>
+			<div id="backlog_list" style="min-height:100px;"></div>
 		</div>
 		<script>
 			new IssuesList({
@@ -109,6 +109,6 @@ issues :<%= @project.issues.without_version.map{|issue|
 <div id="splitcontentright" style="float:right; width:50%;">
 	<div class ="box">
 		<h2><%= l(:label_sprints)%></h2>
-		<%= render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints)%>
+		<%= render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints.planning)%>
 	</div>
 </div>

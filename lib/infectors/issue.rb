@@ -31,7 +31,7 @@ module Scrumbler
         def validate_sprint_trackers
           if @sprint = self.fixed_version.try(:scrumbler_sprint)
               tracker_setting = @sprint.trackers[self.tracker_id.to_s]
-              errors.add_to_base(:tracker_error) unless tracker_setting && tracker_setting[:use]
+              errors.add_to_base(:tracker_error) unless tracker_setting || tracker_setting[:use]
             end
         end
       end
