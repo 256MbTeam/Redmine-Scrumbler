@@ -24,6 +24,13 @@ ru:
   scrumbler_sprint_planing: "Планирование"
   scrumbler_sprint_closed: "Закрыт"
   
+  activerecord:
+    errors:
+      models:
+        issue:
+          attributes:
+            base:
+              tracker_error: "Трекер не активен для данного спринта"
   active_record:
     models:
       scrumbler_sprint_tracker:

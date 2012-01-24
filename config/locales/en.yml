@@ -1,5 +1,6 @@
 # Russian strings go here for Rails i18n
 en:
+  
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
   
@@ -24,6 +25,13 @@ en:
   scrumbler_sprint_planing: "Planning"
   scrumbler_sprint_closed: "Closed"
   
+  activerecord:
+    errors:
+      models:
+        issue:
+          attributes:
+            base:
+              tracker_error: "Tracker doesn's exist in this sprint"
   active_record:
     models:
       scrumbler_sprint_tracker:
