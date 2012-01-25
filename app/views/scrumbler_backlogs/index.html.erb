@@ -5,7 +5,7 @@
 	};
 
 	function render(parent_div, issues) {
-		console.log("render",parent_div, issues);
+		console.log("render", parent_div, issues);
 		parent_div.update("");
 		issues.each(function(issue) {
 			var issue_div = new Element("div", {
@@ -94,16 +94,7 @@
 			<h2><%= l(:label_backlog)%></h2>
 			<div id="backlog_list" style="min-height:100px;"></div>
 		</div>
-		<script>
-			new IssuesList({
-issues :<%= @project.issues.without_version.map{|issue|
-    {:id => issue.id,
-      :subject => issue.subject }
-  }.to_json%>
-	, parent_id : "backlog_list",
-	url : "/projects/<%= @project.identifier%>/scrumbler_backlogs/change_issue_version"
-	});
-		</script>
+		<%= backlog_issues%>
 	</div>
 </div>
 <div id="splitcontentright" style="float:right; width:50%;">

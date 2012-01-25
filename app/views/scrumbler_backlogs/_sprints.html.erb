@@ -1,12 +1,18 @@
-<% selected_tab = params[:tab] ? params[:tab].to_s : tabs.first[:name] %>
+<script>
+var sprintSelected = function(sprint){
+	// TODO save selected sprint
+}
+</script>
+
+<% selected_sprint = params[:tab] ? params[:tab].to_s : sprints.first[:name] %>
 
 <div class="tabs">
   <ul>
-  <% tabs.each do |tab| -%>
-    <li><%= link_to tab[:label], { :tab => tab[:name] },
-                                    :id => "tab-#{tab[:name]}",
-                                    :class => (tab[:name] != selected_tab ? nil : 'selected'),
-                                    :onclick => "showTab('#{tab[:name]}'); this.blur(); return false;" %></li>
+  <% sprints.each do |sprint| -%>
+    <li><%= link_to sprint[:label], { :tab => sprint[:name] },
+                                    :id => "tab-#{sprint[:name]}",
+                                    :class => (sprint[:name] != selected_sprint ? nil : 'selected'),
+                                    :onclick => "showTab('#{sprint[:name]}'); this.blur(); sprintSelected('#{sprint[:name]}'); return false;" %></li>
   <% end -%>
   </ul>
 
@@ -14,9 +20,9 @@
 
 
 
-<% tabs.each do |tab| -%>
-  <%= content_tag('div', render(:partial => tab[:partial], :locals => {:tab => tab, :sprint => tab[:sprint]} ), 
-                       :id => "tab-content-#{tab[:name]}",
-                       :style => (tab[:name] != selected_tab ? 'display:none' : nil),
+<% sprints.each do |sprint| -%>
+  <%= content_tag('div', render(:partial => sprint[:partial], :locals => {:sprint => sprint} ), 
+                       :id => "tab-content-#{sprint[:name]}",
+                       :style => (sprint[:name] != selected_sprint ? 'display:none' : nil),
                        :class => 'tab-content') %>
 <% end -%>
