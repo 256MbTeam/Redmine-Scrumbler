@@ -23,7 +23,7 @@ class ScrumblerSprint < ActiveRecord::Base
     
   default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
   
-  named_scope :opened, :conditions => ["scrumbler_sprints.status = ?", "opened"]
+  named_scope :opened, :conditions => {:status => "opened"}
   
   named_scope :planning, :conditions => {:status => "planning"}
   
@@ -77,7 +77,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_
   end
   
   def after_initialize
-    self.status ||= "planing"
+    self.status ||= "planning"
     self.settings ||= HashWithIndifferentAccess.new
   end
   
