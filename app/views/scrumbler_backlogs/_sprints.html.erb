@@ -1,6 +1,7 @@
 <script>
 var sprintSelected = function(sprint){
 	// TODO save selected sprint
+	console.log(sprint);
 }
 </script>
 
@@ -12,11 +13,12 @@ var sprintSelected = function(sprint){
     <li><%= link_to sprint[:label], { :tab => sprint[:name] },
                                     :id => "tab-#{sprint[:name]}",
                                     :class => (sprint[:name] != selected_sprint ? nil : 'selected'),
-                                    :onclick => "showTab('#{sprint[:name]}'); this.blur(); sprintSelected('#{sprint[:name]}'); return false;" %></li>
+                                    :onclick => "showTab('#{sprint[:name]}'); this.blur(); sprintSelected(#{sprint.to_json}); return false;" %></li>
   <% end -%>
   </ul>
 
 </div>
+
 
 
 

@@ -28,6 +28,7 @@ module ScrumblerBacklogsHelper
         :name => sprint.name,
         :action => :update_general, :partial => 'sprint',
         :label => sprint.name,
+        :trackers => sprint.trackers,
         :issues => sprint.issues.map{|issue|
           {
             :id => issue.id,
