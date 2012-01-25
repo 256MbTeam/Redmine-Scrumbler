@@ -42,6 +42,7 @@
     </p>
     <%= render :partial => 'sprint', :object =>  @scrumbler_sprint %>
   <% else %>
+  	<%=link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
     <p class="nodata"><%= l(:label_no_data) %></p>
   <% end %>
 </div>  
