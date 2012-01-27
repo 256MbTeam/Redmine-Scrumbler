@@ -20,7 +20,9 @@ module ScrumblerBacklogsHelper
     issues.map{|issue|
       { :id => issue.id,
         :subject => issue.subject,
-        :tracker_id => issue.tracker_id
+        :tracker_id => issue.tracker_id,
+        :points => issue.scrumbler_points,
+        # :tracker_name => 
       }
     }
   end
@@ -52,6 +54,7 @@ module ScrumblerBacklogsHelper
 
   def sprint_issues(sprint)
     js_params = {
+      :project_id => @project.identifier,
       :sprint_id => sprint[:id],
       :issues => sprint[:issues],
       :trackers => sprint[:trackers],
@@ -63,6 +66,7 @@ module ScrumblerBacklogsHelper
 
   def backlog_issues
     js_params = {
+      :project_id => @project.identifier,
       :issues => prepare_issues_for_json(@project.issues.without_version),
       :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers),
       :parent_id => "backlog_list",

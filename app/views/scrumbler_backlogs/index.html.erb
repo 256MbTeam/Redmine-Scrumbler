@@ -1,14 +1,20 @@
 <script>
 
-	function renderIssueList(parent_div, issues, trackers) {
-		console.log(trackers);
+	function renderIssueList(parent_div, config) {
+		var issues = config.issues;
+		var trackers = config.trackers;
+		var project_id = config.project_id;
+		
+		
+		var trackers_map = {};
+		
 		parent_div.update("");
 	
 		var trackers_div = new Element("div", {
 			"class" : "scrumbler_backlog_trackers"
 		});
-		console.log(trackers);
 		trackers.each(function(tracker){
+			trackers_map[tracker.id] = tracker; 
 			var tracker_div = new Element("div", {
 				"id" : tracker.id,
 				"class" : "scrumbler_backlog_tracker",
@@ -26,12 +32,30 @@
 
 		issues.each(function(issue) {
 			
-			console.log("disabled", issue.disabled);
+			var tracker = trackers_map[issue.tracker_id];
+			var issue_url = '/issues/'+issue.id;
+			var tracker_url = '/projects/'+project_id+'/issues?tracker_id='+issue.tracker_id;
+			  
 			var issue_div = new Element("div", {
 				"id" : "issue_" + issue.id,
-				"class" : issue.disabled ? "disabled_issue" : "issue"
+				"class" : issue.disabled ? "disabled_issue" : "scrumbler_issue"
 			});
-			issue_div.update("<p>" + issue.subject + "</p>");
+			
+			var issue_content = ISSUE_TEMPLATE.evaluate({
+									issue_url: issue_url,
+									tracker_url: tracker_url,
+									tracker_name: tracker.name,
+									issue_subject: issue.subject,
+									issue_id: issue.id,
+									color: tracker.color || '507AAA',
+									points: issue.points
+								});
+			issue_div.update(issue_content);
+			
+			
+			
+			
+			// issue_div.update("<p>" + issue.subject + "</p>");
 			new Draggable(issue_div, {
 				revert : true
 			});
@@ -45,15 +69,16 @@
 	var IssuesList = Class.create({
 
 		initialize : function(config) {
-			console.log(config);
 			this.issues = config.issues;
 			this.trackers = config.trackers;
 			this.parent = $(config.parent_id);
 			this.sprint_id = config.sprint_id;
 			this.url = config.url;
-			renderIssueList(this.parent, config.issues, config.trackers);
+			this.project_id = config.project_id;
+			
+			renderIssueList(this.parent, config);
 			Droppables.add(this.parent, {
-				accept : 'issue',
+				accept : 'scrumbler_issue',
 				onDrop : this.onDrop.bind(this)
 			});
 		},
@@ -73,17 +98,16 @@
 				},
 				onSuccess : function(transport) { target_div
 					var resp = transport.responseJSON;
-					console.log(resp);
 					if(resp.success) {
 						// Move issue to backlog
 						if(this.sprint_id === undefined) {
-							renderIssueList(target_div, resp.backlog.issues, resp.backlog.trackers);
-							renderIssueList(source_div, resp.sprint.issues, resp.sprint.trackers);
+							renderIssueList(target_div, resp.backlog);
+							renderIssueList(source_div, resp.sprint);
 						}
 						// Move issue to sprint
 						else {
-							renderIssueList(source_div, resp.backlog.issues, resp.backlog.trackers);
-							renderIssueList(target_div, resp.sprint.issues, resp.sprint.trackers);
+							renderIssueList(source_div, resp.backlog);
+							renderIssueList(target_div, resp.sprint);
 						}
 					} else {
 						$growler.growl(resp.text, {
@@ -110,7 +134,12 @@ var BacklogIssuesList = Class.create(IssuesList, {
 			var d = containsById(trackers, issue.tracker_id);
 				issue.disabled = !d;
 		});
-		renderIssueList(this.parent, this.issues, this.trackers);
+		renderIssueList(this.parent, {
+			"issues" : this.issues,
+			"trackers" : this.trackers,
+			"project_id" : this.project_id			
+			}
+		);
 	}
 });
 var SprintIssuesList = Class.create(IssuesList, {

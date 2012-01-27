@@ -36,10 +36,14 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
     end
 
     render :json => { :success => @issue.save,
-                      :backlog => {:issues => prepare_issues_for_json(@project.issues.without_version),
-                                    :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers)},
-                      :sprint => {:issues => prepare_issues_for_json(@sprint.issues),
-                                  :trackers => prepare_trackers(@sprint.trackers, @project.trackers)},
+                      :backlog => {:proejct_id => @project.identifier,
+                                   :issues => prepare_issues_for_json(@project.issues.without_version),
+                                   :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers)
+                                  },
+                      :sprint => {:proejct_id => @project.identifier,
+                                  :issues => prepare_issues_for_json(@sprint.issues),
+                                  :trackers => prepare_trackers(@sprint.trackers, @project.trackers)
+                                 },
                       :text => @issue.errors.full_messages.join(", <br>")
                     }
   end

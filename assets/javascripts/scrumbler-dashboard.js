@@ -159,7 +159,7 @@
           'class' : css_class
         });
         var issueEl = new Element('div', {
-          'class': 'scrumbler_dashboard_issue',
+          'class': 'scrumbler_issue',
           id: id
         });
         function makeStatusElements() {
@@ -265,11 +265,9 @@
                   if(!resp) return;
 
                   if(resp.success) {
-                  	console.log(status);
                     issue.setStatusId(status.status_id);
                     issue.setClosed(status.closed);
                     dropEl.appendChild(issue.getIssueEl());
-                    console.log(issue);
                     issue.getDashboard().refreshHeader();
                   } else {
                     $growler.growl(resp.text, {
@@ -294,7 +292,7 @@
                         
           }
           Droppables.add(status.element, {
-            accept: 'scrumbler_dashboard_issue',
+            accept: 'scrumbler_issue',
             onDrop: onDrop
           });
 
