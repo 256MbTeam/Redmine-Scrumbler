@@ -2,7 +2,8 @@
   <%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
   <%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
   <%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
-  <%= javascript_include_tag 'dashboard', :plugin => 'redmine_scrumbler' %>
+  <%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
+  <%= javascript_include_tag 'scrumbler-dashboard', :plugin => 'redmine_scrumbler' %>
 <% end %>
 <div class="contextual">
   <%= link_to_if_authorized l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
@@ -11,7 +12,6 @@
       :action => :index, 
       :project_id => @project
     %>
-  <%#= backlog_issue_filter_link %>
 </div>
 <h2><%=l(:scrumbler_menu)%></h2>
 

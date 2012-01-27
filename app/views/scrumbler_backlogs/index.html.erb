@@ -1,18 +1,4 @@
 <script>
-	function getRealId(id) {
-		var splitted = id.split("_");
-		return splitted.last();
-	};
-	
-	function containsById(collection, id){
-		var return_value = false;
-		collection.each(function(element){
-				if(element.id == id){
-					return_value = true;
-				}
-		});
-		return return_value;
-	}
 
 	function renderIssueList(parent_div, issues, trackers) {
 		console.log(trackers);
@@ -136,6 +122,8 @@ var SprintIssuesList = Class.create(IssuesList, {
 <%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
 <%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
 <%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
 <%end%>
 <div id="splitcontentleft" style="float:left;width:48%;">
 	<div class ="box" >

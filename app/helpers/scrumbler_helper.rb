@@ -14,27 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 module ScrumblerHelper
-
-
-  def backlog_issue_filter_link
-    link_to l(:label_backlog),
-      :controller => :issues,
-      :action => :index,
-      :project_id => @project,
-      :f => %w(status_id fixed_version_id),
-      :v => {
-        :status_id => %W(5 6)
-      },
-      :op => {
-        :fixed_version_id => "!*",
-        :status_id => "!"
-        },
-      :group_by => :priority,
-      :set_filter => 1,
-      :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
-  end
+  # def backlog_issue_filter_link
+    # link_to l(:label_backlog),
+      # :controller => :issues,
+      # :action => :index,
+      # :project_id => @project,
+      # :f => %w(status_id fixed_version_id),
+      # :v => {
+        # :status_id => %W(5 6)
+      # },
+      # :op => {
+        # :fixed_version_id => "!*",
+        # :status_id => "!"
+        # },
+      # :group_by => :priority,
+      # :set_filter => 1,
+      # :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
+  # end
 
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)

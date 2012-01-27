@@ -15,12 +15,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class ScrumblerBacklogsController < ScrumblerAbstractController
-  # include Scrumbler::ScrumblerJSONator
+  unloadable
+  
   helper :scrumbler_backlogs
   include ScrumblerBacklogsHelper
   
-  
-  unloadable
   def index
 
   end
