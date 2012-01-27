@@ -16,27 +16,55 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module ScrumblerBacklogsHelper
-  
   def draw_issues_list(config)
-    
+
   end
-  
+
   def scrumbler_sprints_tabs(sprints)
-    tabs = []
+    sprints_data = []
     sprints.each do |sprint|
-      tabs << {
+      sprints_data << {
+        :id => sprint.id,
         :name => sprint.name,
         :action => :update_general, :partial => 'sprint',
         :label => sprint.name,
-        :sprint => sprint
+        :trackers => sprint.trackers,
+        :issues => sprint.issues.map{|issue|
+          {
+            :id => issue.id,
+            :subject => issue.subject
+          }
+        }
       }
     end
-    tabs
+    sprints_data
   end
 
-  def render_sprint_tabs(tabs)
-    if tabs.any?
-      render :partial => 'sprints', :locals => {:tabs => tabs}
+  def sprint_issues(sprint)
+    js_params = {
+      :sprint_id => sprint[:id],
+      :issues => sprint[:issues],
+      :parent_id => "sprint_#{sprint[:id]}",
+      :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
+    }
+    javascript_tag("new IssuesList(#{js_params.to_json})")
+  end
+
+  def backlog_issues
+    js_params = {
+      :issues => @project.issues.without_version.map{|issue|
+        {:id => issue.id,
+          :subject => issue.subject }
+      },
+      :parent_id => "backlog_list",
+      :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
+    }
+    javascript_tag("new IssuesList(#{js_params.to_json})")
+  end
+
+  def render_sprint_tabs(sprints)
+    if sprints.any?
+      render :partial => 'sprints', :locals => {:sprints => sprints}
     else
       content_tag 'p', l(:label_no_data), :class => "nodata"
     end

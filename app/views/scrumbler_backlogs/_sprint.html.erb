@@ -1,15 +1,3 @@
-<div id="sprint_<%= sprint.id%>" class="sprint-box" style="min-height:100px;">
+<div id="sprint_<%= sprint[:id]%>" class="sprint-box" style="min-height:100px;">
 </div>
-<script>
-	new IssuesList({
-		issues :<%= sprint.issues.map{|issue|
-    		{
-    		:id => issue.id,
-      		:subject => issue.subject 
-      		}
-  		}.to_json%>, 
-  		sprint_id : <%= sprint.id%>,
-  		parent_id : "sprint_<%= sprint.id%>",
-		url : "/projects/<%=@project.identifier%>/scrumbler_backlogs/change_issue_version"
-	});
-</script>
+<%= sprint_issues(sprint) %>
