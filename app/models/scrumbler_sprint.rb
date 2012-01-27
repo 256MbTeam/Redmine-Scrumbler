@@ -38,6 +38,7 @@ class ScrumblerSprint < ActiveRecord::Base
   serialize :settings, HashWithIndifferentAccess
   
   validate :closing_validation
+  validate :remove_tracker_validation
   
   
   has_many :issues, :readonly => true, :uniq => true, :include => [:assigned_to, :statuses],
@@ -93,7 +94,15 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   
   private
   def closing_validation
-    errors.add_to_base(:closing_sprint_with_opened_issues) if Issue.open.exists?(:id => self.issues.map(&:id))
+    if Issue.open.exists?(:id => self.issues.map(&:id)) && self.status == "closed"
+      errors.add_to_base(:closing_sprint_with_opened_issues) 
+    end
+  end
+  
+  def remove_tracker_validation
+    if Issue.exists?(["tracker_id not in (?) and fixed_version_id = ?", self.trackers.keys, self.version_id])
+         errors.add_to_base(:trackers_with_issues_in_sprint_cant_be_removed) 
+    end
   end
   
 end
