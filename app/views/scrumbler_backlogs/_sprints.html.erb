@@ -1,7 +1,8 @@
 <script>
 var sprintSelected = function(sprint){
 	// TODO save selected sprint
-	console.log(sprint);
+	console.log("sprintSelected", sprint);
+	backlog.setAvaliavbleTrackers(sprint.trackers);
 }
 </script>
 

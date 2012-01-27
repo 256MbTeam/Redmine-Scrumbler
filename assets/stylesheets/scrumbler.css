@@ -1,3 +1,17 @@
+div.scrumbler_backlog_issues{
+	padding-top: 30px;
+}
+
+div.scrumbler_backlog_tracker{
+	float: right;
+	padding: 0px;
+	margin-right: 1em;
+}
+div.scrumbler_backlog_trackers{
+	background: red;
+	display: inline;
+}
+
 div.scrumbler_dashboard_issue {
     border: 2px solid #ccc;
     height: 100%;

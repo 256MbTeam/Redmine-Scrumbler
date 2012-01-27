@@ -5,41 +5,40 @@
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module ScrumblerHelper
-
   def backlog_issue_filter_link
-    link_to l(:label_backlog), 
-      :controller => :issues, 
-      :action => :index, 
+    link_to l(:label_backlog),
+      :controller => :issues,
+      :action => :index,
       :project_id => @project,
       :f => %w(status_id fixed_version_id),
       :v => {
         :status_id => %W(5 6)
       },
       :op => {
-        :fixed_version_id => "!*", 
+        :fixed_version_id => "!*",
         :status_id => "!"
         },
       :group_by => :priority,
       :set_filter => 1,
       :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
   end
-  
+
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)
     out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");
   end
-  
+
   def issue_for_json(issue)
     out = {
       :id => issue.id,
@@ -50,10 +49,10 @@ module ScrumblerHelper
       :points => issue.scrumbler_points
     }
     out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
-      
+
     out
   end
-  
+
   def prepare_issue_statuses(issue_statuses_settings, issue_statuses)
     r_issue_statuses = {}
     issue_statuses_settings.each{|id,issue_setting|
@@ -61,7 +60,7 @@ module ScrumblerHelper
     }
     r_issue_statuses
   end
-  
+
   def prepare_trackers(trackers_settings, trackers)
     r_trackers = {}
     trackers_settings.each{|id,tracker_setting|
@@ -69,7 +68,7 @@ module ScrumblerHelper
     }
     r_trackers
   end
-  
+
   def draw_scrumbler_dashboard(sprint)
     div_id = "dashboard_for_sprint_#{sprint.id}"
     prepared_issues = sprint.issues.sort(){|a,b| sprint.trackers[a.tracker_id.to_s][:position].to_i <=> sprint.trackers[b.tracker_id.to_s][:position].to_i }.map {|issue| issue_for_json(issue) }
@@ -85,7 +84,7 @@ module ScrumblerHelper
     out = "<div id='#{div_id}' style='width:100%;height=100%;'>&nbsp;</div>"
     out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
   end
-  
+
   def select_sprint_statuses_tag(name, selected)
     select_tag name, options_for_select(ScrumblerSprint::STATUSES.collect {|s| [l("scrumbler_sprint_#{s}"), s]}, selected)
   end
