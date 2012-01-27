@@ -53,7 +53,7 @@ and scrumbler_sprints.id = #{self.id})
 custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
 custom_values.customized_type = 'Issue' and
 custom_values.customized_id in (#{(self.issues.map(&:id) << 0).join(",")}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_f
+custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :total_points).to_f
   end
   
   def points_completed
@@ -69,7 +69,7 @@ and issues.status_id in (#{(self.issue_statuses.keys << 0).join(',')})
 and issue_statuses.is_closed = true
 and scrumbler_sprints.version_id = issues.fixed_version_id
 and scrumbler_sprints.id = #{self.id}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_f
+custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :completed_points).to_f
   end
   
   def name_with_points

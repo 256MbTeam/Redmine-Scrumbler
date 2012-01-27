@@ -28,6 +28,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   include ScrumblerHelper
 
 
+
   def settings
     @trackers = @project.trackers
     @issue_statuses = IssueStatus.all
@@ -83,7 +84,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
       params[:issue][:due_date] = Date.today if IssueStatus.exists?(:is_closed => true, :id => params[:issue][:status_id])
 
       
-      {:success => @issue.update_attributes(params[:issue]), :sprint_name => @scrumbler_sprint.name_with_points}
+      {:success => @issue.update_attributes(params[:issue])}
 
     else
       new_status = IssueStatus.find(params[:issue][:status_id])
