@@ -1,13 +1,5 @@
   var ScrumblerDashboard = (function() {
-    
-    // Helpers
-    $from = function(v) {
-      return function() {
-        return v
-      }
-    };
-       
-    
+ 	// Helpers
     var BacklogHeader = function(name) {
     	var el = new Element('div', {
         	id: "scrumbler_sprint_header"
@@ -47,21 +39,6 @@
        
         
     var $current_user_id;
-    var ISSUE_TEMPLATE = new Template(
-    "<div class='scrumbler_dashboard_issue_heading' >\n\
-            <div class='scrumbler_dashboard_issue_color' style='background: ##{color};'>&nbsp;\n\
-                <a href='#{tracker_url}'>#{tracker_name}</a>\n\
-                <div class='scrumbler_dashboard_issue_id'>\n\
-                    <a href='#{issue_url}'>##{issue_id}</a>\n\
-                </div>\n\
-            </div>\n\
-        </div>\n\
-        <div class='scrumbler_issue_body'>\n\
-            <div class='scrumbler_points'>#{points}</div>\n\
-            #{issue_subject}\n\
-        </div>");
-        
-        
     // End helpers
     
         

@@ -14,10 +14,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 module ScrumblerBacklogsHelper
-  def draw_issues_list(config)
+  
+   def prepare_issues_for_json(issues)
+    issues.map{|issue|
+      { :id => issue.id,
+        :subject => issue.subject,
+        :tracker_id => issue.tracker_id
+      }
+    }
+  end
 
+  def prepare_trackers(trackers_settings, trackers)
+    trackers_settings.map{|tracker_id, settings|
+      {
+        :id => tracker_id,
+        :name => trackers.detect {|tracker| tracker.id == tracker_id.to_i}.try(:name),
+        :color => settings[:color]
+      }
+    }
   end
 
   def scrumbler_sprints_tabs(sprints)
@@ -28,13 +43,8 @@ module ScrumblerBacklogsHelper
         :name => sprint.name,
         :action => :update_general, :partial => 'sprint',
         :label => sprint.name,
-        :trackers => sprint.trackers,
-        :issues => sprint.issues.map{|issue|
-          {
-            :id => issue.id,
-            :subject => issue.subject
-          }
-        }
+        :trackers => prepare_trackers(sprint.trackers, @project.trackers),
+        :issues => prepare_issues_for_json(sprint.issues)
       }
     end
     sprints_data
@@ -44,6 +54,7 @@ module ScrumblerBacklogsHelper
     js_params = {
       :sprint_id => sprint[:id],
       :issues => sprint[:issues],
+      :trackers => sprint[:trackers],
       :parent_id => "sprint_#{sprint[:id]}",
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
     }
@@ -52,14 +63,12 @@ module ScrumblerBacklogsHelper
 
   def backlog_issues
     js_params = {
-      :issues => @project.issues.without_version.map{|issue|
-        {:id => issue.id,
-          :subject => issue.subject }
-      },
+      :issues => prepare_issues_for_json(@project.issues.without_version),
+      :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers),
       :parent_id => "backlog_list",
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
     }
-    javascript_tag("new IssuesList(#{js_params.to_json})")
+    javascript_tag("var backlog = new BacklogIssuesList(#{js_params.to_json})")
   end
 
   def render_sprint_tabs(sprints)
