@@ -16,6 +16,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module ScrumblerHelper
+
+
   def backlog_issue_filter_link
     link_to l(:label_backlog),
       :controller => :issues,
@@ -46,7 +48,8 @@ module ScrumblerHelper
       :tracker_id => issue.tracker_id,
       :project_id => issue.project_id,
       :subject => issue.subject,
-      :points => issue.scrumbler_points
+      :points => issue.scrumbler_points,
+      :closed => issue.closed?
     }
     out[:assigned_to] = {:id   => issue.assigned_to_id, :name => issue.assigned_to.name } if issue.assigned_to
 
@@ -56,7 +59,12 @@ module ScrumblerHelper
   def prepare_issue_statuses(issue_statuses_settings, issue_statuses)
     r_issue_statuses = {}
     issue_statuses_settings.each{|id,issue_setting|
-      r_issue_statuses[id.to_i] = issue_setting.merge({:status_id => id.to_i, :name => issue_statuses.detect {|status| status.id == id.to_i}.try(:name)})
+      _status = issue_statuses.detect {|status| status.id == id.to_i}
+      r_issue_statuses[id.to_i] = issue_setting.merge({
+        :status_id => id.to_i,
+        :closed =>  _status.try(:is_closed),
+        :name => _status.try(:name)
+        })
     }
     r_issue_statuses
   end
@@ -74,6 +82,7 @@ module ScrumblerHelper
     prepared_issues = sprint.issues.sort(){|a,b| sprint.trackers[a.tracker_id.to_s][:position].to_i <=> sprint.trackers[b.tracker_id.to_s][:position].to_i }.map {|issue| issue_for_json(issue) }
     config = {
       :sprint => sprint,
+      :name => sprint.name,
       :project => sprint.project,
       :statuses => prepare_issue_statuses(sprint.issue_statuses, IssueStatus.all),
       :trackers => prepare_trackers(sprint.trackers, sprint.project.trackers),

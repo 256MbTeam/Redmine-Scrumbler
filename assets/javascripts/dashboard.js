@@ -1,9 +1,50 @@
   var ScrumblerDashboard = (function() {
+    
+    // Helpers
     $from = function(v) {
       return function() {
         return v
       }
     };
+       
+    
+    var BacklogHeader = function(name) {
+    	var el = new Element('div', {
+        	id: "scrumbler_sprint_header"
+        });
+    	var h3 = new Element('h3', {
+        	id: "scrumbler_sprint_header_name"
+        }).update(name);
+        
+        var progress_bar = new Element('table', {
+        	width: '100%',
+        	'class': 'progress'
+        });
+        var tr = new Element('tr');
+        var td_completed = new Element('td', {'class': 'closed'});
+        var td_total = new Element('td', {'class': 'done'});
+        var p = new Element('p', {'class': 'pourcent'});
+        
+        el.appendChild(h3);
+        el.appendChild(progress_bar);
+		progress_bar.appendChild(tr);
+		tr.appendChild(td_completed);
+		tr.appendChild(td_total);
+		el.appendChild(p);
+		this.getElement = $from(el);
+		
+		this.setValues = function(total, completed) {
+
+			var pct_completed = completed/(total/100.0);
+			var pct_required = 100-pct_completed;
+			
+			td_completed.setStyle({width: pct_completed+"%"});
+			td_total.setStyle({width: (pct_required)+"%"});
+			
+			p.update(completed + '/' + total);
+		}		
+    };
+       
         
     var $current_user_id;
     var ISSUE_TEMPLATE = new Template(
@@ -19,6 +60,10 @@
             <div class='scrumbler_points'>#{points}</div>\n\
             #{issue_subject}\n\
         </div>");
+        
+        
+    // End helpers
+    
         
     var AssignmentStatus = Class.create({
       initialize: function(issue) {
@@ -121,7 +166,11 @@
         this.config = config
         return this.getConfig();
       },
-      initialize: function(sprint, issue_config, statuses, trackers, url, css_class) {
+      getStatusId: function() {return this.config.status_id},
+      setStatusId: function(status_id) {return this.config.status_id = status_id},
+      getClosed: function() {return this.config.status_id},
+      setClosed: function(closed) {return this.config.closed = closed},
+      initialize: function(dashboard, sprint, issue_config, statuses, trackers, url, css_class) {
         this.setConfig(issue_config);
         // -
         // private
@@ -156,6 +205,7 @@
                 
         // +
         // public
+        this.getDashboard		= $from(dashboard);
         this.getID              = $from(id);
         this.getRow             = $from(row);
         this.getIssueEl         = $from(issueEl);
@@ -164,7 +214,7 @@
         this.getIssueURL        = $from(issue_url);
         this.getTrackerURL      = $from(tracker_url);
         this.getTrackers        = $from(trackers);
-        this.status_id          = issue_config.status_id;
+        
               
                 
         var assn = new AssignmentStatus(this);
@@ -204,12 +254,13 @@
           this.getRow().appendChild(status.element);
           status.element.update('&nbsp;')
         }, this);
-        this.statuses.get(this.getConfig().status_id).element.appendChild(this.getIssueEl());
+        this.statuses.get(this.getStatusId()).element.appendChild(this.getIssueEl());
       },
       makeInteractive: function() {
         // -
         // private
         var issue = this;
+        
         var draggable = new Draggable(this.getIssueEl(), {
           revert : true,
           constraint: 'horizontal'
@@ -224,7 +275,7 @@
 
             var status = dropEl.scrumbler_status;
 
-            if(issue.status_id != status.status_id) {
+            if(issue.getStatusId() != status.status_id) {
               issue.getIssueEl().hide();
               new Ajax.Request(issue.getURL(),
               {
@@ -237,9 +288,12 @@
                   if(!resp) return;
 
                   if(resp.success) {
-                    issue.status_id = status.status_id;
+                  	console.log(status);
+                    issue.setStatusId(status.status_id);
+                    issue.setClosed(status.closed);
                     dropEl.appendChild(issue.getIssueEl());
-                    $('scrumbler_sprint_header_name').update(resp.sprint_name);
+                    console.log(issue);
+                    issue.getDashboard().refreshHeader();
                   } else {
                     $growler.growl(resp.text, {
                       header: 'Ошибка'
@@ -290,23 +344,28 @@
                 
         config.statuses = $H(config.statuses);
         config.trackers = $H(config.trackers);
-        
+        var _self = this;
         var sorted_statuses = this.sort_hash(config.statuses);
+        
+        var header = new BacklogHeader(config.name);
+        
         
         var table  = new Element('table', {
           'width': '100%',
           'class': 'list'
-        }, {})
+        }, {});
+        
         var issues = [];
         var css_class = ['odd','even'];
         var css_selector = 0;
         config.issues.each(function(issue) {
           if(css_selector==0) { css_selector = 1 }
           else { css_selector = 0 }
-          issues.push(new Issue(config.sprint, issue, sorted_statuses, config.trackers, config.url, css_class[css_selector]));
+          issues.push(new Issue(_self, config.sprint, issue, sorted_statuses, config.trackers, config.url, css_class[css_selector]));
         });
         // +
         // public
+        this.getHeader    = $from(header);
         this.getDashboard = $from($(dashboard));
         this.getConfig    = $from(config);
         this.getStatuses  = $from(config.statuses);
@@ -316,6 +375,25 @@
         this.getSortedStatuses = $from(sorted_statuses);
         
         this.render();
+        this.refreshHeader();
+      },
+      getPoints: function() {
+      	var total = 0;
+      	var completed = 0;
+      	this.getIssues().each(function(issue) {
+      		var config = issue.getConfig();
+      		var points = parseFloat(config.points);
+      		
+      		if (points == points) {
+      			if (config.closed) { completed += points;}
+				total += points;
+      		}
+      	});
+      	return [total, completed];
+      },
+      refreshHeader: function() {
+      	var points = this.getPoints();
+      	this.getHeader().setValues(points[0], points[1]);
       },
       render: function() {
         // -
@@ -355,6 +433,7 @@
         }, this)
                 
         // Append table to dashboard
+        this.getDashboard().appendChild(this.getHeader().getElement());
         this.getDashboard().appendChild(this.getTable());
       }
     });

@@ -37,8 +37,10 @@ class ScrumblerSprint < ActiveRecord::Base
   
   serialize :settings, HashWithIndifferentAccess
   
+  validate :closing_validation
   
-  has_many :issues, :readonly => true, :uniq => true, :include => :assigned_to,
+  
+  has_many :issues, :readonly => true, :uniq => true, :include => [:assigned_to, :statuses],
     :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
@@ -53,7 +55,7 @@ and scrumbler_sprints.id = #{self.id})
 custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
 custom_values.customized_type = 'Issue' and
 custom_values.customized_id in (#{(self.issues.map(&:id) << 0).join(",")}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_f
+custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :total_points).to_f
   end
   
   def points_completed
@@ -69,7 +71,7 @@ and issues.status_id in (#{(self.issue_statuses.keys << 0).join(',')})
 and issue_statuses.is_closed = true
 and scrumbler_sprints.version_id = issues.fixed_version_id
 and scrumbler_sprints.id = #{self.id}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_f
+custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :completed_points).to_f
   end
   
   def name_with_points
@@ -87,6 +89,11 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'").to_
   
   def issue_statuses
     self.settings[:issue_statuses] || scrumbler_project_setting.issue_statuses
+  end
+  
+  private
+  def closing_validation
+    errors.add_to_base(:closing_sprint_with_opened_issues) if Issue.open.exists?(:id => self.issues.map(&:id))
   end
   
 end
