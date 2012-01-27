@@ -26,12 +26,15 @@
 		this.getElement = $from(el);
 		
 		this.setValues = function(total, completed) {
-
-			var pct_completed = completed/(total/100.0);
-			var pct_required = 100-pct_completed;
 			
-			td_completed.setStyle({width: pct_completed+"%"});
+			var pct_completed = completed/(total/100.0) || 0;
+			var pct_required = 100-pct_completed;
+			console.log(pct_completed, pct_required)
+			td_completed.setStyle({width: pct_completed+"%",});
 			td_total.setStyle({width: (pct_required)+"%"});
+			
+
+			td_completed.setStyle({display: (pct_completed == 0) ? 'none' : 'table-cell'});
 			
 			p.update(completed + '/' + total);
 		}		
