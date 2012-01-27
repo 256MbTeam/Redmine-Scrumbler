@@ -37,8 +37,10 @@ class ScrumblerSprint < ActiveRecord::Base
   
   serialize :settings, HashWithIndifferentAccess
   
+  validate :closing_validation
   
-  has_many :issues, :readonly => true, :uniq => true, :include => :assigned_to,
+  
+  has_many :issues, :readonly => true, :uniq => true, :include => [:assigned_to, :statuses],
     :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
@@ -87,6 +89,11 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   
   def issue_statuses
     self.settings[:issue_statuses] || scrumbler_project_setting.issue_statuses
+  end
+  
+  private
+  def closing_validation
+    errors.add_to_base(:closing_sprint_with_opened_issues) if Issue.open.exists?(:id => self.issues.map(&:id))
   end
   
 end
