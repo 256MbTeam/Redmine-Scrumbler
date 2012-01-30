@@ -30,7 +30,7 @@ class ScrumblerSettingsController < ScrumblerAbstractController
     ScrumblerSprint.connection.transaction do
       params[:scrumbler_sprint].each{|id, sprint|
         @sprint = ScrumblerSprint.find(id)      
-        flash[:error] = t error_message_link unless @sprint.update_attributes(sprint) 
+        flash[:error] = t :error_scrumbler_general_update unless @sprint.update_attributes(sprint) 
       }
     end
     flash[:notice] = t :notice_successful_update unless flash[:error]

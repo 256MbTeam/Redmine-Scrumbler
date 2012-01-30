@@ -43,8 +43,15 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
     User.current = nil
   end
   
+  test "after module enable should create sprints for every existing version" do
+    @project.versions.each { |version|
+      assert_instance_of ScrumblerSprint, version.scrumbler_sprint
+    }
+  end
+  
   test "should update sprint statuses by admin" do
-    @scrumbler_sprint = @project.versions.first.scrumbler_sprint
+    @version = @project.versions.first
+    @scrumbler_sprint = @version.scrumbler_sprint
     sprint_settings = {
       @scrumbler_sprint.id.to_s => {"status" => "opened"}
     }

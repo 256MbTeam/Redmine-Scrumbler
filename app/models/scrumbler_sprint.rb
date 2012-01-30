@@ -33,10 +33,12 @@ class ScrumblerSprint < ActiveRecord::Base
   belongs_to :version
   validates_presence_of :version
   
+  
   delegate :scrumbler_project_setting, :to => :project
   
   serialize :settings, HashWithIndifferentAccess
   
+  validate :scrumbler_project_setting_validation
   validate :closing_validation
   validate :remove_tracker_validation
   
@@ -85,14 +87,22 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   end
   
   def trackers
-    self.settings[:trackers] || scrumbler_project_setting.trackers
+    self.settings[:trackers] || scrumbler_project_setting.try(:trackers)
   end 
   
   def issue_statuses
-    self.settings[:issue_statuses] || scrumbler_project_setting.issue_statuses
+    self.settings[:issue_statuses] || scrumbler_project_setting.try(:issue_statuses)
   end
   
   private
+  
+  def scrumbler_project_setting_validation
+    if !project || !scrumbler_project_setting
+#       TODO change error
+      errors.add_to_base(:closing_sprint_with_opened_issues) 
+    end
+  end
+  
   def closing_validation
     if Issue.open.exists?(:id => self.issues.map(&:id)) && self.status == "closed"
       errors.add_to_base(:closing_sprint_with_opened_issues) 
