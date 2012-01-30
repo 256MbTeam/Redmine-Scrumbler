@@ -47,9 +47,9 @@ class ScrumblerSprintsControllerTest < ActionController::TestCase
 
   test "should update sprint trackers by admin" do
     tracker_setting = {
-      "1" => {"position"=>1, "id"=>1, "color"=>"faa", "enabled"=>true},
-      "2" => {"position"=>3, "id"=>2, "color"=>"faa", "enabled"=>true},
-      "3" => {"position"=>2, "id"=>3, "color"=>"faa", "enabled"=>true}
+      "1" => {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true},
+      "2" => {"position"=>3, "id"=>2, "color"=>"faa", "use"=>true},
+      "3" => {"position"=>2, "id"=>3, "color"=>"faa", "use"=>true}
     }
 
     post(:update_trackers,
@@ -69,9 +69,9 @@ class ScrumblerSprintsControllerTest < ActionController::TestCase
 
   test "should update sprint issue statuses by admin" do
     issue_statuses_setting = {
-      "1" => {"position"=>3, "id"=>1, "enabled"=>true},
-      "2" => {"position"=>1, "id"=>2, "enabled"=>true},
-      "3" => {"position"=>2, "id"=>3, "enabled"=>true}
+      "1" => {"position"=>3, "id"=>1, "use"=>true},
+      "2" => {"position"=>1, "id"=>2, "use"=>true},
+      "3" => {"position"=>2, "id"=>3, "use"=>true}
     }
     
     post(:update_issue_statuses,
