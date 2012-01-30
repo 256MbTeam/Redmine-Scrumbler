@@ -61,7 +61,6 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue_statuses
-    #    TODO change params[:scrumbler_issue_statuses] to params[:scrumbler_sprint][:issue_statuses] (dont forget change tests and views)
     params[:scrumbler_sprint][:issue_statuses].delete_if { |k, v|  !v[:use]}
     @scrumbler_sprint.settings[:issue_statuses] =  params[:scrumbler_sprint][:issue_statuses]
     flash[:error] = t :error_scrumbler_trackers_update unless @scrumbler_sprint.save
