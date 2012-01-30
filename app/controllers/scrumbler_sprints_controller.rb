@@ -50,11 +50,9 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_trackers
-    #    TODO change :enabled to :use (dont forget change tests and views)
     #    TODO add id to settings[:trackers] (dont forget change tests and views)
-    #    TODO change params[:scrumbler_sprint][:scrumbler_sprint_trackers] to params[:scrumbler_sprint][:trackers] (dont forget change tests and views)
-    params[:scrumbler_sprint][:scrumbler_sprint_trackers].delete_if { |k, v|  !v[:enabled]}
-    @scrumbler_sprint.settings[:trackers] = params[:scrumbler_sprint][:scrumbler_sprint_trackers]
+    params[:scrumbler_sprint][:trackers].delete_if { |k, v|  !v[:use]}
+    @scrumbler_sprint.settings[:trackers] = params[:scrumbler_sprint][:trackers]
     
     flash[:error] = t :error_scrumbler_trackers_update unless @scrumbler_sprint.save 
           
@@ -63,10 +61,9 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_issue_statuses
-    #    TODO change :enabled to :use (dont forget change tests and views)
     #    TODO change params[:scrumbler_issue_statuses] to params[:scrumbler_sprint][:issue_statuses] (dont forget change tests and views)
-    params[:scrumbler_issue_statuses].delete_if { |k, v|  !v[:enabled]}
-    @scrumbler_sprint.settings[:issue_statuses] =  params[:scrumbler_issue_statuses]
+    params[:scrumbler_sprint][:issue_statuses].delete_if { |k, v|  !v[:use]}
+    @scrumbler_sprint.settings[:issue_statuses] =  params[:scrumbler_sprint][:issue_statuses]
     flash[:error] = t :error_scrumbler_trackers_update unless @scrumbler_sprint.save
       
     flash[:notice] = t :notice_successful_update unless flash[:error]
@@ -90,7 +87,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
       new_status = IssueStatus.find(params[:issue][:status_id])
       {:success => false, :text => l(:error_scrumbler_issue_status_change, :status_name => new_status.name)}
     end
-
+    p @issue.errors
     render :json => @message
   end
   
