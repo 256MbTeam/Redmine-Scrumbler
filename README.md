@@ -1,11 +1,11 @@
 Scrumbler
 =========
 
-Easy to use plugin for [Redmine](http://http://www.redmine.org/). It allows users to use the Scrum process in projects.
+Easy to use plugin for [Redmine](http://http://www.redmine.org/). It allows users to use the Scrum/Agile process in projects.
 Scrumbler have interactive dashboard with the ability to configure for each sprint. 
 Plugin adds Scrum Points field in every issue in project.
-Scrambler as possible using the standard redmine structure of projects.
-Plugin tested in many browsers, it's not working only in IE.
+Scrumbler as possible using the standard redmine structure of projects.
+Plugin tested in many browsers, but it's not working in IE.
 
 Features
 --------
@@ -20,6 +20,7 @@ Scrumbler supports the following:
 * Scrum Points calculation and progress displayed on the dashboard
 * Automatically set the due date for each issue, when it status changed to closed
 * Easy to change assignee for issue on the dashboard
+* Backlog for easy sprint composing with Drag & Drop
 
 Requirements
 ------------
@@ -51,7 +52,6 @@ TODO
 * IE support
 * Daily reporting for issue assignments
 * Template customization
-* Backlog
 
 Authors
 -------
