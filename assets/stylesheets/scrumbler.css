@@ -1,134 +1,148 @@
-div.scrumbler_backlog_issues{
-	padding-top: 30px;
+div.disabled_scrumbler_issue {
+	border: 2px solid #ccc;
+	height: 100%;
+	background: #ccc;
+	box-shadow: 0px 6px 25px #777;
+	margin: .5em;
+	border-radius: 12px;
 }
 
-div.scrumbler_backlog_tracker{
+
+div.disabled_scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue_color {
+	width: 100%;
+/*	background-color: #eee;*/
+	padding: 2px 0;
+	border-radius: 10px 10px 0 0;
+}
+div.disabled_scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue_color > a {
+	background: #ccc;
+	padding: 0 1em;
+	border-radius: 5px;
+}
+
+div.disabled_scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue_color > div.scrumbler_issue_id {
+	margin: 0 1em;
+	float: right;
+	border-radius: 5px;
+	padding: 0 .5em;
+	background: #ccc;
+}
+
+div.scrumbler_backlog_issues {
+	padding-top: 26px;
+}
+div.scrumbler_backlog_tracker {
 	float: right;
 	padding: 0px;
 	margin-right: 1em;
 }
-div.scrumbler_backlog_trackers{
-	background: red;
-	display: inline;
-}
 
 div.scrumbler_issue {
-    border: 2px solid #ccc;
-    height: 100%;
-    background: white;
-    box-shadow: 0px 6px 25px #777;
-    margin: .5em;
-    border-radius: 12px;
+	border: 2px solid #ccc;
+	height: 100%;
+	background: white;
+	box-shadow: 0px 6px 25px #777;
+	margin: .5em;
+	border-radius: 12px;
+}
+div.scrumbler_issue > div.scrumbler_issue_heading {
+	width: 100%;
+	height: 20px;
+}
+div.scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue_color {
+	width: 100%;
+	padding: 2px 0;
+	border-radius: 10px 10px 0 0;
+}
+div.scrumbler_issue_heading > div.scrumbler_issue_color > a {
+	background-color: white;
+	padding: 0 1em;
+	border-radius: 5px;
 }
 
-div.scrumbler_dashboard_issue_heading{
-    /*    border: 1px solid black;*/
-    width:100%;
-    height:20px;
-}
-div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color {
-    width: 100%;
-    padding: 2px 0;
-    border-radius: 10px 10px 0 0;
-}
-div.scrumbler_dashboard_issue_heading > div.scrumbler_dashboard_issue_color > a{
-    background-color: white;
-    padding: 0 1em;
-    border-radius: 5px;
+div.scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue_color > div.scrumbler_issue_id {
+	margin: 0 1em;
+	float: right;
+	border-radius: 5px;
+	padding: 0 .5em;
+	background-color: white;
 }
 
 div.scrumbler_issue_body {
-    padding: 0 0.5em 0.25em;
+	padding: 0 0.5em 0.25em;
+}
+div.scrumbler_points {
+	margin-right: 1em;
+	font-size: 80%;
+	font-weight: bold;
+/*	background-color: white;*/
+	border: 1px solid #ccc;
+	width: 100%;
+	text-align: center;
 }
 
-div.scrumbler_points{
-    margin-right: 1em;
-    font-size: 80%;
-    font-weight: bold;
-    background-color: white;
-    border: 1px solid #ccc;
-    width: 100%;
-    text-align: center;
-}
-
-div.scrumbler_dashboard_issue_id{
-    margin: 0 1em;
-    float: right;
-    border-radius: 5px;
-    padding: 0 .5em;
-    background-color: white;
-}
-div.scrumbler_dashboard_issue_id > a{
-}
 
 div#scrumbler_sprint table, div#scrumbler_sprint table th, div#scrumbler_sprint table.list td {
-    border-left: 1px solid #DDD;
-    border-right: 1px solid #DDD;
+	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
 }
 div#scrumbler_sprint table th:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
-div#scrumbler_sprint table tr td{
+div#scrumbler_sprint table tr td {
 }
-
-
 div.Growler-notice {
-    background-color: 		#000;
-    color: 					#fff;
-    opacity: 				.85;
-    filter: 				alpha(opacity = 85);
-    zoom: 					1;
-    width: 					235px;
-    padding: 				10px;
-    margin-top: 			5px;
-    margin-bottom: 			5px;
-    margin-left: 			auto;
-    margin-right: 			auto;
-    font-family: 			Tahoma, Arial, Helvetica, sans-serif;
-    font-size: 				12px;
-    text-align: 			left;
-    display: 				none;
-    -moz-border-radius: 	5px;
-    -webkit-border-radius:	5px;
-    min-height: 			40px;
+	background-color: #000;
+	color: #fff;
+	opacity: .85;
+	filter: alpha(opacity = 85);
+	zoom: 1;
+	width: 235px;
+	padding: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	text-align: left;
+	display: none;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	min-height: 40px;
 }
-
 div.Growler-notice-head {
-    font-weight: 			bold;
-    font-size:				10px;
+	font-weight: bold;
+	font-size: 10px;
 }
-
 div.Growler-notice-exit {
-    float: 					right;
-    font-weight: 			bold;
-    font-size: 				12px;
-    cursor:					pointer;
+	float: right;
+	font-weight: bold;
+	font-size: 12px;
+	cursor: pointer;
 }
-
 .scrumbler-assignment-status {
-    font-size: 75%;
-    height: 16px; 
-    padding: 0 0.5em;
+	font-size: 75%;
+	height: 16px;
+	padding: 0 0.5em;
 }
 .scrumbler-assignment-status-info {
-    float: left;  
-    margin-left: 20px;
-    position: relative;
-    top: 1px;
+	float: left;
+	margin-left: 20px;
+	position: relative;
+	top: 1px;
 }
 .scrumbler-assignee-link {
-    width: 16px;
-    height: 16px;
-    background: url(/images/link_break.png);
+	width: 16px;
+	height: 16px;
+	background: url(/images/link_break.png);
 }
 .scrumbler-assignee-link:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
-
 .scrumbler-not-assigned-issue {
-    background-image: url("/images/link.png") !important;
+	background-image: url("/images/link.png") !important;
 }
-
 .scrumler-dashboard-status-inactive {
-    text-decoration: line-through;
+	text-decoration: line-through;
 }

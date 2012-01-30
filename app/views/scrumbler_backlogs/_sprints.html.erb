@@ -1,20 +1,12 @@
-<script>
-var sprintSelected = function(sprint){
-	// TODO save selected sprint
-	console.log("sprintSelected", sprint);
-	backlog.setAvaliavbleTrackers(sprint.trackers);
-}
-</script>
-
 <% selected_sprint = params[:tab] ? params[:tab].to_s : sprints.first[:name] %>
-
+<script>backlog.sprintSelected(<%=sprints.first.to_json%>);</script>
 <div class="tabs">
   <ul>
   <% sprints.each do |sprint| -%>
     <li><%= link_to sprint[:label], { :tab => sprint[:name] },
                                     :id => "tab-#{sprint[:name]}",
                                     :class => (sprint[:name] != selected_sprint ? nil : 'selected'),
-                                    :onclick => "showTab('#{sprint[:name]}'); this.blur(); sprintSelected(#{sprint.to_json}); return false;" %></li>
+                                    :onclick => "showTab('#{sprint[:name]}'); this.blur(); backlog.sprintSelected(#{sprint.to_json}); return false;" %></li>
   <% end -%>
   </ul>
 

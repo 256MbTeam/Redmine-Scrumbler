@@ -38,7 +38,7 @@
 			  
 			var issue_div = new Element("div", {
 				"id" : "issue_" + issue.id,
-				"class" : issue.disabled ? "disabled_issue" : "scrumbler_issue"
+				"class" : issue.disabled ? "disabled_scrumbler_issue" : "scrumbler_issue"
 			});
 			
 			var issue_content = ISSUE_TEMPLATE.evaluate({
@@ -52,10 +52,6 @@
 								});
 			issue_div.update(issue_content);
 			
-			
-			
-			
-			// issue_div.update("<p>" + issue.subject + "</p>");
 			new Draggable(issue_div, {
 				revert : true
 			});
@@ -96,16 +92,23 @@
 					'issue_id' : issue_id,
 					'sprint_id' : this.sprint_id,
 				},
-				onSuccess : function(transport) { target_div
+				onSuccess : function(transport) { 
+					
 					var resp = transport.responseJSON;
 					if(resp.success) {
 						// Move issue to backlog
 						if(this.sprint_id === undefined) {
+							this.issues = resp.backlog.issues;
+							this.selected_sprint.issues = resp.sprint.issues;
+							console.log(this.selected_sprint);
 							renderIssueList(target_div, resp.backlog);
 							renderIssueList(source_div, resp.sprint);
 						}
 						// Move issue to sprint
 						else {
+							this.issues = resp.sprint.issues;
+							console.log(this.backlog);
+							this.backlog.issues = resp.backlog.issues;
 							renderIssueList(source_div, resp.backlog);
 							renderIssueList(target_div, resp.sprint);
 						}
@@ -129,10 +132,10 @@
 	});
 	
 var BacklogIssuesList = Class.create(IssuesList, {
-	setAvaliavbleTrackers: function(trackers){
+	sprintSelected: function(sprint){
+		this.selected_sprint = sprint;
 		this.issues.each(function(issue){
-			var d = containsById(trackers, issue.tracker_id);
-				issue.disabled = !d;
+			issue.disabled = !containsById(sprint.trackers, issue.tracker_id);
 		});
 		renderIssueList(this.parent, {
 			"issues" : this.issues,
@@ -143,7 +146,10 @@ var BacklogIssuesList = Class.create(IssuesList, {
 	}
 });
 var SprintIssuesList = Class.create(IssuesList, {
-	
+	initialize: function($super, backlog, config){
+		this.backlog = backlog;
+		return $super(config);
+	}
 });
 
 </script>

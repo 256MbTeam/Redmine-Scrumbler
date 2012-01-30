@@ -61,7 +61,7 @@ module ScrumblerBacklogsHelper
       :parent_id => "sprint_#{sprint[:id]}",
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
     }
-    javascript_tag("new IssuesList(#{js_params.to_json})")
+    javascript_tag("var sprint = new SprintIssuesList(backlog, #{js_params.to_json});")
   end
 
   def backlog_issues
