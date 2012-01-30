@@ -30,6 +30,7 @@ class ScrumblerSprintsControllerTest < ActionController::TestCase
     :trackers,
     :projects_trackers,
     :enabled_modules
+    
   def setup
     #    Infect project with scrumbler module
     @project = projects(:projects_001)

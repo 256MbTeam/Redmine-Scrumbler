@@ -4,8 +4,12 @@ project_settings_001:
   project_id: 1
   settings: !map:HashWithIndifferentAccess
     trackers: !map:HashWithIndifferentAccess 
-      2: !map:HashWithIndifferentAccess 
+      1: !map:HashWithIndifferentAccess 
         position: 1
+        color: afa
+        use: true
+      2: !map:HashWithIndifferentAccess 
+        position: 2
         color: afa
         use: true
       3: !map:HashWithIndifferentAccess 

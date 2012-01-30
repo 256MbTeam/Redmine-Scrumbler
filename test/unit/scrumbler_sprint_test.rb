@@ -20,7 +20,11 @@ require File.dirname(__FILE__) + '/../test_helper'
 class ScrumblerSprintTest < ActiveSupport::TestCase
   fixtures :scrumbler_project_settings,
     :projects,
-    :versions
+    :versions,
+    :trackers,
+    :projects_trackers,
+    :issues,
+    :issue_statuses
 
   def setup
     @project = projects(:projects_001)
@@ -46,14 +50,12 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
   end
   
   
-  # test "should not save without project or version" do
-    # sprint = ScrumblerSprint.new()
-    # assert !sprint.save
-    # sprint = ScrumblerSprint.new(:project => @project)
-    # assert !sprint.save
-    # sprint = ScrumblerSprint.new(:version => @version)
-    # assert !sprint.save
-  # end
+  test "Shuold not remove tracker from settings, if issues exists in this tracker" do
+    @sprint.settings[:trackers] = {
+      "2" => {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true}
+    }
+    assert !@sprint.save
+  end
 
   test "should return scrumbler project settings if own setting undefined" do
     assert_equal @sprint.trackers, @scrumbler_project_setting.trackers
