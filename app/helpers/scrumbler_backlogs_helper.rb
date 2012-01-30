@@ -17,7 +17,8 @@
 module ScrumblerBacklogsHelper
   
    def prepare_issues_for_json(issues)
-    issues.map{|issue|
+
+    issues.sort_by(&:priority).reverse.map{|issue|
       { :id => issue.id,
         :subject => issue.subject,
         :tracker_id => issue.tracker_id,
