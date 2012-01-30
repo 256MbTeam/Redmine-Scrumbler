@@ -404,7 +404,7 @@ var ScrumblerDashboard = (function() {
 
 					th.observe('click', function(event) {
 						var disabled_class = 'scrumler-dashboard-status-inactive';
-						var rows_scope = $$('.'+uniq_class_name+' > div.scrumbler_dashboard_issue');
+						var rows_scope = $$('.'+uniq_class_name+' > div.scrumbler_issue');
 						if(th.hasClassName(disabled_class)) {
 							th.removeClassName(disabled_class);
 							rows_scope.each( function(el) {
