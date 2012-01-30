@@ -43,7 +43,7 @@ class ScrumblerSprint < ActiveRecord::Base
   validate :remove_tracker_validation
   
   
-  has_many :issues, :readonly => true, :uniq => true, :include => [:assigned_to, :statuses],
+  has_many :issues, :readonly => true, :uniq => true, :include => [:assigned_to, :statuses, :priority],
     :finder_sql => %q(select issues.* from scrumbler_sprints
 inner join projects on scrumbler_sprints.project_id = projects.id
 inner join issues on issues.project_id = projects.id
