@@ -42,16 +42,15 @@ class ScrumblerSprint < ActiveRecord::Base
   validate :closing_validation
   validate :remove_tracker_validation
   
-  
-  has_many :issues, :readonly => true, :uniq => true, :include => [:assigned_to, :statuses, :priority],
-    :finder_sql => %q(select issues.* from scrumbler_sprints
-inner join projects on scrumbler_sprints.project_id = projects.id
-inner join issues on issues.project_id = projects.id
-where issues.tracker_id in (#{(self.trackers.keys << 0).join(',')})
-and issues.status_id in (#{(self.issue_statuses.keys<< 0).join(',')})
-and scrumbler_sprints.version_id = issues.fixed_version_id
-and scrumbler_sprints.id = #{self.id})
-  
+  def issues
+    Issue.find :all, 
+               :include => [:assigned_to, :status, :priority], 
+               :conditions => {
+                 :tracker_id => self.trackers.keys,
+                 :status_id => self.issue_statuses.keys,
+                 :fixed_version_id => self.version_id
+                }
+  end
   
   def points_total
     connection.select_value("select sum(value) from custom_values where 
