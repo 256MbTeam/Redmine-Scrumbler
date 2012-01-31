@@ -48,7 +48,6 @@ TODO
 ----
 
 * Burndown chart
-* Sprint states 
 * IE support
 * Daily reporting for issue assignments
 * Template customization
