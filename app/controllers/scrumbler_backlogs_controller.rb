@@ -26,7 +26,7 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
 
   def change_issue_version
     @issue = Issue.find(params[:issue_id])
-
+  
     @sprint = ScrumblerSprint.find_by_version_id(@issue.fixed_version_id)
     if @sprint #  Move from sprint to backlog
       @issue.fixed_version_id = nil

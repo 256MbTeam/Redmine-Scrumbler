@@ -17,13 +17,11 @@
 module ScrumblerBacklogsHelper
   
    def prepare_issues_for_json(issues)
-
     issues.sort_by(&:priority).reverse.map{|issue|
       { :id => issue.id,
         :subject => issue.subject,
         :tracker_id => issue.tracker_id,
-        :points => issue.scrumbler_points,
-        # :tracker_name => 
+        :points => issue.scrumbler_points
       }
     }
   end

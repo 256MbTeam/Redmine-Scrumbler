@@ -50,8 +50,7 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
   end
   
   test "should update sprint statuses by admin" do
-    @version = @project.versions.first
-    @scrumbler_sprint = @version.scrumbler_sprint
+    @scrumbler_sprint = @project.versions.first.scrumbler_sprint
     sprint_settings = {
       @scrumbler_sprint.id.to_s => {"status" => "opened"}
     }

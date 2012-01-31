@@ -30,7 +30,7 @@ module Scrumbler
         private
         def validate_sprint_trackers
           if @sprint = self.fixed_version.try(:scrumbler_sprint)
-              tracker_setting = @sprint.trackers[self.tracker_id.to_s]
+              tracker_setting = @sprint.trackers[self.tracker_id.to_s] || @sprint.trackers[self.tracker_id.to_i] 
               errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
             end
         end
