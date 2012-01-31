@@ -33,6 +33,7 @@ ru:
           attributes:
             base:
               tracker_error: "Трекер не активен для данного спринта"
+              sprint_not_planning_error: "Задачу можно добавить только в спринт находящийся в статусе планирование"
   active_record:
     models:
       scrumbler_sprint_tracker:

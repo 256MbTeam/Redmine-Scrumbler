@@ -25,11 +25,11 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     :versions,
     :trackers,
     :projects_trackers,
-    :issues,
     :scrumbler_issues,
     :issue_statuses
 
   set_fixture_class :scrumbler_issues => Issue
+  
   def setup
     @project = projects(:projects_001)
     @version = versions(:versions_001)
@@ -62,6 +62,24 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
       "2" => {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true}
     }
     assert_equal false, @sprint.valid?
+  end
+  
+  test 'issue only can saved when status is planning' do
+     sprint = ScrumblerSprint.create(:version => versions(:versions_003), :project => @project)
+
+     issue = scrumbler_issues(:issue_without_version)
+     issue.fixed_version_id = sprint.version_id
+     
+     assert_equal true, issue.valid?
+  end
+  
+  test "cant assign task to sprint, if it not planning" do
+     sprint = ScrumblerSprint.create(:status => "opened", :version => versions(:versions_003), :project => @project)
+
+     issue = scrumbler_issues(:issue_without_version)
+     issue.fixed_version_id = sprint.version_id
+     
+     assert_equal false, issue.valid?
   end
 
   test "should return scrumbler project settings if own setting undefined" do

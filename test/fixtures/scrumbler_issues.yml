@@ -14,7 +14,7 @@ scrumbler_issues_001:
   status_id: 1
   start_date: <%= 1.day.ago.to_date.to_s(:db) %>
   due_date:
-  root_id: 
+  root_id: 15
   lft: 1
   rgt: 2
   
@@ -34,6 +34,27 @@ scrumbler_issues_002:
   status_id: 1
   start_date: <%= 1.day.ago.to_date.to_s(:db) %>
   due_date:
-  root_id: 
+  root_id: 16
+  lft: 1
+  rgt: 2
+  
+
+issue_without_version: 
+  created_on: <%= 3.days.ago.to_date.to_s(:db) %>
+  project_id: 1
+  updated_on: <%= 1.day.ago.to_date.to_s(:db) %>
+  priority_id: 5
+  subject: issue without version
+  id: 17
+  fixed_version_id:  
+  category_id: 1
+  description:
+  tracker_id: 1
+  assigned_to_id: 
+  author_id: 2
+  status_id: 1
+  start_date: <%= 1.day.ago.to_date.to_s(:db) %>
+  due_date:
+  root_id: 17
   lft: 1
   rgt: 2

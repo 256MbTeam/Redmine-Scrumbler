@@ -34,6 +34,7 @@ en:
           attributes:
             base:
               tracker_error: "Tracker doesn's exist in this sprint"
+              sprint_not_planning_error: "Issue can be assigned to planning sprint only"
   active_record:
     models:
       scrumbler_sprint_tracker:

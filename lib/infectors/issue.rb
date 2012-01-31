@@ -28,11 +28,12 @@ module Scrumbler
         end
         
         private
-        def validate_sprint_trackers
+        def validate_sprint
           if @sprint = self.fixed_version.try(:scrumbler_sprint)
               tracker_setting = @sprint.trackers[self.tracker_id.to_s] || @sprint.trackers[self.tracker_id.to_i] 
               errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
-            end
+              errors.add_to_base(:sprint_not_planning_error) unless @sprint.status == "planning"
+          end
         end
       end
       
@@ -40,7 +41,7 @@ module Scrumbler
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval {
-          validate :validate_sprint_trackers
+          validate :validate_sprint
         }
       end
     end
