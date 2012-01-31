@@ -13,6 +13,8 @@ ru:
   label_backlog: "Бэклог"
   label_sprint_settings: "Настройки спринта"
   
+  issue_not_assigned: "Не назначена"
+  
   tracker_use?: "Использовать?"
   error_scrumbler_general_update: "Не удалось обновить настройки "
   error_scrumbler_trackers_update: "Не удалось обновить трекеры "

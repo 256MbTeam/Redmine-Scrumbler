@@ -14,6 +14,8 @@ en:
   label_backlog: "Backlog"
   label_sprint_settings: "Sprint settings"
   
+  issue_not_assigned: "Not assigned"
+  
   tracker_use?: "Use?"
   error_scrumbler_general_update: "Settings update failed"
   error_scrumbler_trackers_update: "Trackers update failed"

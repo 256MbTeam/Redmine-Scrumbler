@@ -96,7 +96,7 @@ var ScrumblerDashboard = (function() {
 			if(assigned_to) {
 				this.infoEl.update(assigned_to.name)
 			} else {
-				this.infoEl.update('Неназначена')
+				this.infoEl.update(ScrumblerTranslations.issue_not_assigned)
 			}
 		},
 		generateStatus: function() {

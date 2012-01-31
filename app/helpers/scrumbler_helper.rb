@@ -33,6 +33,14 @@ module ScrumblerHelper
       # :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
   # end
 
+  def scrumbler_javascript_translations
+    translations = {
+      :issue_not_assigned => t(:issue_not_assigned)
+    }
+    javascript_tag "var ScrumblerTranslations = #{translations.to_json}"
+  end
+
+
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)
     out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");
