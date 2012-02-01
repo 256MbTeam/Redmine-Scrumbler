@@ -40,6 +40,10 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     assert_equal "planning", @sprint.status
   end
 
+  test "should delegate end_date to version effective_date" do
+    assert_equal @version.effective_date, @sprint.end_date
+  end
+
   test "should save with status" do
     sprint = ScrumblerSprint.new(:project => @project, :version => @version, :status=>"opened")
     assert_equal "opened", sprint.status
@@ -103,6 +107,15 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     issue.status = issue_statuses(:issue_statuses_001)
 
     assert_equal false, issue.valid?
+  end
+  
+  test "should not save sprint when start_date more then end_date" do
+    version = versions(:versions_003)
+    sprint = ScrumblerSprint.create(:version_id => version.id, 
+                                    :project_id => @project.id, 
+                                    :start_date => 1.days.ago.to_date,
+                                    :end_date => 3.days.ago.to_date)
+    assert_equal false, sprint.valid?
   end
 
 end

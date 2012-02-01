@@ -33,7 +33,6 @@ class ScrumblerSprint < ActiveRecord::Base
   belongs_to :version
   validates_presence_of :version
   
-  
   delegate :scrumbler_project_setting, :to => :project
   
   serialize :settings, HashWithIndifferentAccess
@@ -41,6 +40,7 @@ class ScrumblerSprint < ActiveRecord::Base
   validate :scrumbler_project_setting_validation
   validate :closing_validation
   validate :remove_tracker_validation
+  validate :start_end_date_validation
   
   def issues
     Issue.find :all, 
@@ -93,6 +93,15 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
     self.settings[:issue_statuses] || scrumbler_project_setting.try(:issue_statuses)
   end
   
+  def end_date=(date)
+    version.effective_date = date
+    version.save
+  end
+  
+  def end_date
+    version.effective_date
+  end
+  
   private
   
   def scrumbler_project_setting_validation
@@ -111,6 +120,12 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   def remove_tracker_validation
     if Issue.exists?(["tracker_id not in (?) and fixed_version_id = ?", self.trackers.keys, self.version_id])
          errors.add_to_base(:trackers_with_issues_in_sprint_cant_be_removed) 
+    end
+  end
+  
+  def start_end_date_validation
+    if start_date && end_date && start_date > end_date
+         errors.add_to_base(:trackers_with_issues_in_sprint_cant_be_removed)
     end
   end
   
