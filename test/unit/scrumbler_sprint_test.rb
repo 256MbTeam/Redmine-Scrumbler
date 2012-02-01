@@ -17,8 +17,6 @@
 
 require File.dirname(__FILE__) + '/../test_helper'
 
-
-
 class ScrumblerSprintTest < ActiveSupport::TestCase
   fixtures :scrumbler_project_settings,
     :projects,
@@ -26,10 +24,10 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     :trackers,
     :projects_trackers,
     :scrumbler_issues,
+    :issues,
     :issue_statuses
 
   set_fixture_class :scrumbler_issues => Issue
-  
   def setup
     @project = projects(:projects_001)
     @version = versions(:versions_001)
@@ -63,46 +61,48 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     }
     assert_equal false, @sprint.valid?
   end
-  
+
   test 'issue only can saved when status is planning' do
-     sprint = ScrumblerSprint.create(:version => versions(:versions_003), :project => @project)
+    sprint = ScrumblerSprint.create(:version => versions(:versions_003), :project => @project)
 
-     issue = scrumbler_issues(:issue_without_version)
-     issue.fixed_version_id = sprint.version_id
-     
-     assert_equal true, issue.valid?
+    issue = scrumbler_issues(:issue_without_version)
+    issue.fixed_version_id = sprint.version_id
+
+    assert_equal true, issue.valid?
   end
-  
-  test "cant assign task to sprint, if it not planning" do
-     sprint = ScrumblerSprint.create(:status => "opened", :version => versions(:versions_003), :project => @project)
 
-     issue = scrumbler_issues(:issue_without_version)
-     issue.fixed_version_id = sprint.version_id
-     
-     assert_equal false, issue.valid?
+  test "cant assign task to sprint, if it not planning" do
+    sprint = ScrumblerSprint.create(:status => "opened", :version => versions(:versions_003), :project => @project)
+
+    issue = scrumbler_issues(:issue_without_version)
+    issue.fixed_version_id = sprint.version_id
+
+    assert_equal false, issue.valid?
   end
 
   test "should return scrumbler project settings if own setting undefined" do
     assert_equal @sprint.trackers, @scrumbler_project_setting.trackers
     assert_equal @sprint.issue_statuses, @scrumbler_project_setting.issue_statuses
   end
-  
+
   test "should not edit issues in closed sprint" do
-    version = versions(:versions_001)
-    
-    
-    Issue.find(:all, :conditions => {:fixed_version_id => version.id}).each{|issue|
-        issue.status = issue_statuses(:issue_statuses_005)
-       issue.save
+    version = versions(:versions_003)
+
+    Issue.find(:all, :conditions => {:project_id => @project.id, :fixed_version_id => nil}).each{|issue|
+      issue.fixed_version_id = version.id
+      issue.status = issue_statuses(:issue_statuses_005)
+      issue.save
+      assert_equal true, issue.valid?
     }
-    
+
     sprint = ScrumblerSprint.create(:version_id => version.id, :project_id => @project.id)
     sprint.status = "closed"
     sprint.save
-    
-    issue = scrumbler_issues(:scrumbler_issues_002)
+
+    issue = Issue.find(:first, :conditions => {:fixed_version_id => version.id})
     issue.status = issue_statuses(:issue_statuses_001)
-    assert_equal false, issue.valid?  
+
+    assert_equal false, issue.valid?
   end
 
 end
