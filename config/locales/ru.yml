@@ -1,5 +1,6 @@
 # Russian strings go here for Rails i18n
 ru:
+  field_end_date: "Окончание"
   scrumbler_menu: "Скрамблер"
   scrumbler_sprint: "Спринт"
   
@@ -16,7 +17,7 @@ ru:
   issue_not_assigned: "Не назначена"
   
   tracker_use?: "Использовать?"
-  error_scrumbler_general_update: "Не удалось обновить настройки "
+  #error_scrumbler_general_update: "Не удалось обновить настройки "
   error_scrumbler_trackers_update: "Не удалось обновить трекеры "
   error_scrumbler_issue_statuses_update: "Не удалось обновить статусы задач"
   error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
@@ -39,6 +40,9 @@ ru:
           attributes:
             base:
               start_date_is_greater_than_end_date: "Дата окончания спринта не может быть раньше даты начала спринта"
+              trackers_with_issues_in_sprint_cant_be_removed: "Нельзя отключить трекер, в котором есть задачи"
+              sprint_without_project: "Нельзя создать спринт без проекта"
+              closing_sprint_with_opened_issues: "Нельзя закрыть спринт, если в нем есть незакрытые задачи"
   active_record:
     models:
       scrumbler_sprint_tracker:

@@ -39,11 +39,10 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   end
   
   def update_general
-    flash[:error] = t :error_scrumbler_general_update unless @scrumbler_sprint.update_attributes({:status => params[:scrumbler_sprint][:status]}) 
-    params[:scrumbler_sprint].delete_if{|k,v| k == "status"}
+    flash[:error] = @scrumbler_sprint.errors.on_base unless @scrumbler_sprint.update_attributes({:status => params[:scrumbler_sprint][:status], :start_date => params[:scrumbler_sprint][:start_date], :end_date => params[:scrumbler_sprint][:end_date]})  
     
     @version = @scrumbler_sprint.version
-    flash[:error] = t :error_scrumbler_general_update unless @version.update_attributes(params[:scrumbler_sprint]) 
+    flash[:error] = @version.errors.on_base unless @version.update_attributes({:name => params[:scrumbler_sprint][:name], :description => params[:scrumbler_sprint][:description]}) 
           
     flash[:notice] = t :notice_successful_update unless flash[:error]
     redirect_to project_scrumbler_sprint_settings_url(@project, @scrumbler_sprint, :general)

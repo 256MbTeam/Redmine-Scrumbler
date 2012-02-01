@@ -1,6 +1,6 @@
 # Russian strings go here for Rails i18n
 en:
-  
+  field_end_date: "End date"
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
   
@@ -17,7 +17,7 @@ en:
   issue_not_assigned: "Not assigned"
   
   tracker_use?: "Use?"
-  error_scrumbler_general_update: "Settings update failed"
+  #error_scrumbler_general_update: "Settings update failed"
   error_scrumbler_trackers_update: "Trackers update failed"
   error_scrumbler_issue_statuses_update: "Issue statuses update failed"
   error_sprint_not_found_in_project: "Sprint not found in project"
