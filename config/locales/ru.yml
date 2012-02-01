@@ -34,6 +34,11 @@ ru:
             base:
               tracker_error: "Трекер не активен для данного спринта"
               sprint_not_planning_error: "Задачу можно добавить только в спринт находящийся в статусе планирование"
+              sprint_is_closed_error: "Нельзя редактировать задачу, находящуюся в закрытом спринте"
+        scrumbler_sprint:
+          attributes:
+            base:
+              start_date_is_greater_than_end_date: "Дата окончания спринта не может быть раньше даты начала спринта"
   active_record:
     models:
       scrumbler_sprint_tracker:

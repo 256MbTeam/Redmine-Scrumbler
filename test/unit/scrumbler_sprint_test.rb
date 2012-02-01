@@ -84,6 +84,15 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     assert_equal false, issue.valid?
   end
 
+  test "Should be only one opened sprint in project" do
+      opened_sprint     = ScrumblerSprint.create(:project => @project, :version => versions(:versions_001), :status=>"opened")
+      planning_sprint   = ScrumblerSprint.create(:project => @project, :version => versions(:versions_003), :status=>"planning")
+      
+      planning_sprint.status = "opened"
+      
+      assert_equal false, planning_sprint.valid?
+  end
+
   test "should return scrumbler project settings if own setting undefined" do
     assert_equal @sprint.trackers, @scrumbler_project_setting.trackers
     assert_equal @sprint.issue_statuses, @scrumbler_project_setting.issue_statuses
@@ -106,7 +115,9 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     issue = Issue.find(:first, :conditions => {:fixed_version_id => version.id})
     issue.status = issue_statuses(:issue_statuses_001)
 
+
     assert_equal false, issue.valid?
+    assert issue.errors[:base].include?(I18n.t("activerecord.errors.models.issue.attributes.base.sprint_is_closed_error"))
   end
   
   test "should not save sprint when start_date more then end_date" do
@@ -115,6 +126,9 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
                                     :project_id => @project.id, 
                                     :start_date => 1.days.ago.to_date,
                                     :end_date => 3.days.ago.to_date)
+     
+    assert sprint.errors[:base].include?(I18n.t("activerecord.errors.models.scrumbler_sprint.attributes.base.start_date_is_greater_than_end_date")) 
+                
     assert_equal false, sprint.valid?
   end
 
