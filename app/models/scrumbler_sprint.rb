@@ -32,7 +32,7 @@ class ScrumblerSprint < ActiveRecord::Base
   
   belongs_to :version
   validates_presence_of :version
-  
+  validates_uniqueness_of :status, :scope => :project_id, :if => lambda {|sprint| sprint.status == "opened"}
   
   delegate :scrumbler_project_setting, :to => :project
   
@@ -81,7 +81,9 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   end
   
   def after_initialize
-    self.status ||= "planning"
+    if self.new_record?
+      self.status ||= "planning"
+    end
     self.settings ||= HashWithIndifferentAccess.new
   end
   

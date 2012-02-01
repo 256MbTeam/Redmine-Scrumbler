@@ -82,6 +82,15 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
      assert_equal false, issue.valid?
   end
 
+  test "Should be only one opened sprint in project" do
+      opened_sprint     = ScrumblerSprint.create(:project => @project, :version => versions(:versions_001), :status=>"opened")
+      planning_sprint   = ScrumblerSprint.create(:project => @project, :version => versions(:versions_003), :status=>"planning")
+      
+      planning_sprint.status = "opened"
+      
+      assert_equal false, planning_sprint.valid?
+  end
+
   test "should return scrumbler project settings if own setting undefined" do
     assert_equal @sprint.trackers, @scrumbler_project_setting.trackers
     assert_equal @sprint.issue_statuses, @scrumbler_project_setting.issue_statuses
