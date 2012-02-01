@@ -1,5 +1,6 @@
 # Russian strings go here for Rails i18n
 ru:
+  versions_for_sprints_not_created: "Для создания спринтов используйте версии проекта. Настройки -> Версии."
   field_end_date: "Окончание"
   scrumbler_menu: "Скрамблер"
   scrumbler_sprint: "Спринт"

@@ -45,6 +45,9 @@
 	<% else %>
 	<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
 	<p class="nodata">
+		<%= l(:versions_for_sprints_not_created) %>
+	</p>
+	<p class="nodata">
 		<%= l(:label_no_data) %>
 	</p>
 	<% end %>
