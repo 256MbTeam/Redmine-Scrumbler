@@ -1,5 +1,6 @@
 Scrumbler
 =========
+Current version: 1.2.1 ([Changelog](CHANGELOG.md))
 
 Easy to use plugin for [Redmine](http://http://www.redmine.org/). It allows users to use the Scrum/Agile process in projects.
 Scrumbler have interactive dashboard with the ability to configure for each sprint. 
@@ -51,6 +52,7 @@ TODO
 * IE support
 * Daily reporting for issue assignments
 * Template customization
+
 
 Authors
 -------

@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_scrumbler do
   name 'Redmine Scrumbler plugin'
   author 'Alexandr_Andrianov, Dmitry Kuzmin, Ivan Kotenko'
   description 'This is a scrum plugin for Redmine'
-  version '0.0.2'
+  version '1.2.1'
   project_module :redmine_scrumbler do
     permission :scrumbler, :scrumbler => :index, :public => true
     permission :scrumbler_settings, :scrumbler_settings => [:show, :update_trackers, :update_issue_statuses, :update_sprints], 
