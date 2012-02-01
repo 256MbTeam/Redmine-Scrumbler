@@ -86,5 +86,23 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
     assert_equal @sprint.trackers, @scrumbler_project_setting.trackers
     assert_equal @sprint.issue_statuses, @scrumbler_project_setting.issue_statuses
   end
+  
+  test "should not edit issues in closed sprint" do
+    version = versions(:versions_001)
+    
+    
+    Issue.find(:all, :conditions => {:fixed_version_id => version.id}).each{|issue|
+        issue.status = issue_statuses(:issue_statuses_005)
+       issue.save
+    }
+    
+    sprint = ScrumblerSprint.create(:version_id => version.id, :project_id => @project.id)
+    sprint.status = "closed"
+    sprint.save
+    
+    issue = scrumbler_issues(:scrumbler_issues_002)
+    issue.status = issue_statuses(:issue_statuses_001)
+    assert_equal false, issue.valid?  
+  end
 
 end
