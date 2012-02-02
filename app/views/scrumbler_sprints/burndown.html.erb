@@ -23,20 +23,25 @@ var seriesOptions = [],
 				renderTo : 'scrumbler_burndown_chart'
 			},
 
-			rangeSelector : {
-				selected : 1
-			},
-
+			rangeSelector : { enabled: false },
+			credits: { enabled: false },
 			title : {
-				text : 'AAPL Stock Price'
+				text : 'Burndown chart for sprint'
 			},
-			
-			series : [{
-				name : 'AAPL',
-				data : <%= @data.to_json%>,
+			yAxis: {
+				min: 0
+			},
+			series : [
+			{
+				name : 'Normal',
+				data : <%= @data_normal.to_json%>,
 				tooltip: {
 					yDecimals: 2
 				}
+			}, 
+			{
+				name : 'Current',
+				data: <%= @data_real.to_json%>
 			}]
 		});
 </script>
