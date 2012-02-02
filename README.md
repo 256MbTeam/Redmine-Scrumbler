@@ -33,7 +33,7 @@ Installation
 
 To install the Scrumbler please follow the steps outlined below.
 
-Install the plugin in your Redmine plugins directory:
+Install the plugin in your Redmine plugins directory, name of directory must be **redmine_scrumbler**:
     
     git clone git://github.com/256MbTeam/Redmine-Scrumbler.git vendor/plugins/redmine_scrumbler
 

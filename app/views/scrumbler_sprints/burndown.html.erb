@@ -1,0 +1,61 @@
+<% content_for :header_tags do %>
+<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+<%= scrumbler_javascript_translations %>
+<%= javascript_include_tag 'highstock/prototype-adapter', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'highstock/highstock', :plugin => 'redmine_scrumbler' %>
+<% end %>
+<div class="contextual">
+        <%= link_to l(:label_sprint_back), {
+    									:controller => :scrumbler, 
+    									:action => :index, 
+    									:project_id => @project, 
+    									:scrumbler_sprint_id => @scrumbler_sprint
+    									},
+    									:class => "icon icon-scrumbler-back"  %>
+</div>
+<h2><%=  @scrumbler_sprint.name%> - <%=l(:label_statistics)%></h2>
+<div id="scrumbler_burndown_chart" style="height: 500px; min-width: 600px">
+	
+</div>
+<script type="text/javascript">
+var seriesOptions = [],
+		yAxisOptions = [],
+		seriesCounter = 0,
+		names = ['MSFT', 'AAPL', 'GOOG'],
+		colors = Highcharts.getOptions().colors;
+		Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
+	chart = new Highcharts.StockChart({
+			chart : {
+				renderTo : 'scrumbler_burndown_chart'
+			},
+
+			rangeSelector : { enabled: false },
+			credits: { enabled: false },
+			title : {
+				text : "Burndown"
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: ScrumblerTranslations.scrumbler_statistics.estimated_axis
+				}
+			},
+			xAxis: {
+				title: {
+					text: ScrumblerTranslations.scrumbler_statistics.iteration_axis
+				}
+			},
+			series : [
+			{
+				name : ScrumblerTranslations.scrumbler_statistics.ideal_issues,
+				data : <%= @data_normal.to_json%>,
+				tooltip: {
+					yDecimals: 2
+				}
+			}, 
+			{
+				name : ScrumblerTranslations.scrumbler_statistics.actual_issues,
+				data: <%= @data_real.to_json%>
+			}]
+		});
+</script>

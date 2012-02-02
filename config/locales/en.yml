@@ -14,7 +14,8 @@ en:
   label_sprint_back: "Back to sprint"
   label_backlog: "Backlog"
   label_sprint_settings: "Sprint settings"
-  
+  label_statistics: "Statistics"
+
   issue_not_assigned: "Not assigned"
   
   tracker_use?: "Use?"
@@ -23,6 +24,12 @@ en:
   error_scrumbler_issue_statuses_update: "Issue statuses update failed"
   error_sprint_not_found_in_project: "Sprint not found in project"
   error_scrumbler_issue_status_change: "You dont have permissions to change status \"%{status_name}\" for this issue"
+  
+  scrumbler_statistics:
+    ideal_issues: "Ideal"
+    actual_issues: "Actual"
+    iteration_axis: "Iteration timeline"
+    estimated_axis: "Estimated work"
   
   scrumbler_sprint_opened: "Opened"
   scrumbler_sprint_planning: "Planning"

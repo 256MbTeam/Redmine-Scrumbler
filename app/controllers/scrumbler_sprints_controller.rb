@@ -105,6 +105,40 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     end
   end
   
+  def burndown
+    start_date = @scrumbler_sprint.start_date
+    
+    end_date  = @scrumbler_sprint.end_date || Date.today
+    
+    closed_issues = @scrumbler_sprint.issues.find_all {|i| i.due_date && i.closed?}
+    closed_issues = Hash[closed_issues.group_by(&:due_date).map {|k,v| 
+      [k, v.inject(0.0) {|t,is| 
+        t+= is.custom_value_for(ScrumblerIssueCustomField.points).value.to_f }
+    ]}]
+    
+    
+    days_total = (end_date - start_date).to_i
+
+    points_total_normal = @scrumbler_sprint.points_total
+    points_total_real = @scrumbler_sprint.points_total
+    
+    points_per_day_normal = points_total_normal/days_total.to_f
+
+
+    
+    @data_normal = []
+    @data_real = []
+    (days_total+1).times {|day_num|
+      cycle_date = (start_date + day_num)
+      js_date = cycle_date.to_time.to_i*1000
+      @data_normal << [js_date, points_total_normal]
+      @data_real << [js_date, points_total_real -= closed_issues[cycle_date].to_f]
+      points_total_normal = (points_total_normal - points_per_day_normal).round(2)
+      points_total_normal = 0 if points_total_normal < 0 
+    }
+
+  end
+  
   private
   def find_scrumbler_sprint
     @scrumbler_sprint = @project.scrumbler_sprints.find(params[:id])
