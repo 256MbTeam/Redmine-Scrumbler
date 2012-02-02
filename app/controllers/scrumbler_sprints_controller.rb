@@ -131,7 +131,9 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     days_total.times {|day_num|
       cycle_date = (start_date + day_num)
       js_date = cycle_date.to_time.to_i*1000
-      @data_normal << [js_date, points_total_normal -= points_per_day_normal]
+      points_total_normal = (points_total_normal - points_per_day_normal).round(2)
+      points_total_normal = 0 if points_total_normal < 0 
+      @data_normal << [js_date, points_total_normal]
       @data_real << [js_date, points_total_real -= closed_issues[cycle_date].to_f]
     }
 

@@ -13,7 +13,7 @@
     									},
     									:class => "icon icon-scrumbler-back"  %>
 </div>
-
+<h2><%=  @scrumbler_sprint.name%> - <%=l(:label_statistics)%></h2>
 <div id="scrumbler_burndown_chart" style="height: 500px; min-width: 600px">
 	
 </div>
@@ -23,7 +23,7 @@ var seriesOptions = [],
 		seriesCounter = 0,
 		names = ['MSFT', 'AAPL', 'GOOG'],
 		colors = Highcharts.getOptions().colors;
-		
+		Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
 	chart = new Highcharts.StockChart({
 			chart : {
 				renderTo : 'scrumbler_burndown_chart'
@@ -32,41 +32,30 @@ var seriesOptions = [],
 			rangeSelector : { enabled: false },
 			credits: { enabled: false },
 			title : {
-				text : 'Burndown chart for sprint'
+				text : "Burndown"
 			},
 			yAxis: {
-				min: 0
+				min: 0,
+				title: {
+					text: ScrumblerTranslations.scrumbler_statistics.estimated_axis
+				}
+			},
+			xAxis: {
+				title: {
+					text: ScrumblerTranslations.scrumbler_statistics.iteration_axis
+				}
 			},
 			series : [
 			{
-				name : 'Normal',
+				name : ScrumblerTranslations.scrumbler_statistics.ideal_issues,
 				data : <%= @data_normal.to_json%>,
 				tooltip: {
 					yDecimals: 2
 				}
 			}, 
 			{
-				name : 'Current',
+				name : ScrumblerTranslations.scrumbler_statistics.actual_issues,
 				data: <%= @data_real.to_json%>
 			}]
 		});
 </script>
-
-<!-- [[1107302400000,39.82],
-[1107388800000,38.90],
-[1107475200000,39.42],
-[1107734400000,39.47],
-[1107820800000,40.45],
-[1107907200000,39.37],
-[1107993600000,39.18],
-[1108080000000,40.60],
-[1108339200000,42.32],
-[1108425600000,44.20],
-[1108512000000,45.06],
-[1108598400000,43.90],
-[1108684800000,43.40],
-[1109030400000,42.64],
-[1109116800000,44.12],
-[1109203200000,44.46],
-[1109289600000,44.50],
-[1109548800000,44.86]] -->

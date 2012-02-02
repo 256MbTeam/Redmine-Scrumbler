@@ -14,7 +14,7 @@ ru:
   label_sprint_back: "Вернуться в спринт"
   label_backlog: "Бэклог"
   label_sprint_settings: "Настройки спринта"
-  label_sprint_burndown: "Burndown диаграмма"
+  label_statistics: "Статистика"
   
   issue_not_assigned: "Не назначена"
   
@@ -24,6 +24,18 @@ ru:
   error_scrumbler_issue_statuses_update: "Не удалось обновить статусы задач"
   error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
   error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
+  
+  
+  scrumbler_statistics:
+    ideal_issues: "Идеал"
+    actual_issues: "Факт"
+    iteration_axis: "Продолжительность итерации"
+    estimated_axis: "Оставшаяся работа"
+    
+  scrumbler_statistics_ideal_issues: 
+  scrumbler_statistics_: "Факт"
+  scrumbler_statistics_actual_: "Iteration timeline"
+
   
   scrumbler_sprint_opened: "Открыт"
   scrumbler_sprint_planning: "Планирование"

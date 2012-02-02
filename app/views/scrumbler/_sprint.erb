@@ -1,7 +1,7 @@
 <div id="scrumbler_sprint" style="">
   <% if sprint %>
     <div class="contextual">
-      <%= link_to l(:label_sprint_burndown), burndown_project_scrumbler_sprint_url(@project, sprint), :class=> "icon icon-scrumbler-burndown" if sprint.status != "planning"%>
+      <%= link_to l(:label_statistics), burndown_project_scrumbler_sprint_url(@project, sprint), :class=> "icon icon-scrumbler-burndown" if sprint.status != "planning"%>
       <%= link_to l(:label_sprint_settings), project_scrumbler_sprint_settings_url(@project, sprint), :class=> "icon icon-scrumbler-settings" if authorize_for(:scrumbler_sprints, :settings)%>
     </div>
     <%= draw_scrumbler_dashboard(sprint) %>
