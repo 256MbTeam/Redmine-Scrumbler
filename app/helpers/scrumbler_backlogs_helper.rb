@@ -58,6 +58,7 @@ module ScrumblerBacklogsHelper
       :issues => sprint[:issues],
       :trackers => sprint[:trackers],
       :parent_id => "sprint_#{sprint[:id]}",
+      :update_points_url => update_scrum_points_project_scrumbler_backlogs_path(@project),
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
     }
     javascript_tag("var sprint = new SprintIssuesList(backlog, #{js_params.to_json});")
@@ -69,7 +70,9 @@ module ScrumblerBacklogsHelper
       :issues => prepare_issues_for_json(@project.issues.without_version),
       :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers),
       :parent_id => "backlog_list",
+      :update_points_url => update_scrum_points_project_scrumbler_backlogs_path(@project),
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
+      
     }
     javascript_tag("var backlog = new BacklogIssuesList(#{js_params.to_json})")
   end

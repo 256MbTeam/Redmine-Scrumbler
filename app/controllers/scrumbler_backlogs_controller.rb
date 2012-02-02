@@ -24,6 +24,16 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
 
   end
 
+  def update_scrum_points
+    @issue = Issue.find(params[:issue_id])
+    value = @issue.custom_value_for(ScrumblerIssueCustomField.points)
+    value.value = params[:points].to_s
+    
+    render :json => { :success => value.save,
+                      :text => @issue.errors.full_messages.join(", <br>")
+                    }
+  end
+
   def change_issue_version
     @issue = Issue.find(params[:issue_id])
   

@@ -1,12 +1,15 @@
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+	<%= stylesheet_link_tag    'scrumbler-points-editor', :plugin => 'redmine_scrumbler' %>
 	<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
 	<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
 	<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
 	<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
 <%end%>
+
+
 <div id="splitcontentleft" style="float:left;width:48%;">
-	<div class ="box" >
+	<div class ="scrumbler_box" >
 		<div id="backlog" class="backlog">
 			<h2><%= l(:label_backlog)%></h2>
 			<div id="backlog_list" style="min-height:100px;"></div>
@@ -15,7 +18,7 @@
 	</div>
 </div>
 <div id="splitcontentright" style="float:right; width:50%;">
-	<div class ="box">
+	<div class ="scrumbler_box">
 		<h2><%= l(:label_sprints)%></h2>
 		<%= render_sprint_tabs scrumbler_sprints_tabs(@project.scrumbler_sprints.planning)%>
 	</div>

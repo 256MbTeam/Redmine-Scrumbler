@@ -8,10 +8,9 @@
             </div>\n\
         </div>\n\
         <div class='scrumbler_issue_body'>\n\
-            <div class='scrumbler_points'>#{points}</div>\n\
+            <div class='scrumbler_points'><span class='scrumbler_points_value'>#{points}</span></div>\n\
             #{issue_subject}\n\
         </div>");
- 
     $from = function(v) {
       return function() {
         return v

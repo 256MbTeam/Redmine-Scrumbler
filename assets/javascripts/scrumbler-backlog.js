@@ -1,3 +1,76 @@
+var ScrumPointEditor = Class.create({
+    initialize: function(element, options){
+        this.options = Object.extend({
+        	value: "?",
+            element_classname: "scrum-points-element",
+            popup_classname: "scrum-points-popup",
+            popup_width: "188px",
+            popup_height: "38px",
+            values: ["?", "0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100"]
+        }, options);
+        var popup = this.createPopup(element, this.options);
+        
+        element.observe("click", function(event){
+            popup.toggle();      
+            return;
+        });
+        element.appendChild(popup);
+    },
+    createPopup: function(element, options){
+    	var new_value = options.value;
+    	var update_url = options.update_url;
+    	var popup = new Element('div',{
+    		'class' : options.popup_classname 
+    	});
+    	
+    	popup.setStyle({
+        	display: 'none',
+            width: options["popup_width"],
+            height: options["popup_height"]
+        });
+        
+        options.values.each(function(value){
+        	 var value_field = new Element('div',{
+                'class' : options.element_classname
+            });
+            value_field.update(value);
+            value_field.observe("click", function(event){
+            	new_value = value;
+				new Ajax.Request(update_url, {
+					method : 'post',
+					parameters : {
+						'issue_id' : options.issue_id,
+						'points' : new_value,
+					},
+					onSuccess : function(transport) { 
+						var resp = transport.responseJSON;
+						if(resp.success) {
+							element.firstChild.update(new_value);
+						}else {
+							$growler.growl(resp.text, {
+								header : 'Ошибка'
+							});
+						}
+					},
+					onFailure : function() {
+						$growler.growl('Something went wrong...', {
+							header : 'Error'
+						});
+					},
+					onComplete: function(){
+						popup.hide();
+					}
+					
+				});
+            	
+            });
+            popup.appendChild(value_field);
+        });
+        return popup;
+        
+    }
+});
+
 var IssuesList = Class.create({
 
 	initialize: function(config) {
@@ -7,6 +80,7 @@ var IssuesList = Class.create({
 		this.sprint_id = config.sprint_id;
 		this.url = config.url;
 		this.project_id = config.project_id;
+		this.update_points_url = config.update_points_url;
 		
 		this.renderIssueList(this.parent, config);
 		Droppables.add(this.parent, {
@@ -18,8 +92,7 @@ var IssuesList = Class.create({
 		var issues = config.issues;
 		var trackers = config.trackers;
 		var project_id = config.project_id;
-		
-		
+		var update_points_url = config.update_points_url;
 		var trackers_map = {};
 		
 		parent_div.update("");
@@ -65,13 +138,18 @@ var IssuesList = Class.create({
 									points: issue.points
 								});
 			issue_div.update(issue_content);
+			var points_div = issue_div.select('[class="scrumbler_points"]').first(); 
+			new ScrumPointEditor(points_div, {
+				value : issue.points,
+				update_url: update_points_url,
+				issue_id: issue.id
+			});
 			
 			new Draggable(issue_div, {
 				revert : true
 			});
 			issues_div.appendChild(issue_div);
 		});
-		
 		
 		parent_div.appendChild(issues_div);
 	},
@@ -126,6 +204,9 @@ var IssuesList = Class.create({
 	}
 });
 	
+	
+
+	
 var BacklogIssuesList = Class.create(IssuesList, {
 	sprintSelected: function(sprint){
 		this.selected_sprint = sprint;
@@ -135,7 +216,8 @@ var BacklogIssuesList = Class.create(IssuesList, {
 		this.renderIssueList(this.parent, {
 			"issues" : this.issues,
 			"trackers" : this.trackers,
-			"project_id" : this.project_id			
+			"project_id" : this.project_id,
+			"update_points_url": this.update_points_url	
 			}
 		);
 	}

@@ -1,3 +1,7 @@
+div.scrumbler_box{
+	color: #505050
+}
+
 div.disabled_scrumbler_issue {
 	border: 2px solid #ccc;
 	height: 100%;
