@@ -107,7 +107,9 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   
   def burndown
     @data = []
-    
+    10.times {|i|
+      @data << [i.days.since.to_i*1000, rand(100)]
+    }
   end
   
   private
