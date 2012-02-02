@@ -8,12 +8,12 @@
 <% end %>
 
 <div class="contextual">
-	<%= link_to_if_authorized l(:label_settings), :controller => :scrumbler_settings, :action => :show, :project_id => @project  %>
 	<%=link_to l(:label_backlog),
-	:controller => :scrumbler_backlogs,
+	{:controller => :scrumbler_backlogs,
 	:action => :index,
-	:project_id => @project
+	:project_id => @project},  :class => "icon icon-scrumbler-backlog"
 	%>
+	<%= link_to_if_authorized l(:label_settings), {:controller => :scrumbler_settings, :action => :show, :project_id => @project}, :class => "icon icon-scrumbler-settings"  %>
 </div>
 <h2><%= l(:scrumbler_menu)%></h2>
 

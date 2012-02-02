@@ -1,10 +1,17 @@
 <% content_for :header_tags do %>
+  <%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
   <%= stylesheet_link_tag    'tiny-color-chooser', :plugin => 'redmine_scrumbler' %>
   <%= javascript_include_tag 'tiny-color-chooser', :plugin => 'redmine_scrumbler' %>
 <% end %>
 
 <div class="contextual">
-    <%= link_to l(:label_sprint_back), :controller => :scrumbler, :action => :index, :project_id => @project, :scrumbler_sprint_id => @scrumbler_sprint  %>
+    <%= link_to l(:label_sprint_back), {
+    									:controller => :scrumbler, 
+    									:action => :index, 
+    									:project_id => @project, 
+    									:scrumbler_sprint_id => @scrumbler_sprint
+    									},
+    									:class => "icon icon-scrumbler-back"  %>
 </div>
 <h2><%=  @scrumbler_sprint.name%> - <%=l(:label_settings)%></h2>
 <%= render_tabs scrumbler_sprint_settings_tabs %>

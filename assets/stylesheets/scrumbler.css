@@ -146,3 +146,8 @@ div.Growler-notice-exit {
 .scrumler-dashboard-status-inactive {
 	text-decoration: line-through;
 }
+
+.icon-scrumbler-burndown { background-image: url(../images/burndown.png); }
+.icon-scrumbler-settings {background-image: url(../images/settings.png);}
+.icon-scrumbler-backlog {background-image: url(../images/backlog.png);}
+.icon-scrumbler-back {background-image: url(../images/back.png);}

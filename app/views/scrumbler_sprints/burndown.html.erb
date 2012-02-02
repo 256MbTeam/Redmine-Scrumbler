@@ -5,7 +5,13 @@
 <%= javascript_include_tag 'highstock/highstock', :plugin => 'redmine_scrumbler' %>
 <% end %>
 <div class="contextual">
-    <%= link_to l(:label_sprint_back), :controller => :scrumbler, :action => :index, :project_id => @project, :scrumbler_sprint_id => @scrumbler_sprint  %>
+        <%= link_to l(:label_sprint_back), {
+    									:controller => :scrumbler, 
+    									:action => :index, 
+    									:project_id => @project, 
+    									:scrumbler_sprint_id => @scrumbler_sprint
+    									},
+    									:class => "icon icon-scrumbler-back"  %>
 </div>
 
 <div id="scrumbler_burndown_chart" style="height: 500px; min-width: 600px">
