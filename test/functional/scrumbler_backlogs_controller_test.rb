@@ -45,6 +45,12 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
     User.current = nil
   end
 
+  test "Should save new custom field value, create if it doesnt exist" do
+    # TODO
+    assert true
+  end
+  
+
   test "should move issue to sprint from backlog" do
     version = Version.find(3)
     issue = issues(:issues_001)
