@@ -1,0 +1,61 @@
+<% content_for :header_tags do %>
+<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+<%= scrumbler_javascript_translations %>
+<%= javascript_include_tag 'highstock/prototype-adapter', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'highstock/highstock', :plugin => 'redmine_scrumbler' %>
+<% end %>
+<div class="contextual">
+    <%= link_to l(:label_sprint_back), :controller => :scrumbler, :action => :index, :project_id => @project, :scrumbler_sprint_id => @scrumbler_sprint  %>
+</div>
+
+<div id="scrumbler_burndown_chart" style="height: 500px; min-width: 600px">
+	
+</div>
+<script type="text/javascript">
+var seriesOptions = [],
+		yAxisOptions = [],
+		seriesCounter = 0,
+		names = ['MSFT', 'AAPL', 'GOOG'],
+		colors = Highcharts.getOptions().colors;
+		
+	chart = new Highcharts.StockChart({
+			chart : {
+				renderTo : 'scrumbler_burndown_chart'
+			},
+
+			rangeSelector : {
+				selected : 1
+			},
+
+			title : {
+				text : 'AAPL Stock Price'
+			},
+			
+			series : [{
+				name : 'AAPL',
+				data : <%= @data.to_json%>,
+				tooltip: {
+					yDecimals: 2
+				}
+			}]
+		});
+</script>
+
+<!-- [[1107302400000,39.82],
+[1107388800000,38.90],
+[1107475200000,39.42],
+[1107734400000,39.47],
+[1107820800000,40.45],
+[1107907200000,39.37],
+[1107993600000,39.18],
+[1108080000000,40.60],
+[1108339200000,42.32],
+[1108425600000,44.20],
+[1108512000000,45.06],
+[1108598400000,43.90],
+[1108684800000,43.40],
+[1109030400000,42.64],
+[1109116800000,44.12],
+[1109203200000,44.46],
+[1109289600000,44.50],
+[1109548800000,44.86]] -->

@@ -105,6 +105,11 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     end
   end
   
+  def burndown
+    @data = []
+    
+  end
+  
   private
   def find_scrumbler_sprint
     @scrumbler_sprint = @project.scrumbler_sprints.find(params[:id])
