@@ -38,9 +38,9 @@ module ScrumblerHelper
       :issue_not_assigned => t(:issue_not_assigned),
       :scrumbler_statistics => t(:scrumbler_statistics),
       :highstock => {
-        :months => t("date.standalone_month_names").compact,
-        :shortMonths => t("date.standalone_abbr_month_names").compact,
-        :weekdays => I18n.t("date.standalone_day_names").compact
+        :months => t("date.month_names").compact,
+        :shortMonths => t("date.abbr_month_names").compact,
+        :weekdays => t("date.day_names").compact
       }
     }
     javascript_tag "var ScrumblerTranslations = #{translations.to_json}"
