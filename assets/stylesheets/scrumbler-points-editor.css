@@ -1,24 +1,24 @@
-span.scrumbler_points_value{
+div.scrumbler_points > span.scrumbler_points_value {
 	cursor: pointer;
+	cursor: hand;
+	border-bottom: 1pt dashed black;
 }
-
-div.scrum-points-element{
-	width:24px;
-	height:12px;
-	border:1px solid #777;
+div.scrum-points-element {
+	width: 24px;
+	height: 12px;
+	border: 1px solid #777;
 	border-radius: 5px;
 	margin: 2px;
 	display: inline-block;
 	padding: 0px;
 	cursor: pointer;
+	cursor: hand;
 }
-
 div.scrum-points-element:hover {
 	background-color: #ccc;
 }
-
-div.scrum-points-popup{
-	border:1px solid #777;
+div.scrum-points-popup {
+	border: 1px solid #777;
 	border-radius: 5px;
 	padding: 2px;
 	position: absolute;
@@ -26,4 +26,3 @@ div.scrum-points-popup{
 	background: #fff;
 	z-index: 10000;
 }
-	
