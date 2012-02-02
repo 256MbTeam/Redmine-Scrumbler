@@ -14,6 +14,7 @@ ru:
   label_sprint_back: "Вернуться в спринт"
   label_backlog: "Бэклог"
   label_sprint_settings: "Настройки спринта"
+  label_sprint_burndown: "Burndown диаграмма"
   
   issue_not_assigned: "Не назначена"
   

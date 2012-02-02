@@ -118,7 +118,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     
     
     days_total = (end_date - start_date).to_i
-    p "days_total", days_total
+
     points_total_normal = @scrumbler_sprint.points_total
     points_total_real = @scrumbler_sprint.points_total
     
