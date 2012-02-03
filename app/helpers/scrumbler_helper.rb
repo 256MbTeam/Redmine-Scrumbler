@@ -43,7 +43,7 @@ module ScrumblerHelper
         :weekdays => t("date.day_names").compact
       }
     }
-    javascript_tag "var ScrumblerTranslations = #{translations.to_json}"
+    javascript_tag "var ScrumblerTranslations = #{translations.to_json}; var $root_url = #{root_url.to_json};"
   end
 
 

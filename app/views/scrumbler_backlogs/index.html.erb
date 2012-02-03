@@ -1,13 +1,12 @@
 <% content_for :header_tags do %>
-	<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
-	<%= stylesheet_link_tag    'scrumbler-points-editor', :plugin => 'redmine_scrumbler' %>
-	<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
-	<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
-	<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
-	<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
+<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+<%= stylesheet_link_tag    'scrumbler-points-editor', :plugin => 'redmine_scrumbler' %>
+<%= scrumbler_javascript_translations %>
+<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
+<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
 <%end%>
-
-
 <div id="splitcontentleft" style="float:left;width:48%;">
 	<div class ="scrumbler_box" >
 		<div id="backlog" class="backlog">

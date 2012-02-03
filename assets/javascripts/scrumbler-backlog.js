@@ -45,7 +45,7 @@ var ScrumPointEditor = Class.create({
 					onSuccess : function(transport) { 
 						var resp = transport.responseJSON;
 						if(resp.success) {
-							element.firstChild.update(new_value);
+							element.select('[class="scrumbler_points_value"]').first().update(new_value);
 						}else {
 							$growler.growl(resp.text, {
 								header : 'Ошибка'
@@ -98,14 +98,16 @@ var IssuesList = Class.create({
 		parent_div.update("");
 	
 		var trackers_div = new Element("div", {
-			"class" : "scrumbler_backlog_trackers"
+			"class" : "scrumbler_backlog_trackers", 
+			style: "padding-left: 1em;"
 		});
 		trackers.each(function(tracker){
 			trackers_map[tracker.id] = tracker; 
-			var tracker_div = new Element("div", {
+			var tracker_div = new Element("span", {
 				"id" : tracker.id,
 				"class" : "scrumbler_backlog_tracker",
-				"style" : "background:#"+tracker.color+";"
+				style: "border-bottom: 5px solid #"+tracker.color+";"
+				
 			});
 			tracker_div.update(tracker.name);
 			trackers_div.appendChild(tracker_div);
@@ -120,8 +122,8 @@ var IssuesList = Class.create({
 		issues.each(function(issue) {
 			
 			var tracker = trackers_map[issue.tracker_id];
-			var issue_url = '/issues/'+issue.id;
-			var tracker_url = '/projects/'+project_id+'/issues?tracker_id='+issue.tracker_id;
+			var issue_url = $root_url+'/issues/'+issue.id;
+			var tracker_url = $root_url+'/projects/'+project_id+'/issues?tracker_id='+issue.tracker_id;
 			  
 			var issue_div = new Element("div", {
 				"id" : "issue_" + issue.id,
@@ -138,6 +140,7 @@ var IssuesList = Class.create({
 									points: issue.points
 								});
 			issue_div.update(issue_content);
+			issue_div.addClassName("scrumbler_issue_backlog");
 			var points_div = issue_div.select('[class="scrumbler_points"]').first(); 
 			new ScrumPointEditor(points_div, {
 				value : issue.points,

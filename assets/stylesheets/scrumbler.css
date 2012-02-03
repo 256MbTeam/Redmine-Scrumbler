@@ -35,8 +35,8 @@ div.disabled_scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue
 div.scrumbler_backlog_issues {
 	padding-top: 26px;
 }
-div.scrumbler_backlog_tracker {
-	float: right;
+span.scrumbler_backlog_tracker {
+/*	float: right;*/
 	padding: 0px;
 	margin-right: 1em;
 }
@@ -49,6 +49,11 @@ div.scrumbler_issue {
 	margin: .5em;
 	border-radius: 12px;
 }
+
+div.scrumbler_issue_backlog {
+	margin-bottom: 1.125em;
+}
+
 div.scrumbler_issue > div.scrumbler_issue_heading {
 	width: 100%;
 	height: 20px;
@@ -79,12 +84,10 @@ div.scrumbler_points {
 	margin-right: 1em;
 	font-size: 80%;
 	font-weight: bold;
-/*	background-color: white;*/
-	border: 1px solid #ccc;
+
 	width: 100%;
 	text-align: center;
 }
-
 
 div#scrumbler_sprint table, div#scrumbler_sprint table th, div#scrumbler_sprint table.list td {
 	border-left: 1px solid #DDD;
