@@ -48,7 +48,6 @@ Restart the Redmine:
 TODO
 ----
 
-* Burndown chart
 * IE support
 * Daily reporting for issue assignments
 * Template customization
