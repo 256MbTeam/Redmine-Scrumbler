@@ -8,7 +8,6 @@ ActionController::Routing::Routes.draw do |map|
     },:prefix => '/projects/:project_id/scrumbler_backlogs'
     
     project.resource :scrumbler_settings, :member => {
-      :update_sprints => :post,
       :update_trackers => :post,
       :update_issue_statuses => :post
       

@@ -49,17 +49,6 @@ class ScrumblerSettingsControllerTest < ActionController::TestCase
     }
   end
   
-  test "should update sprint statuses by admin" do
-    @scrumbler_sprint = @project.versions.first.scrumbler_sprint
-    sprint_settings = {
-      @scrumbler_sprint.id.to_s => {"status" => "opened"}
-    }
-    post(:update_sprints, {:project_id => @project.id, :scrumbler_sprint => sprint_settings}, {:user_id => @manager.id})  
-    assert_redirected_to project_scrumbler_settings_url(@project, :sprints)
-    assert_equal "Successful update.", flash[:notice]
-    assert_equal "opened", @project.versions.first.scrumbler_sprint.status
-  end
-  
   test "should update trackers by admin" do 
     tracker_setting = {
       "1" => {"position"=>1, "id"=>1, "color"=>"faa", "use"=>true},

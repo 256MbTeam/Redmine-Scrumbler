@@ -1,19 +1,22 @@
-<% form_tag update_sprints_project_scrumbler_settings_url(@project) do%>
-    <table class="list">
-        <thead>
-            <tr>
-                <th><%=l :scrumbler_sprint %></th>
-                 <th width="100px"><%=label("scrumbler_sprint", "status")%></th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @project.scrumbler_sprints.each do |sprint| %>
-                <tr class="<%= cycle 'odd', 'even' %>">
-                    <td><%= sprint.name %></td>
-                    <td><%=  select_sprint_statuses_tag("scrumbler_sprint[#{sprint.id}][status]", sprint.status)%></td>
-                </tr>
-            <% end %>
-        </tbody>
-    </table>
-    <p><%= submit_tag(l(:button_save)) %></p>
-<% end %>
+<table class="list">
+	<thead>
+		<tr>
+			<th><%= l :scrumbler_sprint %></th>
+			<th width="100px"><%= label("scrumbler_sprint", "status")%></th>
+			<% if authorize_for(:scrumbler_sprints, :settings)%> 
+				<th width="100px"><%= label("scrumbler_sprint","activity")%></th>
+			<%end%>
+		</tr>
+	</thead>
+	<tbody>
+		<% @project.scrumbler_sprints.each do |sprint| %>
+		<tr class="<%= cycle 'odd', 'even' %>">
+			<td><%= sprint.name %></td>
+			<td><%= l("scrumbler_sprint_#{sprint.status}") %></td>
+			<% if authorize_for(:scrumbler_sprints, :settings)%> 
+				<td><%= link_to l(:button_edit), project_scrumbler_sprint_settings_url(@project, sprint), :class=> "icon icon-scrumbler-settings" %></td>
+			<%end%>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

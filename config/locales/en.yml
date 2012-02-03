@@ -51,6 +51,8 @@ en:
               trackers_with_issues_in_sprint_cant_be_removed: "Can't remove tracker from sprint. Tracker is not empty"
               sprint_without_project: "Can't create sprint without project"
               closing_sprint_with_opened_issues: "Can't close sprint with opened issues"
+            status:
+              only_one_opened: "error. Only one sprint can be opened a in the project"
   active_record:
     models:
       scrumbler_sprint_tracker:

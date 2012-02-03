@@ -1,5 +1,13 @@
 Scrumbler Changelog
 ===================
+1.3.0
+--------
+
+* Create statistic page
+* Fix bugs with sprint update
+* Remove bulk sprint edit
+* Fix routing bugs
+* Scrum points for issues can be edited in backlog view
 
 1.2.1
 --------
