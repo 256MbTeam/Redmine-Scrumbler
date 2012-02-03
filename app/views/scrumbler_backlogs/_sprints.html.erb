@@ -3,7 +3,7 @@
 <div class="tabs">
   <ul>
   <% sprints.each do |sprint| -%>
-    <li><%= link_to sprint[:label], { :tab => sprint[:name] },
+    <li><%= link_to sprint[:label], { :tab => sprint[:name], :project_id => @project },
                                     :id => "tab-#{sprint[:name]}",
                                     :class => (sprint[:name] != selected_sprint ? nil : 'selected'),
                                     :onclick => "showTab('#{sprint[:name]}'); this.blur(); backlog.sprintSelected(#{sprint.to_json}); return false;" %></li>
