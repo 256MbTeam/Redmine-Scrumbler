@@ -21,7 +21,7 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
   include ScrumblerBacklogsHelper
   
   def index
-
+    @selected_sprint = @project.scrumbler_sprints.planning.first
   end
 
   def update_scrum_points

@@ -36,32 +36,16 @@ module ScrumblerBacklogsHelper
     }
   end
 
-  def scrumbler_sprints_tabs(sprints)
-    sprints_data = []
-    sprints.each do |sprint|
-      sprints_data << {
-        :id => sprint.id,
-        :name => sprint.name,
-        :action => :update_general, :partial => 'sprint',
-        :label => sprint.name,
-        :trackers => prepare_trackers(sprint.trackers, @project.trackers),
-        :issues => prepare_issues_for_json(sprint.issues)
-      }
-    end
-    sprints_data
-  end
-
   def sprint_issues(sprint)
     js_params = {
       :project_id => @project.identifier,
-      :sprint_id => sprint[:id],
-      :issues => sprint[:issues],
-      :trackers => sprint[:trackers],
+      :sprint_id => sprint.id,
+      :issues => prepare_issues_for_json(sprint.issues),
+      :trackers => prepare_trackers(sprint.trackers, @project.trackers),
       :parent_id => "sprint_#{sprint[:id]}",
-      :update_points_url => update_scrum_points_project_scrumbler_backlogs_path(@project),
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
     }
-    javascript_tag("var sprint = new SprintIssuesList(backlog, #{js_params.to_json});")
+    javascript_tag("new Scrumbler.SprintIssuesList(backlog, #{js_params.to_json});")
   end
 
   def backlog_issues
@@ -70,18 +54,10 @@ module ScrumblerBacklogsHelper
       :issues => prepare_issues_for_json(@project.issues.without_version),
       :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers),
       :parent_id => "backlog_list",
-      :update_points_url => update_scrum_points_project_scrumbler_backlogs_path(@project),
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
       
     }
-    javascript_tag("var backlog = new BacklogIssuesList(#{js_params.to_json})")
+    javascript_tag("var backlog = new Scrumbler.BacklogIssuesList(#{js_params.to_json})")
   end
 
-  def render_sprint_tabs(sprints)
-    if sprints.any?
-      render :partial => 'sprints', :locals => {:sprints => sprints}
-    else
-      content_tag 'p', l(:label_no_data), :class => "nodata"
-    end
-  end
 end
