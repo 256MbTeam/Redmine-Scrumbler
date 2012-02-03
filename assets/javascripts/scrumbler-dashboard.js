@@ -172,9 +172,11 @@ Scrumbler.ScrumblerDashboard = (function() {
 			// -
 			// private
 			var id = "scrumbler_dashboard_issue_" + issue_config.id;
+
 			var issue_url = Scrumbler.root_url+'/issues/'+issue_config.id;
 			var tracker_url = Scrumbler.root_url+url+'/issues?tracker_id='+issue_config.tracker_id;
 			var sprint_url = Scrumbler.root_url+url+'/scrumbler_sprints/'+sprint.id+'/issue/'+issue_config.id;
+
 			var row = new Element('tr', {
 				'class' : css_class
 			});

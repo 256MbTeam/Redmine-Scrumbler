@@ -26,7 +26,8 @@ end
 
 Redmine::Plugin.register :redmine_scrumbler do
   name 'Redmine Scrumbler plugin'
-  author 'Alexandr_Andrianov, Dmitry Kuzmin, Ivan Kotenko'
+  url 'https://github.com/256MbTeam/Redmine-Scrumbler/'
+  author 'Alexandr_Andrianov, Ivan Kotenko'
   description 'This is a scrum plugin for Redmine'
   version '1.3.0'
   project_module :redmine_scrumbler do
