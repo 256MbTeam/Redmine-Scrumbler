@@ -18,13 +18,25 @@
 	
 </div>
 <script type="text/javascript">
-var seriesOptions = [],
+
+(function() {
+	
+	var seriesOptions = [],
 		yAxisOptions = [],
 		seriesCounter = 0,
 		names = ['MSFT', 'AAPL', 'GOOG'],
 		colors = Highcharts.getOptions().colors;
-		Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
-	chart = new Highcharts.StockChart({
+	
+	Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
+	var normal_data = <%= @data_normal.to_json%>;
+	var real_data   = <%= @data_real.to_json%>;
+	
+	var current_extr = (normal_data.concat(real_data)).max(function(i) {return i[0];});
+	var today = (new Date()).valueOf();
+	if (today < current_extr) { current_extr = today };
+	
+	
+	var chart = new Highcharts.StockChart({
 			chart : {
 				renderTo : 'scrumbler_burndown_chart'
 			},
@@ -41,6 +53,7 @@ var seriesOptions = [],
 				}
 			},
 			xAxis: {
+				max: current_extr,
 				title: {
 					text: ScrumblerTranslations.scrumbler_statistics.iteration_axis
 				}
@@ -48,14 +61,25 @@ var seriesOptions = [],
 			series : [
 			{
 				name : ScrumblerTranslations.scrumbler_statistics.ideal_issues,
-				data : <%= @data_normal.to_json%>,
+				data : normal_data,
 				tooltip: {
 					yDecimals: 2
 				}
 			}, 
 			{
 				name : ScrumblerTranslations.scrumbler_statistics.actual_issues,
-				data: <%= @data_real.to_json%>
+				data: real_data
 			}]
 		});
+
+})();
+
+// 		
+	// (function() {
+		// 
+		// 
+		// 
+	// })();	
+	
+		
 </script>

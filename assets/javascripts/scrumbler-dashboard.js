@@ -173,8 +173,10 @@ var ScrumblerDashboard = (function() {
 			// private
 			var id = "scrumbler_dashboard_issue_" + issue_config.id;
 			var issue_url = $root_url+'/issues/'+issue_config.id;
-			var tracker_url = $root_url+url+'/issues?tracker_id='+issue_config.tracker_id;
-			var sprint_url = $root_url+url+'/scrumbler_sprints/'+sprint.id+'/issue/'+issue_config.id;
+			var tracker_url = url+'/issues?tracker_id='+issue_config.tracker_id;
+			var sprint_url = url+'/scrumbler_sprints/'+sprint.id+'/issue/'+issue_config.id;
+									console.log('sprint_url', sprint_url)
+
 			var row = new Element('tr', {
 				'class' : css_class
 			});
