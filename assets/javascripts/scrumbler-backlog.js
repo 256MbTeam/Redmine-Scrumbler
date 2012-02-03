@@ -122,8 +122,8 @@ var IssuesList = Class.create({
 		issues.each(function(issue) {
 			
 			var tracker = trackers_map[issue.tracker_id];
-			var issue_url = '/issues/'+issue.id;
-			var tracker_url = '/projects/'+project_id+'/issues?tracker_id='+issue.tracker_id;
+			var issue_url = $root_url+'/issues/'+issue.id;
+			var tracker_url = $root_url+'/projects/'+project_id+'/issues?tracker_id='+issue.tracker_id;
 			  
 			var issue_div = new Element("div", {
 				"id" : "issue_" + issue.id,
