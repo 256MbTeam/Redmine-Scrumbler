@@ -33,7 +33,7 @@ class ScrumblerSprint < ActiveRecord::Base
   belongs_to :version
   validates_presence_of :version
 
-  validates_uniqueness_of :status, :scope => :project_id, :if => lambda {|sprint| sprint.status == "opened"}
+  validates_uniqueness_of :status, :scope => :project_id, :if => lambda {|sprint| sprint.status == "opened"}, :message => :only_one_opened 
   
   delegate :scrumbler_project_setting, :to => :project
   
