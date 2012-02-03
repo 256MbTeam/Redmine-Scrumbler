@@ -27,7 +27,7 @@
 		names = ['MSFT', 'AAPL', 'GOOG'],
 		colors = Highcharts.getOptions().colors;
 	
-	Highcharts.setOptions({lang: Scrumbler.Translations.highstock});
+	Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
 	var normal_data = <%= @data_normal.to_json%>;
 	var real_data   = <%= @data_real.to_json%>;
 	
