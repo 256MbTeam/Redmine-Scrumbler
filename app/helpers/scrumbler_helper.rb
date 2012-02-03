@@ -16,23 +16,22 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerHelper
   # def backlog_issue_filter_link
-    # link_to l(:label_backlog),
-      # :controller => :issues,
-      # :action => :index,
-      # :project_id => @project,
-      # :f => %w(status_id fixed_version_id),
-      # :v => {
-        # :status_id => %W(5 6)
-      # },
-      # :op => {
-        # :fixed_version_id => "!*",
-        # :status_id => "!"
-        # },
-      # :group_by => :priority,
-      # :set_filter => 1,
-      # :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
+  # link_to l(:label_backlog),
+  # :controller => :issues,
+  # :action => :index,
+  # :project_id => @project,
+  # :f => %w(status_id fixed_version_id),
+  # :v => {
+  # :status_id => %W(5 6)
+  # },
+  # :op => {
+  # :fixed_version_id => "!*",
+  # :status_id => "!"
+  # },
+  # :group_by => :priority,
+  # :set_filter => 1,
+  # :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
   # end
-
   def scrumbler_javascript_translations
     translations = {
       :issue_not_assigned => t(:issue_not_assigned),
@@ -45,7 +44,6 @@ module ScrumblerHelper
     }
     javascript_tag "var ScrumblerTranslations = #{translations.to_json}; var $root_url = #{root_url.to_json};"
   end
-
 
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)
@@ -75,7 +73,7 @@ module ScrumblerHelper
         :status_id => id.to_i,
         :closed =>  _status.try(:is_closed),
         :name => _status.try(:name)
-        })
+      })
     }
     r_issue_statuses
   end
@@ -105,4 +103,7 @@ module ScrumblerHelper
     out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
   end
 
+  def select_sprint_statuses_tag(name, selected)
+    select_tag name, options_for_select(ScrumblerSprint::STATUSES.collect {|s| [l("scrumbler_sprint_#{s}"), s]}, selected)
+  end
 end
