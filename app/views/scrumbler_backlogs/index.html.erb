@@ -8,8 +8,8 @@
 	<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
 <%end%>
 
-<h2><%= l(:label_backlog)%></h2>
 	<div id="splitcontentleft" style="float:left;width:48%;">
+		<h2><%= l(:label_backlog)%></h2>
 		<div class ="scrumbler_box" >
 			<%if @project.issues.without_version.any?%>
 			<div id="backlog" class="backlog">
