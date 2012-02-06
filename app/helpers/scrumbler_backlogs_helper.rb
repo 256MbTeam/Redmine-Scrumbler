@@ -58,7 +58,7 @@ module ScrumblerBacklogsHelper
   end
 
   def sprint_issues(sprint)
-    javascript_tag("var sprint_list = new Scrumbler.SprintIssuesList(backlog, #{prepare_sprint_for_json(@project, sprint).to_json});")
+    javascript_tag("var sprint_list = new Scrumbler.SprintIssuesList(backlog_list, #{prepare_sprint_for_json(@project, sprint).to_json});")
   end
 
   def backlog_issues
