@@ -30,15 +30,10 @@
 	
 	
 	var chart = new Highcharts.StockChart({
-			chart : {
-				renderTo : 'scrumbler_burndown_chart'
-			},
-
+			chart : { renderTo : 'scrumbler_burndown_chart' },
 			rangeSelector : { enabled: false },
 			credits: { enabled: false },
-			title : {
-				text : "Burndown"
-			},
+			title : { text : "Burndown" },
 			yAxis: {
 				min: 0,
 				title: {
@@ -54,14 +49,14 @@
 			series : [
 			{
 				name : Scrumbler.Translations.scrumbler_statistics.actual_issues,
-				data: real_data
+				data: real_data,
+				tooltip: { yDecimals: 2 }
+
 			},
 			{
 				name : Scrumbler.Translations.scrumbler_statistics.ideal_issues,
 				data : normal_data,
-				tooltip: {
-					yDecimals: 2
-				}
+				tooltip: { yDecimals: 2 }
 			} 
 			
 			]
