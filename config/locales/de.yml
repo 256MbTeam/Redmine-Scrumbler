@@ -1,0 +1,52 @@
+de:
+  versions_for_sprints_not_created: "Zur Erstellung von neuen Sprints verwenden sie Versionen . Einstellungen -> Versionen."
+  field_end_date: "Endedatum"
+  scrumbler_menu: "Scrumbler"
+  scrumbler_sprint: "Sprint"
+
+  show_opened: "zeigen offene"
+  show_all: "alle Sprints"
+  label_general: "Allgemein"
+  label_sprints: "Sprints"
+  label_trackers: "Trackers"
+  label_issue_statuses: "Ticket-Status"
+  label_sprint_back: "zur Sprintansicht"
+  label_backlog: "Backlog"
+  label_sprint_settings: "Sprint-Einstellungen"
+
+  issue_not_assigned: "Nicht zugewiesen"
+
+  tracker_use?: "verwenden?"
+  #error_scrumbler_general_update: "Die Aktualisierung der Einstellumngen ist fehlgeschlagen"
+  error_scrumbler_trackers_update: "Trackers Aktualisierung fehlgeschlagen"
+  error_scrumbler_issue_statuses_update: "Ticket Status Aktualisierung fehlgeschlagen"
+  error_sprint_not_found_in_project: "Sprint im Projekt nicht vorhanden"
+  error_scrumbler_issue_status_change: "Sie haben keine Recht den Status \"%{status_name}\" für das Ticket zu ändern."
+
+  scrumbler_sprint_opened: "Offen"
+  scrumbler_sprint_planning: "Planung"
+  scrumbler_sprint_closed: "Abgeschlossen"
+
+  activerecord:
+    errors:
+      models:
+        issue:
+          attributes:
+            base:
+              tracker_error: "Für diesen Tracker gibt es keine Sprints"
+              sprint_not_planning_error: "Das Ticket kann nur mit Sprints im Status Planung verknüpft werden."
+              sprint_is_closed_error: "Tickets in abgeschlossenen Sprints können nicht editiert werden."
+        scrumbler_sprint:
+          attributes:
+            base:
+              start_date_is_greater_than_end_date: "Das Beginndatum kann nicht grösser dem Enddatum sein."
+              trackers_with_issues_in_sprint_cant_be_removed: "Der Tracker kann dem Sprint nicht entzogen werden, da der Tracker Tickets für den Sprint vorhält."
+              sprint_without_project: "Sprints können nur im Kontext eines Projekts erstellt werden."
+              closing_sprint_with_opened_issues: "Sprints mit nicht geschlossen Tickets können selbst nicht abgeschlossen werden."
+  active_record:
+    models:
+      scrumbler_sprint_tracker:
+        position: "Position"
+        color: "Farbe"
+      scrumbler_sprint_status:
+        position: "Position"
