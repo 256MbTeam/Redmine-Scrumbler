@@ -83,6 +83,12 @@ Sponsors
 
 * [RDTEX](http://rdtex.ru/)
 
+Translations
+------------
+
+* [Steven.W](https://github.com/archonwang) - zh
+* [Terence Miller](https://github.com/cforce)
+
 License
 -------
 
