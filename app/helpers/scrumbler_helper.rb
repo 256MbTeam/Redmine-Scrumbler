@@ -18,6 +18,7 @@ module ScrumblerHelper
   
   def scrumbler_javascript_helper
     translations = {
+      :nodata => t(:label_no_data),
       :issue_not_assigned => t(:issue_not_assigned),
       :scrumbler_statistics => t(:scrumbler_statistics),
       :highstock => {

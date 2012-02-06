@@ -11,18 +11,12 @@
 	<div id="splitcontentleft" style="float:left;width:48%;">
 		<h2><%= l(:label_backlog)%></h2>
 		<div class ="scrumbler_box" >
-			<%if @project.issues.without_version.any?%>
 			<div id="backlog" class="backlog">
 				
 				<div id="backlog_list" style="min-height:100px;"></div>
 			</div>
 			
-				<%= backlog_issues%>
-			<%else%>
-				<p class="nodata">
-					<%= l(:label_no_data) %>
-				</p>
-			<%end%>
+			<%= backlog_issues%>
 		</div>
 		
 	</div>
@@ -51,7 +45,7 @@
 			</div>
 		<%else%>
 			<p class="nodata">
-				<%= l(:label_no_data) %>
+				<%= l(:versions_for_sprints_not_created) %>
 			</p>
 		<%end%>
 		

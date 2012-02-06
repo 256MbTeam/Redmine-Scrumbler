@@ -1,10 +1,4 @@
-
-	
-	
-	
-
-
-		Scrumbler.ScrumPointEditor = Class.create({
+Scrumbler.ScrumPointEditor = Class.create({
     initialize: function(element, options){
         this.options = Object.extend({
         	value: "?",
@@ -152,21 +146,26 @@ Scrumbler.IssuesList = Class.create({
 		var issues_div = new Element("div", {
 			"class" : "scrumbler_backlog_issues"
 		});
-		issues.each(function(issue) {
-			
-			var issue_div = new Scrumbler.IssueBacklogTemplate({
-				'project_id': project_id,
-				'tracker': trackers_map[issue.tracker_id],
-				'issue': issue,
-				class_name : issue.disabled ? "disabled_scrumbler_issue" : "scrumbler_issue"
-			}).getEl();
-
-			new Draggable(issue_div, {
-				revert : true
-			});
-			issues_div.appendChild(issue_div);
-		});
 		
+		if(issues.length == 0){
+			issues_div.appendChild(new Element('p',{'class':'nodata'}).update(Scrumbler.Translations.nodata));
+		}
+		else{
+			issues.each(function(issue) {
+				
+				var issue_div = new Scrumbler.IssueBacklogTemplate({
+					'project_id': project_id,
+					'tracker': trackers_map[issue.tracker_id],
+					'issue': issue,
+					class_name : issue.disabled ? "disabled_scrumbler_issue" : "scrumbler_issue"
+				}).getEl();
+	
+				new Draggable(issue_div, {
+					revert : true
+				});
+				issues_div.appendChild(issue_div);
+			});
+		}
 		parent_div.appendChild(issues_div);
 	},
 	onDrop : function(issue_div, target_div, event) {
