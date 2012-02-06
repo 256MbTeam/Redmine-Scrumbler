@@ -58,17 +58,11 @@ Scrumbler.ScrumblerDashboard = (function() {
 
 	var AssignmentStatus = Class.create({
 		initialize: function(issue) {
-			this.issue = issue;
-			this.el =  new Element('div');
-			var body = new Element('div', {
-				"class": "scrumbler-assignment-status"
-			});
-			this.statusLink = new Element('div', {
-				"class": 'scrumbler-assignee-link'
-			}).update("&nbsp;");
-			this.infoEl = new Element('span', {
-				"class": 'scrumbler-assignment-status-info'
-			});
+			this.issue      = issue;
+			this.el         = new Element('div');
+			var body        = new Element('div', {"class": "scrumbler-assignment-status"});
+			this.statusLink = new Element('div', {"class": 'scrumbler-assignee-link'}).update("&nbsp;");
+			this.infoEl     = new Element('span', {"class": 'scrumbler-assignment-status-info'});
 
 			this.el.appendChild(body);
 
@@ -80,9 +74,7 @@ Scrumbler.ScrumblerDashboard = (function() {
 
 		},
 		getEl: function() {
-			if(!this.rendered) {
-				this.render()
-			}
+			if (!this.rendered) { this.render() };
 			return this.el;
 
 		},
@@ -148,26 +140,13 @@ Scrumbler.ScrumblerDashboard = (function() {
 	});
 
 	var Issue = Class.create({
-		getConfig: function() {
-			return this.config;
-		},
-		setConfig: function(config) {
-			this.config = config
-			return this.getConfig();
-		},
-		getStatusId: function() {
-			return this.config.status_id
-		},
-		setStatusId: function(status_id) {
-			return this.config.status_id = status_id
-		},
-		getClosed: function() {
-			return this.config.status_id
-		},
-		setClosed: function(closed) {
-			return this.config.closed = closed
-		},
-		initialize: function(dashboard, sprint, issue_config, statuses, trackers, url, css_class) {
+		getConfig:   function() { return this.config;},
+		setConfig:   function(config) { this.config = config; return this.getConfig(); },
+		getStatusId: function() { return this.config.status_id },
+		setStatusId: function(status_id) { return this.config.status_id = status_id;},
+		getClosed:   function() { return this.config.status_id;},
+		setClosed:   function(closed) { return this.config.closed = closed;},
+		initialize:  function(dashboard, sprint, issue_config, statuses, trackers, url, css_class) {
 			this.setConfig(issue_config);
 			// -
 			// private
@@ -210,25 +189,21 @@ Scrumbler.ScrumblerDashboard = (function() {
 			this.getIssueURL        = $from(issue_url);
 			this.getIssueEl         = $from(issueEl);
 			this.getAssn            = $from(new AssignmentStatus(this));
-
-			this.statuses = makeStatusElements();
+			this.statuses 			= makeStatusElements();
 
 			this.render();
-
 			this.makeInteractive();
-
 		},
 		getSortedStatuses: function() {
-			function sortFn(a, b) { return a.position - b.position}
+			function sortFn(a, b) { return a.position - b.position};
 			return this.statuses.values().sort(sortFn);
 		},
 		render: function() {
 			this.getIssueEl().appendChild(this.getAssn().getEl());
 
 			// Draw statuses
-			this.getSortedStatuses().each( function(status) {
-				this.getRow().appendChild(status.element);
-				status.element.update('&nbsp;')
+			this.getSortedStatuses().each(function(status) {
+				this.getRow().appendChild(status.element.update('&nbsp;'));
 			}, this);
 			
 			this.statuses.get(this.getStatusId()).element.appendChild(this.getIssueEl());
@@ -236,73 +211,54 @@ Scrumbler.ScrumblerDashboard = (function() {
 		makeInteractive: function() {
 			// -
 			// private
-			var issue = this;
-
-			var draggable = new Draggable(this.getIssueEl(), {
-				revert : true,
-				constraint: 'horizontal'
-			});
+			var issue     = this;
+			var draggable = new Draggable(this.getIssueEl(), { revert : true, constraint: 'horizontal' });
 
 			function makeDroppableEl (status) {
 
 				function onDrop(dragEl, dropEl, event) {
-					if((dragEl != issue.getIssueEl()) ||
-					!dropEl.scrumbler_status)
-						return;
+					if ((dragEl != issue.getIssueEl()) || !dropEl.scrumbler_status) {
+						return;	
+					}
 
 					var status = dropEl.scrumbler_status;
 
 					if(issue.getStatusId() != status.status_id) {
 						issue.getIssueEl().hide();
+						
 						new Ajax.Request(issue.getURL(), {
 							method:'post',
-							parameters: {
-								'issue[status_id]': status.status_id
-							},
+							parameters: { 'issue[status_id]': status.status_id },
 							onSuccess: function(transport) {
 								var resp = transport.responseJSON;
-								if(!resp)
-									return;
+								if (!resp) { return; }
 
-								if(resp.success) {
+								if (resp.success) {
 									issue.setStatusId(status.status_id);
 									issue.setClosed(status.closed);
 									dropEl.appendChild(issue.getIssueEl());
 									issue.getDashboard().refreshHeader();
 								} else {
-									$growler.growl(resp.text, {
-										header: 'Ошибка'
-									});
+									$growler.growl(resp.text, { header: 'Ошибка' });
 								}
 
 							},
 							onFailure: function() {
-
-								$growler.growl('Something went wrong...', {
-									header: 'Error'
-								});
+								$growler.growl('Something went wrong...', { header: 'Error' });
 							},
-							onComplete: function() {
-								issue.getIssueEl().show()
-							}
+							onComplete: function() { issue.getIssueEl().show() }
 						});
 
 					}
 
-				}
+				};
 
-				Droppables.add(status.element, {
-					accept: 'scrumbler_issue',
-					onDrop: onDrop
-				});
+				Droppables.add(status.element, { accept: 'scrumbler_issue', onDrop: onDrop });
 
 			};
 
 			// Create droppables
-			this.statuses.each( function(pair) {
-
-				makeDroppableEl(pair.value);
-			});
+			this.statuses.each(function(pair) { makeDroppableEl(pair.value); });
 		}
 	});
 
