@@ -1,6 +1,6 @@
 <% content_for :header_tags do %>
 <%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
-<%= scrumbler_javascript_translations %>
+<%= scrumbler_javascript_helper %>
 <%= javascript_include_tag 'highstock/prototype-adapter', :plugin => 'redmine_scrumbler' %>
 <%= javascript_include_tag 'highstock/highstock', :plugin => 'redmine_scrumbler' %>
 <% end %>
@@ -20,7 +20,7 @@
 <script type="text/javascript">
 (function() {
 	
-	Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
+	Highcharts.setOptions({lang: Scrumbler.Translations.highstock});
 	var normal_data = <%= @data_normal.to_json%>;
 	var real_data   = <%= @data_real.to_json%>;
 	
