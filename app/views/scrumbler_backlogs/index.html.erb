@@ -9,42 +9,51 @@
 <%end%>
 
 <h2><%= l(:label_backlog)%></h2>
-<%if !@selected_sprint%>
-	<p class="nodata">
-			<%= l(:label_no_data) %>
-	</p>
-<%else%>
-<div id="splitcontentleft" style="float:left;width:48%;">
-	<div class ="scrumbler_box" >
-		<div id="backlog" class="backlog">
+	<div id="splitcontentleft" style="float:left;width:48%;">
+		<div class ="scrumbler_box" >
+			<%if @project.issues.without_version.any?%>
+			<div id="backlog" class="backlog">
+				
+				<div id="backlog_list" style="min-height:100px;"></div>
+			</div>
 			
-			<div id="backlog_list" style="min-height:100px;"></div>
+				<%= backlog_issues%>
+			<%else%>
+				<p class="nodata">
+					<%= l(:label_no_data) %>
+				</p>
+			<%end%>
 		</div>
-		<%= backlog_issues%>
+		
 	</div>
-</div>
-<div id="splitcontentright" style="float:right; width:50%;">
-	<div id = "sprint_list_div" class ="scrumbler_box">
+	<div id="splitcontentright" style="float:right; width:50%;">
+		<%if @selected_sprint%>
+			<div id = "sprint_list_div" class ="scrumbler_box">
+				
+				<b><%=t(:scrumbler_sprint)%></b>
+				<script>
+					var selector = new Scrumbler.SprintSelector({
+						project_id: <%=@project.identifier.to_json%>,
+						sprints: <%=@project.scrumbler_sprints.planning.to_json%>
+						});
+					$('sprint_list_div').appendChild(selector.el);
+				</script>
+				
+				
+				<div id="sprint_list" class="sprint-box" style="min-height:100px;">
+			
+				</div>
+				<%= sprint_issues(@selected_sprint) %>
+				
+				<script>
+					backlog_list.sprintSelected(<%=prepare_sprint_for_json(@project, @selected_sprint).to_json%>);
+				</script>
+			</div>
+		<%else%>
+			<p class="nodata">
+				<%= l(:label_no_data) %>
+			</p>
+		<%end%>
 		
-		<b><%=t(:scrumbler_sprint)%></b>
-		<script>
-			var selector = new Scrumbler.SprintSelector({
-				project_id: <%=@project.identifier.to_json%>,
-				sprints: <%=@project.scrumbler_sprints.planning.to_json%>
-				});
-			$('sprint_list_div').appendChild(selector.el);
-		</script>
-		
-		
-		<div id="sprint_list" class="sprint-box" style="min-height:100px;">
-	
-		</div>
-		<%= sprint_issues(@selected_sprint) %>
-		
-		<script>
-			backlog_list.sprintSelected(<%=prepare_sprint_for_json(@project, @selected_sprint).to_json%>);
-		</script>
 	</div>
-</div>
 
-<%end%>
