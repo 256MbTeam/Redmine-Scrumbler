@@ -246,6 +246,46 @@ Scrumbler.SprintIssuesList = Class.create(Scrumbler.IssuesList, {
 	}
 });
 	
+	
+Scrumbler.SprintSelector = Class.create({
+	initialize: function(config){
+		var sprint_selector = new Element('select',{
+			id: 'scrumbler_sprint_id'
+		});
+		sprint_selector.observe('change',function(event){
+			new Ajax.Request(Scrumbler.root_url+'/projects/'+config.project_id+'/scrumbler_backlogs/select_sprint',{
+				method: 'post',
+				parameters: {
+					'sprint_id':sprint_selector.value
+				},
+				onSuccess : function(transport) { 
+				
+					var resp = transport.responseJSON;
+					if(resp.success) {
+						backlog_list.sprintSelected(resp.sprint);
+						sprint_list.sprint_id = resp.sprint.sprint_id;
+						sprint_list.renderIssueList($('sprint_list'), resp.sprint);
+					} else {
+						$growler.growl(resp.text, {
+							header : 'Ошибка'
+						});
+					}
+
+				}.bind(this),
+				onFailure : function() {
+					$growler.growl('Something went wrong...', {
+						header : 'Error'
+					});
+			}
+			});
+		});
+		config.sprints.each(function(sprint){
+			var option = new Element('option',{value: sprint.id}).update(sprint.name);
+			sprint_selector.appendChild(option);
+		});
+		this.el = sprint_selector;
+	}
+});
 </script>
 
 <div id="splitcontentleft" style="float:left;width:48%;">
@@ -258,11 +298,24 @@ Scrumbler.SprintIssuesList = Class.create(Scrumbler.IssuesList, {
 	</div>
 </div>
 <div id="splitcontentright" style="float:right; width:50%;">
-	<div class ="scrumbler_box">
-		<%= collection_select "scrumbler_sprint", :id, @project.scrumbler_sprints.planning, :id, :name, { :selected => @selected_sprint } %>
-		<%=render :partial => "sprint", :object => @selected_sprint%>
+	<div id = "sprint_list_div" class ="scrumbler_box">
+		
 		<script>
-			backlog.sprintSelected(<%=prepare_sprint_for_json(@project, @selected_sprint).to_json%>);
+			var selector = new Scrumbler.SprintSelector({
+				project_id: <%=@project.identifier.to_json%>,
+				sprints: <%=@project.scrumbler_sprints.planning.to_json%>
+				});
+			$('sprint_list_div').appendChild(selector.el);
+		</script>
+		
+		
+		<div id="sprint_list" class="sprint-box" style="min-height:100px;">
+	
+		</div>
+		<%= sprint_issues(@selected_sprint) %>
+		
+		<script>
+			backlog_list.sprintSelected(<%=prepare_sprint_for_json(@project, @selected_sprint).to_json%>);
 		</script>
 	</div>
 </div>

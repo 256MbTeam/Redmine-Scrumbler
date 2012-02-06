@@ -24,7 +24,7 @@ ru:
   error_scrumbler_issue_statuses_update: "Не удалось обновить статусы задач"
   error_sprint_not_found_in_project: "Спринт не был найден или не прикреплен к этому проекту"
   error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
-  
+  error_sprint_not_found: "Спринт не найден"
   
   scrumbler_statistics:
     ideal_issues: "Идеал"

@@ -35,32 +35,34 @@ module ScrumblerBacklogsHelper
     }
   end
 
-  def prepare_sprint_for_json(project,sprint)
+  def prepare_sprint_for_json(project, sprint)
     {
       :project_id => project.identifier,
       :sprint_id => sprint.id,
       :issues => prepare_issues_for_json(sprint.issues),
       :trackers => prepare_trackers(sprint.trackers, project.trackers),
-      :parent_id => "sprint_#{sprint[:id]}",
+      :parent_id => "sprint_list",
       :url => "/projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
     }
   end
 
-  def sprint_issues(sprint)
+  def prepare_backlog_for_json(project)
+    {
+      :project_id => project.identifier,
+      :issues => prepare_issues_for_json(project.issues.without_version),
+      :trackers => prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers),
+      :parent_id => "backlog_list",
+      :url => "/projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
 
-    javascript_tag("new Scrumbler.SprintIssuesList(backlog, #{prepare_sprint_for_json(@project,sprint).to_json});")
+    }
+  end
+
+  def sprint_issues(sprint)
+    javascript_tag("var sprint_list = new Scrumbler.SprintIssuesList(backlog, #{prepare_sprint_for_json(@project, sprint).to_json});")
   end
 
   def backlog_issues
-    js_params = {
-      :project_id => @project.identifier,
-      :issues => prepare_issues_for_json(@project.issues.without_version),
-      :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers),
-      :parent_id => "backlog_list",
-      :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
-
-    }
-    javascript_tag("var backlog = new Scrumbler.BacklogIssuesList(#{js_params.to_json})")
+    javascript_tag("var backlog_list = new Scrumbler.BacklogIssuesList(#{prepare_backlog_for_json(@project).to_json})")
   end
 
 end
