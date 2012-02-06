@@ -24,6 +24,15 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
     @selected_sprint = @project.scrumbler_sprints.planning.first
   end
 
+  def select_sprint
+    @sprint = ScrumblerSprint.find(params[:sprint_id])
+    
+    render :json => { :success => !!@sprint,
+                      :sprint => prepare_sprint_for_json(@project, @sprint),
+                      :text => t(:error_sprint_not_found)
+                    }
+  end
+
   def update_scrum_points
     @issue = Issue.find(params[:issue_id])
     value = @issue.custom_value_for(ScrumblerIssueCustomField.points) || 
@@ -48,14 +57,8 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
     end
 
     render :json => { :success => @issue.save,
-                      :backlog => {:proejct_id => @project.identifier,
-                                   :issues => prepare_issues_for_json(@project.issues.without_version),
-                                   :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers)
-                                  },
-                      :sprint => {:proejct_id => @project.identifier,
-                                  :issues => prepare_issues_for_json(@sprint.issues),
-                                  :trackers => prepare_trackers(@sprint.trackers, @project.trackers)
-                                 },
+                      :backlog => prepare_backlog_for_json(@project),
+                      :sprint => prepare_sprint_for_json(@project, @sprint),
                       :text => @issue.errors.full_messages.join(", <br>")
                     }
   end
