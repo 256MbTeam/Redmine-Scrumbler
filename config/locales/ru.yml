@@ -32,10 +32,7 @@ ru:
     iteration_axis: "Продолжительность итерации"
     estimated_axis: "Оставшаяся работа"
     
-  scrumbler_statistics_ideal_issues: 
-  scrumbler_statistics_: "Факт"
-  scrumbler_statistics_actual_: "Iteration timeline"
-
+  scrumbler_sprint_statistics_not_available: "Внимание! Статистика недоступна. Спринт должен быть открыт и заданы даты начала окончания спринта."
   
   scrumbler_sprint_opened: "Открыт"
   scrumbler_sprint_planning: "Планирование"

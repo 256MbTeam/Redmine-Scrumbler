@@ -90,7 +90,7 @@ Scrumbler.IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 
 			new Scrumbler.ScrumPointEditor(points_div, {
 				value : config.issue.points,
-				update_url: Scrumbler.root_url+'/projects/'+config.project_id+'/scrumbler_backlogs/update_scrum_points',
+				update_url: Scrumbler.root_url+'projects/'+config.project_id+'/scrumbler_backlogs/update_scrum_points',
 				issue_id: config.issue.id
 			});
     		
@@ -250,7 +250,9 @@ Scrumbler.SprintSelector = Class.create({
 			id: 'scrumbler_sprint_id'
 		});
 		sprint_selector.observe('change',function(event){
-			new Ajax.Request(Scrumbler.root_url+'/projects/'+config.project_id+'/scrumbler_backlogs/select_sprint',{
+			var url = Scrumbler.root_url+'projects/'+config.project_id+'/scrumbler_backlogs/select_sprint';
+			console.log(url)
+			new Ajax.Request(url,{
 				method: 'post',
 				parameters: {
 					'sprint_id':sprint_selector.value

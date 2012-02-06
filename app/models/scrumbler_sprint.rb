@@ -106,6 +106,10 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
     version.effective_date
   end
   
+  def statistics_available?
+    status != "planning" && start_date && end_date
+  end
+  
   private
   
   def scrumbler_project_setting_validation
