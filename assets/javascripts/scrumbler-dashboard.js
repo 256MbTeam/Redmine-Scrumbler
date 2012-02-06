@@ -1,4 +1,4 @@
-var ScrumblerDashboard = (function() {
+Scrumbler.ScrumblerDashboard = (function() {
 	// Helpers
 	var BacklogHeader = function(name) {
 		var el = new Element('div', {
@@ -96,7 +96,7 @@ var ScrumblerDashboard = (function() {
 			if(assigned_to) {
 				this.infoEl.update(assigned_to.name)
 			} else {
-				this.infoEl.update(ScrumblerTranslations.issue_not_assigned)
+				this.infoEl.update(Scrumbler.Translations.issue_not_assigned)
 			}
 		},
 		generateStatus: function() {
@@ -172,10 +172,10 @@ var ScrumblerDashboard = (function() {
 			// -
 			// private
 			var id = "scrumbler_dashboard_issue_" + issue_config.id;
-			var issue_url = $root_url+'/issues/'+issue_config.id;
-			var tracker_url = url+'/issues?tracker_id='+issue_config.tracker_id;
-			var sprint_url = url+'/scrumbler_sprints/'+sprint.id+'/issue/'+issue_config.id;
-									console.log('sprint_url', sprint_url)
+
+			var issue_url = Scrumbler.root_url+'/issues/'+issue_config.id;
+			var tracker_url = Scrumbler.root_url+url+'/issues?tracker_id='+issue_config.tracker_id;
+			var sprint_url = Scrumbler.root_url+url+'/scrumbler_sprints/'+sprint.id+'/issue/'+issue_config.id;
 
 			var row = new Element('tr', {
 				'class' : css_class
@@ -232,7 +232,7 @@ var ScrumblerDashboard = (function() {
 		render: function() {
 			var tracker = this.getTrackers().get(this.getConfig().tracker_id);
 
-			this.getIssueEl().update(ISSUE_TEMPLATE.evaluate({
+			this.getIssueEl().update(Scrumbler.ISSUE_TEMPLATE.evaluate({
 				issue_url: this.getIssueURL(),
 				tracker_url: this.getTrackerURL(),
 				tracker_name: tracker.name,

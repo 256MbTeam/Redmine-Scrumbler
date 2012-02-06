@@ -1,9 +1,9 @@
 <% content_for :header_tags do %>
 	<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
-	<%= scrumbler_javascript_translations %>
 	<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
 	<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
 	<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
+	<%= scrumbler_javascript_helper %>
 	<%= javascript_include_tag 'scrumbler-dashboard', :plugin => 'redmine_scrumbler' %>
 <% end %>
 
@@ -22,37 +22,36 @@
 
 <div id="scrumbler_dashboard">
 	<% if @scrumbler_sprints.any? %>
-	<p>
-		<%= label_tag :scrumbler_sprint_id, l(:scrumbler_sprint) %>
-
-		<%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name,
-		{
-		:selected => @scrumbler_sprint.id
-		},
-		{
-		:onchange => "#{remote_function :url => {
-		:controller => :scrumbler,
-		:action => :sprint,
-		:project_id => @project
-		}, :with => "'sprint_id='+value"}"
-		}
-%>
-	</p>
-	<p>
-		<%if @show_all %>
-		<%= link_to l(:show_opened), :controller => :scrumbler, :action => :index, :project_id => @project %>
-		<%else%>
-		<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
-		<%end%>
-	</p>
-	<%= render :partial => 'sprint', :object =>  @scrumbler_sprint %>
+		<p>
+			<%= label_tag :scrumbler_sprint_id, l(:scrumbler_sprint) %>
+	
+			<%= collection_select "scrumbler_sprint", :id, @scrumbler_sprints, :id, :name,
+			{
+			:selected => @scrumbler_sprint.id
+			},
+			{
+			:onchange => remote_function(:url => {
+			:controller => :scrumbler,
+			:action => :sprint,
+			:project_id => @project
+			}, :with => "'sprint_id='+value")
+			}%>
+		</p>
+		<p>
+			<%if @show_all %>
+				<%= link_to l(:show_opened), :controller => :scrumbler, :action => :index, :project_id => @project %>
+			<%else%>
+				<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
+			<%end%>
+		</p>
+		<%= render :partial => 'sprint', :object =>  @scrumbler_sprint %>
 	<% else %>
-	<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
-	<p class="nodata">
-		<%= l(:versions_for_sprints_not_created) %>
-	</p>
-	<p class="nodata">
-		<%= l(:label_no_data) %>
-	</p>
+		<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
+		<p class="nodata">
+			<%= l(:versions_for_sprints_not_created) %>
+		</p>
+		<p class="nodata">
+			<%= l(:label_no_data) %>
+		</p>
 	<% end %>
 </div>

@@ -18,10 +18,8 @@
 	
 </div>
 <script type="text/javascript">
-
 (function() {
 	
-
 	Highcharts.setOptions({lang: ScrumblerTranslations.highstock});
 	var normal_data = <%= @data_normal.to_json%>;
 	var real_data   = <%= @data_real.to_json%>;
@@ -44,22 +42,22 @@
 			yAxis: {
 				min: 0,
 				title: {
-					text: ScrumblerTranslations.scrumbler_statistics.estimated_axis
+					text: Scrumbler.Translations.scrumbler_statistics.estimated_axis
 				}
 			},
 			xAxis: {
 				max: current_extr,
 				title: {
-					text: ScrumblerTranslations.scrumbler_statistics.iteration_axis
+					text: Scrumbler.Translations.scrumbler_statistics.iteration_axis
 				}
 			},
 			series : [
 			{
-				name : ScrumblerTranslations.scrumbler_statistics.actual_issues,
+				name : Scrumbler.Translations.scrumbler_statistics.actual_issues,
 				data: real_data
 			},
 			{
-				name : ScrumblerTranslations.scrumbler_statistics.ideal_issues,
+				name : Scrumbler.Translations.scrumbler_statistics.ideal_issues,
 				data : normal_data,
 				tooltip: {
 					yDecimals: 2
@@ -71,12 +69,5 @@
 
 })();
 
-// 		
-	// (function() {
-		// 
-		// 
-		// 
-	// })();	
 	
-		
 </script>

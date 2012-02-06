@@ -15,24 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerHelper
-  # def backlog_issue_filter_link
-  # link_to l(:label_backlog),
-  # :controller => :issues,
-  # :action => :index,
-  # :project_id => @project,
-  # :f => %w(status_id fixed_version_id),
-  # :v => {
-  # :status_id => %W(5 6)
-  # },
-  # :op => {
-  # :fixed_version_id => "!*",
-  # :status_id => "!"
-  # },
-  # :group_by => :priority,
-  # :set_filter => 1,
-  # :c => [:status, :priority, :subject, "cf_#{ScrumblerIssueCustomField.points.id}"]
-  # end
-  def scrumbler_javascript_translations
+  
+  def scrumbler_javascript_helper
     translations = {
       :issue_not_assigned => t(:issue_not_assigned),
       :scrumbler_statistics => t(:scrumbler_statistics),
@@ -42,7 +26,7 @@ module ScrumblerHelper
         :weekdays => t("date.day_names").compact
       }
     }
-    javascript_tag "var ScrumblerTranslations = #{translations.to_json}; var $root_url = #{root_url.to_json};"
+    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_url.to_json};"
   end
 
   def select_color_tag(name, value=nil, options={})
@@ -100,7 +84,7 @@ module ScrumblerHelper
       :current_user_id => User.current.id
     }.to_json
     out = "<div id='#{div_id}' style='width:100%;height=100%;'>&nbsp;</div>"
-    out << javascript_tag("new ScrumblerDashboard('#{div_id}', #{config})")
+    out << javascript_tag("new Scrumbler.ScrumblerDashboard('#{div_id}', #{config});")
   end
 
   def select_sprint_statuses_tag(name, selected)
