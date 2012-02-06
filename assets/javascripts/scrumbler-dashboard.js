@@ -1,3 +1,4 @@
+alert(1);
 Scrumbler.ScrumblerDashboard = (function() {
 	// Helpers
 	var BacklogHeader = function(name) {
