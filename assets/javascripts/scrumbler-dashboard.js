@@ -172,18 +172,11 @@ Scrumbler.ScrumblerDashboard = (function() {
 			// -
 			// private
 			var id = "scrumbler_dashboard_issue_" + issue_config.id;
-
 			var issue_url = Scrumbler.root_url+'/issues/'+issue_config.id;
 			var tracker_url = url+'/issues?tracker_id='+issue_config.tracker_id;
 			var sprint_url = url+'/scrumbler_sprints/'+sprint.id+'/issue/'+issue_config.id;
-	console.log(issue_url, tracker_url, sprint_url)
-			var row = new Element('tr', {
-				'class' : css_class
-			});
-			var issueEl = new Element('div', {
-				'class': 'scrumbler_issue',
-				id: id
-			});
+			var row = new Element('tr', { 'class' : css_class });
+
 			function makeStatusElements() {
 				var statusElements = {};
 				var i = 0;
@@ -200,48 +193,36 @@ Scrumbler.ScrumblerDashboard = (function() {
 				})
 				return $H(statusElements);
 			};
+			var issueEl = new Scrumbler.IssueTemplate({
+				'tracker': trackers.get(issue_config.tracker_id),
+				'issue': issue_config,
+				class_name : "scrumbler_issue"
+			}).getEl();
 
 			// +
 			// public
 			this.getDashboard		= $from(dashboard);
 			this.getID              = $from(id);
 			this.getRow             = $from(row);
-			this.getIssueEl         = $from(issueEl);
-
 			this.getURL             = $from(sprint_url);
-			this.getIssueURL        = $from(issue_url);
 			this.getTrackerURL      = $from(tracker_url);
 			this.getTrackers        = $from(trackers);
-
-			var assn = new AssignmentStatus(this);
-			this.getAssn            = $from(assn);
+			this.getIssueURL        = $from(issue_url);
+			this.getIssueEl         = $from(issueEl);
+			this.getAssn            = $from(new AssignmentStatus(this));
 
 			this.statuses = makeStatusElements();
+
 			this.render();
 
 			this.makeInteractive();
 
 		},
 		getSortedStatuses: function() {
-			function sortFn(a, b) {
-				return a.position - b.position
-			}
-
+			function sortFn(a, b) { return a.position - b.position}
 			return this.statuses.values().sort(sortFn);
 		},
 		render: function() {
-			var tracker = this.getTrackers().get(this.getConfig().tracker_id);
-
-			this.getIssueEl().update(Scrumbler.ISSUE_TEMPLATE.evaluate({
-				issue_url: this.getIssueURL(),
-				tracker_url: this.getTrackerURL(),
-				tracker_name: tracker.name,
-				issue_subject: this.getConfig().subject,
-				issue_id: this.getConfig().id,
-				color: tracker.color || '507AAA',
-				points: this.getConfig().points
-			}));
-
 			this.getIssueEl().appendChild(this.getAssn().getEl());
 
 			// Draw statuses
@@ -249,6 +230,7 @@ Scrumbler.ScrumblerDashboard = (function() {
 				this.getRow().appendChild(status.element);
 				status.element.update('&nbsp;')
 			}, this);
+			
 			this.statuses.get(this.getStatusId()).element.appendChild(this.getIssueEl());
 		},
 		makeInteractive: function() {
