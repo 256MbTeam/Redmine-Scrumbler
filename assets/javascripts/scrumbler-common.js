@@ -46,7 +46,6 @@ Scrumbler.IssueTemplate = Class.create({
 			style: 'background: #'+config.tracker.color+';'
 		});
 		color_div.update("&nbsp;");
-		console.log(Scrumbler.root_url)
 		var tracker_link = new Element('a',{
 			href: Scrumbler.root_url+'/projects/'+config.project_id+'/issues?tracker_id='+config.tracker.id
 		});

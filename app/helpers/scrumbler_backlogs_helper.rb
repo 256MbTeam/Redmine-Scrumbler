@@ -15,8 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerBacklogsHelper
-  
-   def prepare_issues_for_json(issues)
+  def prepare_issues_for_json(issues)
     issues.sort_by(&:priority).reverse.map{|issue|
       { :id => issue.id,
         :subject => issue.subject,
@@ -36,16 +35,20 @@ module ScrumblerBacklogsHelper
     }
   end
 
-  def sprint_issues(sprint)
-    js_params = {
-      :project_id => @project.identifier,
+  def prepare_sprint_for_json(project,sprint)
+    {
+      :project_id => project.identifier,
       :sprint_id => sprint.id,
       :issues => prepare_issues_for_json(sprint.issues),
-      :trackers => prepare_trackers(sprint.trackers, @project.trackers),
+      :trackers => prepare_trackers(sprint.trackers, project.trackers),
       :parent_id => "sprint_#{sprint[:id]}",
-      :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
+      :url => "/projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
     }
-    javascript_tag("new Scrumbler.SprintIssuesList(backlog, #{js_params.to_json});")
+  end
+
+  def sprint_issues(sprint)
+
+    javascript_tag("new Scrumbler.SprintIssuesList(backlog, #{prepare_sprint_for_json(@project,sprint).to_json});")
   end
 
   def backlog_issues
@@ -55,7 +58,7 @@ module ScrumblerBacklogsHelper
       :trackers => prepare_trackers(@project.scrumbler_project_setting.trackers, @project.trackers),
       :parent_id => "backlog_list",
       :url => "/projects/#{@project.identifier}/scrumbler_backlogs/change_issue_version"
-      
+
     }
     javascript_tag("var backlog = new Scrumbler.BacklogIssuesList(#{js_params.to_json})")
   end

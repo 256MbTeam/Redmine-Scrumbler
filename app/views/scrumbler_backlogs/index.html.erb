@@ -1,11 +1,11 @@
 <% content_for :header_tags do %>
-<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
-<%= stylesheet_link_tag    'scrumbler-points-editor', :plugin => 'redmine_scrumbler' %>
-<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
-<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
-<%= scrumbler_javascript_helper %>
-<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
-<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
+	<%= stylesheet_link_tag    'scrumbler', :plugin => 'redmine_scrumbler' %>
+	<%= stylesheet_link_tag    'scrumbler-points-editor', :plugin => 'redmine_scrumbler' %>
+	<%= javascript_include_tag 'Growler-packed', :plugin => 'redmine_scrumbler' %>
+	<%= javascript_include_tag 'growler', :plugin => 'redmine_scrumbler' %>
+	<%= scrumbler_javascript_helper %>
+	<%= javascript_include_tag 'scrumbler-common', :plugin => 'redmine_scrumbler' %>
+	<%= javascript_include_tag 'scrumbler-backlog', :plugin => 'redmine_scrumbler' %>
 <%end%>
 
 <script>
@@ -87,11 +87,13 @@ Scrumbler.IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
     		var points_div = new Element('div',{
     			'class' : 'scrumbler_points' 
     		});
+    		
+    		points_div.appendChild(new Element("span").update("Points: "));
+    		
     		var points_value_span = new Element("span", {
     			'class': 'scrumbler_points_value'
     		});
-    		points_value_span.update("Points: "+config.issue.points);
-    		
+    		points_value_span.update(config.issue.points);
     		
     		points_div.appendChild(points_value_span);
     		
@@ -259,5 +261,8 @@ Scrumbler.SprintIssuesList = Class.create(Scrumbler.IssuesList, {
 	<div class ="scrumbler_box">
 		<%= collection_select "scrumbler_sprint", :id, @project.scrumbler_sprints.planning, :id, :name, { :selected => @selected_sprint } %>
 		<%=render :partial => "sprint", :object => @selected_sprint%>
+		<script>
+			backlog.sprintSelected(<%=prepare_sprint_for_json(@project, @selected_sprint).to_json%>);
+		</script>
 	</div>
 </div>
