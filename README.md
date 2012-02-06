@@ -46,6 +46,24 @@ Restart the Redmine:
 
     You should now be able to see the plugin list in Administration -> Plugins and configure the Scrumbler plugin.
 
+
+Upgrading
+---------
+
+Browse to Scrumbler plugin directory.
+
+	cd $REDMINE_HOME/vendor/plugins/redmine_scrumbler
+	
+Update the plugin.
+
+	git pull
+	
+Execute plugin migrations.
+
+	rake db:plugins_migrate
+
+Restart the Redmine.
+
 TODO
 ----
 
