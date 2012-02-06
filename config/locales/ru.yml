@@ -58,7 +58,7 @@ ru:
               sprint_without_project: "Нельзя создать спринт без проекта"
               closing_sprint_with_opened_issues: "Нельзя закрыть спринт, если в нем есть незакрытые задачи"
             status:
-              only_one_opened: "ошибка. только один спринт может быть открыт в проекте"
+              only_one_opened: "Только один спринт может быть открыт в проекте"
   active_record:
     models:
       scrumbler_sprint_tracker:
