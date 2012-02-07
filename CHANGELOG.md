@@ -1,5 +1,10 @@
 Scrumbler Changelog
 ===================
+1.3.1
+--------
+
+* Fix bugs with links on dashboard 
+
 1.3.0
 --------
 
