@@ -172,9 +172,12 @@ Scrumbler.ScrumblerDashboard = (function() {
 				})
 				return $H(statusElements);
 			};
+			var tracker = trackers.get(issue_config.tracker_id)
+			tracker.id = issue_config.tracker_id;
 			var issueEl = new Scrumbler.IssueTemplate({
-				'tracker': trackers.get(issue_config.tracker_id),
+				'tracker': tracker,
 				'issue': issue_config,
+				'project_id' : sprint.project_id,
 				class_name : "scrumbler_issue"
 			}).getEl();
 
