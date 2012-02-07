@@ -33,7 +33,7 @@ Scrumbler.IssueTemplate = Class.create({
 		});
 		color_div.update("&nbsp;");
 		var tracker_link = new Element('a',{
-			href: Scrumbler.root_url+'/projects/'+config.project_id+'/issues?tracker_id='+config.tracker.id
+			href: Scrumbler.root_url+'projects/'+config.project_id+'/issues?tracker_id='+config.tracker.id
 		});
 		tracker_link.update(config.tracker.name);
 		var issue_id_div = new Element('div',{
@@ -41,7 +41,7 @@ Scrumbler.IssueTemplate = Class.create({
 		});
 
 		var issue_link = new Element('a',{
-			href: Scrumbler.root_url+'/issues/'+config.issue.id
+			href: Scrumbler.root_url+'issues/'+config.issue.id
 		});
 		issue_link.update("#"+config.issue.id);
 		issue_id_div.appendChild(issue_link);
