@@ -26,6 +26,8 @@ ru:
   error_scrumbler_issue_status_change: "У вас нет разрешений на присвоение статуса \"%{status_name}\" для данной задачи"
   error_sprint_not_found: "Спринт не найден"
   
+  scrumbler_points_field: "Поле Points"
+  
   scrumbler_statistics:
     ideal_issues: "Идеал"
     actual_issues: "Факт"

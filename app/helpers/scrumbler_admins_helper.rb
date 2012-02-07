@@ -14,23 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-module Scrumbler
-  MODULE_NAME = "redmine_scrumbler"
-  module Infectors
-    def self.integration_module_for(project)
-      if project.module_enabled?(Scrumbler::MODULE_NAME)
-      yield
-      end
-    end
+module ScrumblerAdminsHelper
+  
+    def scrumbler_admin_settings_tabs
+    [
+      {:name => 'points_field', :action => :points_field, :partial => 'points_field', :label => :scrumbler_points_field}
+    ]
   end
-
-  module Hooks
-    class AdminMenuHooks < Redmine::Hook::ViewListener
-      def view_layouts_base_html_head(context = { })
-        stylesheet_link_tag 'scrumbler.css', :plugin => :redmine_scrumbler, :media => 'screen'
-      end
-    end
-  end
-
 end

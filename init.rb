@@ -38,5 +38,5 @@ Redmine::Plugin.register :redmine_scrumbler do
   end
   
   menu :project_menu, :redmine_scrumbler, { :controller => 'scrumbler', :action => "index" }, :caption => :scrumbler_menu, :after => :activity, :param => :project_id
-  
+  menu :admin_menu, :redmine_scrumbler, {:controller => 'scrumbler_admins', :action => "index"}, :caption => :scrumbler_menu, :html => { :class => 'icon icon-scrumbler-burndown' }
 end
