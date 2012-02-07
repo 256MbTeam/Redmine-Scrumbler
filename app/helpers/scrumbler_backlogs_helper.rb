@@ -42,7 +42,7 @@ module ScrumblerBacklogsHelper
       :issues => prepare_issues_for_json(sprint.issues),
       :trackers => prepare_trackers(sprint.trackers, project.trackers),
       :parent_id => "sprint_list",
-      :url => "/projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
+      :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
     }
   end
 
@@ -52,7 +52,7 @@ module ScrumblerBacklogsHelper
       :issues => prepare_issues_for_json(project.issues.without_version),
       :trackers => prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers),
       :parent_id => "backlog_list",
-      :url => "/projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
+      :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
 
     }
   end
