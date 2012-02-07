@@ -27,8 +27,8 @@ zh:
   error_sprint_not_found: "找不到 Sprint。"
  
   scrumbler_statistics:
-    ideal_issues: "理想的"
-    actual_issues: "实际的"
+    ideal_issues: "理想情况"
+    actual_issues: "实际情况"
     iteration_axis: "迭代时间表"
     estimated_axis: "估计工作"
   
