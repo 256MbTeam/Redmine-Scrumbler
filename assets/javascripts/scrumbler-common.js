@@ -7,43 +7,40 @@ $from = function(v) {
     
 Scrumbler.IssueTemplate = Class.create({
 	initialize: function(config){
-		
-		var config = Object.extend({
+		this.config = Object.extend({
 			class_name : 'scrumbler_issue'
 		}, config);
 		var el = new Element('div',{
-			id : 'issue_'+config.issue.id,
-			'class': config.class_name
+			id : 'issue_'+this.config.issue.id,
+			'class': this.config.class_name
 		});
 	
 		this.getEl = $from(el);
-		el.appendChild(this.createHeader(config));
-
-		el.appendChild(this.createBody(config));
-		
+		el.appendChild(this.createHeader());
+		el.appendChild(this.createBody());
 	},
-	createHeader: function(config){
+	createHeader: function(){
 		var header_div = new Element('div',{
 			'class' : 'scrumbler_issue_heading'
 		});
 
 		var color_div = new Element('div',{
 			'class' : 'scrumbler_issue_color',
-			style: 'background: #'+config.tracker.color+';'
+			style: 'background: #'+this.config.tracker.color+';'
 		});
 		color_div.update("&nbsp;");
 		var tracker_link = new Element('a',{
-			href: Scrumbler.root_url+'projects/'+config.project_id+'/issues?tracker_id='+config.tracker.id
+			href: Scrumbler.root_url+'projects/'+this.config.project_id+'/issues?tracker_id='+this.config.tracker.id
 		});
-		tracker_link.update(config.tracker.name);
+		tracker_link.update(this.config.tracker.name);
 		var issue_id_div = new Element('div',{
 			'class' : 'scrumbler_issue_id'
 		});
 
 		var issue_link = new Element('a',{
-			href: Scrumbler.root_url+'issues/'+config.issue.id
+			href: Scrumbler.root_url+'issues/'+this.config.issue.id
 		});
-		issue_link.update("#"+config.issue.id);
+		issue_link.update("#"+this.config.issue.id);
 		issue_id_div.appendChild(issue_link);
 		
 		color_div.appendChild(tracker_link);
@@ -52,29 +49,29 @@ Scrumbler.IssueTemplate = Class.create({
 		header_div.appendChild(color_div);
 		return header_div;
 	},
-	createBody:function(config){
+	createBody:function(){
 		var body_div = new Element('div', {
 			'class': 'scrumbler_issue_body'
 		});
 		
-		var points_div = this.createPointsDiv(config);
+		var points_div = this.createPointsDiv(this.config);
 		
 		body_div.appendChild(points_div);
 		
-		var subject = new Element('p').update(config.issue.subject);
+		var subject = new Element('p').update(this.config.issue.subject);
 		
 		body_div.appendChild(subject);
 		
 		return body_div;
 	},
-	createPointsDiv: function(config) {
+	createPointsDiv: function() {
 		var points_div = new Element('div',{
 			'class' : 'scrumbler_points' 
 		});
 		var points_value_span = new Element("span", {
 			'class': 'scrumbler_points_value'
 		});
-		points_value_span.update("Points: "+config.issue.points);
+		points_value_span.update("Points: "+this.config.issue.points);
 		
 		
 		points_div.appendChild(points_value_span);
