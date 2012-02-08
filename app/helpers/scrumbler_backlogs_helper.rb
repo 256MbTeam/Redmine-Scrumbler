@@ -38,8 +38,7 @@ module ScrumblerBacklogsHelper
   def prepare_sprint_for_json(project, sprint)
     trackers = prepare_trackers(sprint.trackers, project.trackers)
     {
-      :project_id => project.identifier,
-      :sprint_id => sprint.id,
+      :id => sprint.id,
       :issues => prepare_issues_for_json(sprint.issues,trackers),
       :trackers => trackers,
       :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
@@ -49,29 +48,23 @@ module ScrumblerBacklogsHelper
   def prepare_backlog_for_json(project)
     trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     {
-      :project_id => project.identifier,
       :trackers => trackers,
       :issues => prepare_issues_for_json(project.issues.without_version, trackers),
       :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
-
     }
   end
 
-  def prepare_all()
+  def prepare_backlogs_data_to_json(project)
     {
-      :project_id => @project.id,
-      :backlog => prepare_backlog_for_json(@project),
-      :sprint => prepare_sprint_for_json(@project, @project.scrumbler_sprints.planning.first),
-      :sprints => @project.scrumbler_sprints.planning.map{|sprint| {:name => sprint.name, :id => sprint.id} }
+      :project_id => project.id,
+      :backlog => prepare_backlog_for_json(project),
+      :sprint => prepare_sprint_for_json(project, project.scrumbler_sprints.planning.first),
+      :sprints => project.scrumbler_sprints.planning.map{|sprint| {:name => sprint.name, :id => sprint.id} }
     }
-  end
-
-  def sprint_issues(sprint)
-    javascript_tag("var sprint_list = new Scrumbler.SprintIssuesList(backlog_list, #{prepare_sprint_for_json(@project, sprint).to_json});")
   end
 
   def backlog_issues
-    javascript_tag("var backlog_list = new Scrumbler.BacklogIssuesList(#{prepare_backlog_for_json(@project).to_json})")
+    javascript_tag("$('content').appendChild(new Scrumbler.Backlog(#{prepare_backlogs_data_to_json(@project).to_json}).el);")
   end
 
 end
