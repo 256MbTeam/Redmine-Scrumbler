@@ -5,8 +5,8 @@ $from = function(v) {
 	}
 };
 
-t = function(xxx){
-	return Scrumbler.Translations[xxx];
+t = function(msg){
+	return Scrumbler.Translations[msg];
 }
 
 Scrumbler.IssueTemplate = Class.create({
