@@ -68,8 +68,6 @@ Scrumbler.ScrumPointEditor = Class.create({
             values: ["?", "0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100"]
         }, config);
         
-        console.log(this.config, this.config.project_id);
-        
         this.el = this.createPopup(config);
     },
 	createPopup: function(){
@@ -120,7 +118,9 @@ Scrumbler.ScrumPointEditor = Class.create({
 	}
 });
 
-// TODO xxx
+/**
+ * Generate HTML Element for single Issue
+ */
 Scrumbler.IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 	// create HTML element for point rendering and editing
 	createPointsDiv: function() {
@@ -138,11 +138,8 @@ Scrumbler.IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 	}
 }); 
 
-// TODO DOC
 /**
  * Create ui element for tracker displaying
- * 
- * 
  */
 Scrumbler.TrackersListUI = Class.create({
 	// Create trackers ui element 	
@@ -182,10 +179,10 @@ Scrumbler.TrackersListUI = Class.create({
 	}
 });
 
-//TODO
-/*
- * new Scrumbler.IssuesListUI({},{project_id : project_id})
- */
+
+/** 
+ *Create HTML Element for displaying issues list. User to display sprint and backlog issues.
+ **/
 Scrumbler.IssuesListUI = Class.create({
 	// Create issue ui element
 	initialize: function(issues, config) {
@@ -195,7 +192,6 @@ Scrumbler.IssuesListUI = Class.create({
 			disabled_issue_class_name : "disabled_scrumbler_issue"
 		}, config);
 		
-		console.log(this.config, this.config.project_id);
 		this.issues = issues;
 		this.el = this.createUI();
 		this.editor = new Scrumbler.ScrumPointEditor({
@@ -219,7 +215,7 @@ Scrumbler.IssuesListUI = Class.create({
 		var issues_div = this.el.update("");
 		if(this.issues.length == 0){
 			// TODO Extract transaction strings to this.config 			
-			issues_div.appendChild(new Element('p',{'class':'nodata'}).update(Scrumbler.Translations.nodata));
+			issues_div.appendChild(new Element('p',{'class':'nodata'}).update(t('nodata')));
 		}else{
 			this.issues.each(function(issue) {
 				var issue_div = this.createIssueEl(issue);
@@ -288,7 +284,7 @@ Scrumbler.SprintSelector = Class.create({
 		
 		if(this.config.sprints.length == 0){
 			// TODO Extract transaction strings to this.config 			
-			this.el = new Element('p',{'class':'nodata'}).update(Scrumbler.Translations.nodata);
+			this.el = new Element('p',{'class':'nodata'}).update(t('nodata'));
 			return;
 		}
 		
@@ -338,7 +334,7 @@ Scrumbler.SprintSelector = Class.create({
 			
 			
 			var div = new Element('div',{id:'splitcontentleft', style: "float:left;width:48%;"});
-			div.appendChild(new Element('h2').update(Scrumbler.Translations.label_backlog));
+			div.appendChild(new Element('h2').update(t('label_backlog')));
 			div.appendChild(backlog_trackers.el);
 			div.appendChild(this.backlog.el);
 			this.el.appendChild(div);
@@ -361,7 +357,6 @@ Scrumbler.SprintSelector = Class.create({
 				var sprint = event.memo;
 				this.sprint.update(sprint.issues);
 				sprint_trackers.update(sprint.trackers);
-				console.log("xxx", sprint);
 				
 			}.bind(this));
 		},
@@ -383,11 +378,7 @@ Scrumbler.SprintSelector = Class.create({
 </script>
 
 <script>
-	var backlog = new Scrumbler.Backlog(
-		<%=prepare_all().to_json%>
-		
-	);
-	
+	var backlog = new Scrumbler.Backlog(<%=prepare_all().to_json%>);
 	$('content').appendChild(backlog.el);
 </script>
 

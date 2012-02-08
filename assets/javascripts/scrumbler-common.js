@@ -4,7 +4,11 @@ $from = function(v) {
 		return v
 	}
 };
-    
+
+t = function(xxx){
+	return Scrumbler.Translations[xxx];
+}
+
 Scrumbler.IssueTemplate = Class.create({
 	initialize: function(config){
 		this.config = Object.extend({
