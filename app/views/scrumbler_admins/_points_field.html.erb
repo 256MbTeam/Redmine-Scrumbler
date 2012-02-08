@@ -1,0 +1,12 @@
+<%= error_messages_for 'points_field' %>
+<% labelled_tabular_form_for :points_field, @points_field, :url => scrumbler_admin_update_points_field_url do |f|%>
+<p>
+  <%= f.text_area :possible_values, :value => @points_field.possible_values.to_a.join("\n"), :rows => 15 %>
+  <br />
+  <em><%= l(:text_custom_field_possible_values_info) %></em>
+</p>
+<p>
+	<%= f.text_field :default_value %>
+</p>
+<%= submit_tag l(:button_save) %>
+<% end %>
