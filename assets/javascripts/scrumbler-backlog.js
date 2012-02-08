@@ -10,7 +10,6 @@
  *       		'popup' : popup
  *       	});
 **/
-
 Scrumbler.Backlog = (function() {
 	
 var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
@@ -346,100 +345,104 @@ var MoveIssue = Class.create(Ajax.Request, {
 
 
 return Class.create({
-		initialize: function(config){
-			this.config = Object.extend({
-				parent_id : "content"
-			}, config);
-			
-			this.backlog = this.createBacklog();
-			this.sprint = this.createSprint();
-			
-			this.el = this.createUI();
-			
-			// Update backlog on sprint selection
-			this.sprint.selector.el.observe('sprint:selected', function(event){
-				var sprint = event.memo;
-				this.updateSprint(sprint);
-			}.bind(this));
+	initialize: function(config){
+		this.config = Object.extend({
+			parent_id : "content"
+		}, config);
+		
+		this.backlog = this.createBacklog();
+		this.sprint = this.createSprint();
+		
+		this.el = this.createUI();
+		
+		// Update backlog on sprint selection
+		this.sprint.selector.el.observe('sprint:selected', function(event){
+			var sprint = event.memo;
+			this.updateSprint(sprint);
+		}.bind(this));
 
-			// Update backlog on issue movement
-			$(document).observe('issue:moved', function(event){
-				var config = event.memo;
-				this.update(config);
-			}.bind(this));
-			
-			this.sprint.list.el.observe('issue:drop', function(event){
-				var issue = event.memo;
-				new MoveIssue({
-					project_id: this.config.project_id,
-					sprint_id: this.config.sprint.id,
-					issue_id: issue.id,
-					source: issue.source
-				});
-			}.bind(this));
-			
-			this.backlog.list.el.observe('issue:drop', function(event){
-				var issue = event.memo;
-				new MoveIssue({
-					project_id: this.config.project_id,
-					issue_id: issue.id,
-					source: issue.source
-				});
-			}.bind(this));
-		},
-		createBacklog: function(){
-			this.disableIssuesInUnsupportedTrackers(this.config.backlog.issues, this.config.sprint.trackers);
-			var backlog = {};
-			backlog.list = new IssuesListUI(this.config.backlog.issues, {
-				project_id: this.config.project_id
+		// Update backlog on issue movement
+		$(document).observe('issue:moved', function(event){
+			var config = event.memo;
+			this.update(config);
+		}.bind(this));
+		
+		this.sprint.list.el.observe('issue:drop', function(event){
+			var issue = event.memo;
+			new MoveIssue({
+				project_id: this.config.project_id,
+				sprint_id: this.config.sprint.id,
+				issue_id: issue.id,
+				source: issue.source
 			});
-			backlog.trackers = new TrackersListUI(this.config.backlog.trackers);
-			return backlog;			
-		},
-		createSprint: function(){
-			var sprint = {};
-			sprint.list = new IssuesListUI(this.config.sprint.issues,{
-				project_id: this.config.project_id
+		}.bind(this));
+		
+		this.backlog.list.el.observe('issue:drop', function(event){
+			var issue = event.memo;
+			new MoveIssue({
+				project_id: this.config.project_id,
+				issue_id: issue.id,
+				source: issue.source
 			});
-			sprint.trackers = new TrackersListUI(this.config.sprint.trackers);
-			sprint.selector = new SprintSelector({sprints: this.config.sprints, project_id: this.config.project_id});
-			return sprint;
-		},
-		// Create Backlog HTML Element 
-		createUI: function(){
-			var el = new Element('div');
-			var div;
-			div = new Element('div',{id:'splitcontentleft', style: "float:left;width:48%;"});
-			div.appendChild(new Element('h2').update(t('label_backlog')));
-			div.appendChild(this.backlog.trackers.el);
-			div.appendChild(this.backlog.list.el);
-			el.appendChild(div);
+		}.bind(this));
+	},
+	createBacklog: function(){
+		this.disableIssuesInUnsupportedTrackers(this.config.backlog.issues, this.config.sprint.trackers);
+		var backlog = {};
+		backlog.list = new IssuesListUI(this.config.backlog.issues, {
+			project_id: this.config.project_id
+		});
+		backlog.trackers = new TrackersListUI(this.config.backlog.trackers);
+		return backlog;			
+	},
+	createSprint: function(){
+		var sprint = {};
+		sprint.list = new IssuesListUI(this.config.sprint.issues,{
+			project_id: this.config.project_id
+		});
+		sprint.trackers = new TrackersListUI(this.config.sprint.trackers);
+		sprint.selector = new SprintSelector({sprints: this.config.sprints, project_id: this.config.project_id});
+		return sprint;
+	},
+	// Create Backlog HTML Element 
+	createUI: function(){
+		var el = new Element('div');
+		var div;
+		div = new Element('div',{id:'splitcontentleft', style: "float:left;width:48%;"});
+		div.appendChild(new Element('h2').update(t('label_backlog')));
+		div.appendChild(this.backlog.trackers.el);
+		div.appendChild(this.backlog.list.el);
+		el.appendChild(div);
 
-			div = new Element('div',{id:'splitcontentright', style: "float:right; width:50%;"})
-			div.appendChild(this.sprint.selector.el);
-			div.appendChild(this.sprint.trackers.el);
-			div.appendChild(this.sprint.list.el);
-			el.appendChild(div);
-			return el;
-		},
-		update: function(config){
-			this.updateBacklog(config.backlog);
-			this.updateSprint(config.sprint);
-		},
-		updateBacklog: function(backlog){
-			this.config.backlog = Object.extend(this.config.backlog, backlog);
-			this.backlog.list.update(this.config.backlog.issues);
-			this.backlog.trackers.update(this.config.backlog.trackers);
-		},
-		updateSprint: function(sprint){
-			this.config.sprint = Object.extend(this.config.sprint, sprint);
-			this.sprint.list.update(sprint.issues);
-			this.sprint.trackers.update(sprint.trackers);
-			this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, sprint.trackers);
-			this.backlog.list.update(this.backlog.list.issues);
-		},
-		disableIssuesInUnsupportedTrackers: function(issues, trackers){
-			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
-		}
+		div = new Element('div',{id:'splitcontentright', style: "float:right; width:50%;"})
+		var contextual_div = new Element('div', {'class': 'contextual'});
+		var h2 = new Element('h2').update(t('scrumbler_sprint'));
+		contextual_div.appendChild(this.sprint.selector.el);
+		div.appendChild(contextual_div);
+		div.appendChild(h2);
+		div.appendChild(this.sprint.trackers.el);
+		div.appendChild(this.sprint.list.el);
+		el.appendChild(div);
+		return el;
+	},
+	update: function(config){
+		this.updateBacklog(config.backlog);
+		this.updateSprint(config.sprint);
+	},
+	updateBacklog: function(backlog){
+		this.config.backlog = Object.extend(this.config.backlog, backlog);
+		this.backlog.list.update(this.config.backlog.issues);
+		this.backlog.trackers.update(this.config.backlog.trackers);
+	},
+	updateSprint: function(sprint){
+		this.config.sprint = Object.extend(this.config.sprint, sprint);
+		this.sprint.list.update(sprint.issues);
+		this.sprint.trackers.update(sprint.trackers);
+		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, sprint.trackers);
+		this.backlog.list.update(this.backlog.list.issues);
+	},
+	disableIssuesInUnsupportedTrackers: function(issues, trackers){
+		issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+	}
 });
 })();

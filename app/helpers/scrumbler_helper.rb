@@ -17,6 +17,7 @@
 module ScrumblerHelper
   def scrumbler_javascript_helper
     translations = {
+      :scrumbler_sprint => t(:scrumbler_sprint),
       :nodata => t(:label_no_data),
       :label_backlog => t(:label_backlog),
       :issue_not_assigned => t(:issue_not_assigned),
