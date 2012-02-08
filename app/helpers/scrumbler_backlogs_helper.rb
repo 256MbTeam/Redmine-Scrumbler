@@ -15,12 +15,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerBacklogsHelper
-  def prepare_issues_for_json(issues)
+  def prepare_issues_for_json(issues, trackers)
     issues.sort_by(&:priority).reverse.map{|issue|
       { :id => issue.id,
         :subject => issue.subject,
-        :tracker_id => issue.tracker_id,
-        :points => issue.scrumbler_points
+        :points => issue.scrumbler_points,
+        :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s}
       }
     }
   end
@@ -36,24 +36,33 @@ module ScrumblerBacklogsHelper
   end
 
   def prepare_sprint_for_json(project, sprint)
+    trackers = prepare_trackers(sprint.trackers, project.trackers)
     {
       :project_id => project.identifier,
       :sprint_id => sprint.id,
-      :issues => prepare_issues_for_json(sprint.issues),
-      :trackers => prepare_trackers(sprint.trackers, project.trackers),
-      :parent_id => "sprint_list",
+      :issues => prepare_issues_for_json(sprint.issues,trackers),
+      :trackers => trackers,
       :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
     }
   end
 
   def prepare_backlog_for_json(project)
+    trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     {
       :project_id => project.identifier,
-      :issues => prepare_issues_for_json(project.issues.without_version),
-      :trackers => prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers),
-      :parent_id => "backlog_list",
+      :trackers => trackers,
+      :issues => prepare_issues_for_json(project.issues.without_version, trackers),
       :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
 
+    }
+  end
+
+  def prepare_all()
+    {
+      :project_id => @project.id,
+      :backlog => prepare_backlog_for_json(@project),
+      :sprint => prepare_sprint_for_json(@project, @project.scrumbler_sprints.planning.first),
+      :sprints => @project.scrumbler_sprints.planning.map{|sprint| {:name => sprint.name, :id => sprint.id} }
     }
   end
 

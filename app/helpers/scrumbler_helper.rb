@@ -15,10 +15,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerHelper
-  
   def scrumbler_javascript_helper
     translations = {
       :nodata => t(:label_no_data),
+      :label_backlog => t(:label_backlog),
       :issue_not_assigned => t(:issue_not_assigned),
       :scrumbler_statistics => t(:scrumbler_statistics),
       :highstock => {

@@ -88,7 +88,7 @@ Scrumbler.ScrumblerDashboard = (function() {
 			if(assigned_to) {
 				this.infoEl.update(assigned_to.name)
 			} else {
-				this.infoEl.update(Scrumbler.Translations.issue_not_assigned)
+				this.infoEl.update(t('issue_not_assigned'))
 			}
 		},
 		generateStatus: function() {
