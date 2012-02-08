@@ -119,7 +119,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     closed_issues = @scrumbler_sprint.issues.find_all {|i| i.due_date && i.closed?}
     closed_issues = Hash[closed_issues.group_by(&:due_date).map {|k,v|
       [k, v.inject(0.0) {|t,is|
-          t+= is.custom_value_for(ScrumblerIssueCustomField.points).value.to_f }
+          t+= is.custom_value_for(ScrumblerIssueCustomField.points).try(:value).to_f }
       ]}]
 
     days_total = (end_date - start_date).to_i
