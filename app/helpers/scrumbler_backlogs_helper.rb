@@ -46,25 +46,23 @@ module ScrumblerBacklogsHelper
     }
   end
 
-  # def prepare_backlog_for_json(project)
-    # {
-      # :project_id => project.identifier,
-      # :issues => prepare_issues_for_json(project.issues.without_version),
-      # :trackers => prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers),
-      # :parent_id => "backlog_list",
-      # :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
-# 
-    # }
-  # end
-
- def prepare_backlog_for_json(project)
-   trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
+  def prepare_backlog_for_json(project)
+    trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     {
       :project_id => project.identifier,
       :trackers => trackers,
       :issues => prepare_issues_for_json(project.issues.without_version, trackers),
       :url => "projects/#{project.identifier}/scrumbler_backlogs/change_issue_version"
 
+    }
+  end
+
+  def prepare_all()
+    {
+      :project_id => @project.id,
+      :backlog => prepare_backlog_for_json(@project),
+      :sprint => prepare_sprint_for_json(@project, @project.scrumbler_sprints.planning.first),
+      :sprints => @project.scrumbler_sprints.planning.map{|sprint| {:name => sprint.name, :id => sprint.id} }
     }
   end
 

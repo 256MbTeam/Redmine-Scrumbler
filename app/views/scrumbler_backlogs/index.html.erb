@@ -229,15 +229,11 @@ Scrumbler.IssuesListUI = Class.create({
 	},
 	// create issue ui element
 	createIssueEl: function(issue){
-		var project_id = this.config.project_id;
-		var issue_class_name = this.config.disabled_issue_class_name;
-		var disabled_issue_class_name = this.config.disabled_issue_class_name;
-		
 		var issue_div = new Scrumbler.IssueBacklogTemplate({
-					'project_id': project_id,
+					'project_id': this.config.project_id,
 					'tracker': issue.tracker,
 					'issue': issue,
-					'class_name' : issue.disabled ? disabled_issue_class_name : issue_class_name,
+					'class_name' : issue.disabled ? this.config.disabled_issue_class_name : this.config.issue_class_name,
 					'points_editor' : this.editor
 				}).getEl();
 		
@@ -247,6 +243,72 @@ Scrumbler.IssuesListUI = Class.create({
 	}
 });
 
+Scrumbler.SelectSprintRequest = Class.create(Ajax.Request,{
+	initialize: function($super, config){
+		this.config = Object.extend({}, config);
+		var selector = this.config.selector;
+		var url = Scrumbler.root_url+'projects/'+this.config.project_id+'/scrumbler_backlogs/select_sprint';
+		$super(url,{ method: 'post',
+				parameters: { 'sprint_id': selector.value },
+				onSuccess : function(transport) { 
+					var resp = transport.responseJSON;
+					if(resp.success) {
+						selector.fire('sprint:selected', resp.sprint);
+					} else {
+						$growler.growl(resp.text, { header : 'Ошибка' });
+					}
+				}.bind(this),
+				onFailure : function() {
+					// TODO More details
+					$growler.growl('Something went wrong...', { header : 'Error' });
+				}
+			});
+	}
+});
+
+/**
+ * Create HTML Select element for sprints. Observe change actionm and send request on it. 
+ * After success sprint selected fire "sprint:selected" event.
+ * 
+ * Usage:
+ * 	new Scrumbler.SprintSelector({
+ * 									project_id: project_id,
+ * 								 	sprints: [
+ * 												{ id:1, name:"name1" },
+ * 												{ id:2, name:"name2" }
+ * 											]
+ * 								});
+ */
+Scrumbler.SprintSelector = Class.create({
+	initialize: function(config){
+		this.config = Object.extend({
+			selector_id: 'scrumbler_sprint_id'
+		}, config);
+		var sprint_selector = new Element('select', { id: this.config.selector_id });
+		
+		if(this.config.sprints.length == 0){
+			// TODO Extract transaction strings to this.config 			
+			this.el = new Element('p',{'class':'nodata'}).update(Scrumbler.Translations.nodata);
+			return;
+		}
+		
+		// Populate selector with avaliable options
+		config.sprints.each(function(sprint){
+			var option = new Element('option',{value: sprint.id}).update(sprint.name);
+			sprint_selector.appendChild(option);
+		});
+		
+		// Send request on sprint selected
+		sprint_selector.observe('change', function(event){
+			new Scrumbler.SelectSprintRequest({
+				project_id: this.config.project_id,
+				selector: sprint_selector
+			});
+		}.bind(this));
+		
+		this.el = sprint_selector;
+	}
+});
 
 </script>
 
@@ -258,15 +320,17 @@ Scrumbler.IssuesListUI = Class.create({
 			this.config = Object.extend({
 				parent_id : "content",
 				backlog : {
-					issues : [],
-					trackers : {}
+					issues: [],
+					trackers: []
+				},
+				sprint: {
+					issues: [],
+					trackers: []
 				}
 			}, config);
 			
 			
 			this.backlog = this.createBacklog();
-			
-			// this.sprint = this.createSprint();
 			
 			var backlog_trackers = new Scrumbler.TrackersListUI(this.config.backlog.trackers);
 			
@@ -278,30 +342,51 @@ Scrumbler.IssuesListUI = Class.create({
 			div.appendChild(backlog_trackers.el);
 			div.appendChild(this.backlog.el);
 			this.el.appendChild(div);
+
+
+			this.sprint = this.createSprint();
 			
-			// div = new Element('div',{id:'splitcontentright', style: "float:right; width:50%;"})
-			// div.appendChild(this.sprint.el);
-			// this.el.appendChild(div);
+			var sprint_trackers = new Scrumbler.TrackersListUI(this.config.sprint.trackers);
+			div = new Element('div',{id:'splitcontentright', style: "float:right; width:50%;"})
+			
+			var sprint_selector = new Scrumbler.SprintSelector({sprints: this.config.sprints, project_id: this.config.backlog.project_id});
+			
+			div.appendChild(sprint_selector.el);
+			div.appendChild(sprint_trackers.el);
+			div.appendChild(this.sprint.el);
+			this.el.appendChild(div);
+			
+			
+			sprint_selector.el.observe('sprint:selected', function(event){
+				var sprint = event.memo;
+				this.sprint.update(sprint.issues);
+				sprint_trackers.update(sprint.trackers);
+				console.log("xxx", sprint);
+				
+			}.bind(this));
 		},
 		createBacklog: function(){
-			console.log(this.config);
-			
-			var backlog = new Scrumbler.IssuesListUI(this.config.backlog.issues,{
-				project_id: this.config.backlog.project_id
+			var backlog = new Scrumbler.IssuesListUI(this.config.backlog.issues, {
+				project_id: this.config.project_id
 			});
 			return backlog;			
 		},
 		createSprint: function(){
-			var sprint = new Scrumbler.IssuesListUI([],{});
+			var sprint = new Scrumbler.IssuesListUI(this.config.sprint.issues,{
+				project_id:this.config.project_id
+			});
 			return sprint;
 		}
 	});
+	
+	
 </script>
 
 <script>
-	var backlog = new Scrumbler.Backlog({
-		backlog : <%=prepare_backlog_for_json(@project).to_json%>
-	});
+	var backlog = new Scrumbler.Backlog(
+		<%=prepare_all().to_json%>
+		
+	);
 	
 	$('content').appendChild(backlog.el);
 </script>
