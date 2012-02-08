@@ -28,8 +28,17 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
     @sprint = ScrumblerSprint.find(params[:sprint_id])
     
     render :json => { :success => !!@sprint,
-                      :sprint => prepare_sprint_for_json(@project, @sprint),
+                      :sprint => prepare_sprint_for_json(@sprint),
                       :text => t(:error_sprint_not_found)
+                    }
+  end
+
+  def create_version
+    @version = Version.new(:project => @project, :name => params[:sprint_name])
+    render :json => {
+                     :success => @version.save,
+                     :sprint => prepare_sprint_for_json(@version.try(:scrumbler_sprint)),
+                     :sprints => prepare_sprints(@project.scrumbler_sprints.planning)
                     }
   end
 

@@ -269,6 +269,28 @@ var SelectSprintRequest = Class.create(Ajax.Request,{
 	}
 });
 
+var CreateVersionRequest = Class.create(Ajax.Request,{
+	initialize: function($super,config){
+		var url = Scrumbler.root_url+'projects/'+config.project_id+'/scrumbler_backlogs/create_version';
+		$super(url,{
+				parameters: {
+					sprint_name: config.sprint_name
+				},
+				onSuccess: function(transport) { 
+					var resp = transport.responseJSON;
+					if(resp.success) {
+						// TODO maybe extract to event 'sprint:created' 
+						config.observer.update(resp.sprints);
+						config.observer.sprint_selector.setValue(resp.sprint.id);
+						config.observer.sprint_selector.fire('sprint:selected', resp.sprint);
+					} else {
+						$growler.growl(resp.text, { header : 'Ошибка' });
+					}
+				},
+			});
+	}
+});
+
 /**
  * Create HTML Select element for sprints. Observe change actionm and send request on it. 
  * After success sprint selected fire "sprint:selected" event.
@@ -287,29 +309,71 @@ var SprintSelector = Class.create({
 		this.config = Object.extend({
 			selector_id: 'scrumbler_sprint_id'
 		}, config);
-		var sprint_selector = new Element('select', { id: this.config.selector_id });
+		
+		this.createUI();
+		this.update(config.sprints);
+		
+		// Create new sprint and select it
+		this.add_button.observe('click', function() {
+			var sprint_name = prompt(t('label_new_sprint'));
+			if(!sprint_name){
+				return false;
+			}
+			
+			new CreateVersionRequest({
+				project_id: this.config.project_id,
+				sprint_name: sprint_name,
+				observer: this 
+			});
+		}.bind(this));
+		
+		// Send request on sprint selected
+		this.sprint_selector.observe('change', function(event){
+			new SelectSprintRequest({
+				project_id: this.config.project_id,
+				selector: this.sprint_selector
+			});
+		}.bind(this))
+		
+	},
+	createUI: function(){
+		this.sprint_selector = new Element('select', { id: this.config.selector_id });
 		
 		if(this.config.sprints.length == 0){
-			// TODO Extract transaction strings to this.config 			
+			// TODO change transaction  			
 			this.el = new Element('p',{'class':'nodata'}).update(t('nodata'));
 			return;
 		}
 		
+		this.el = new Element('div');
+		this.add_button = this.createNewSprintButton();
+		
+		this.el.appendChild(this.sprint_selector);
+		this.el.appendChild(this.add_button);
+	},
+	update: function(sprints){
+		this.config.sprints = sprints; 
+		this.sprint_selector.update('');
+		
 		// Populate selector with avaliable options
-		config.sprints.each(function(sprint){
+		this.config.sprints.each(function(sprint){
 			var option = new Element('option',{value: sprint.id}).update(sprint.name);
-			sprint_selector.appendChild(option);
-		});
-		
-		// Send request on sprint selected
-		sprint_selector.observe('change', function(event){
-			new SelectSprintRequest({
-				project_id: this.config.project_id,
-				selector: sprint_selector
-			});
+			this.sprint_selector.appendChild(option);
 		}.bind(this));
+	},
+	
+	createNewSprintButton: function() {
+		var button = new Element('a');
 		
-		this.el = sprint_selector;
+		button.appendChild(new Element('image', {
+			src: Scrumbler.root_url+'images/add.png',
+			style: 'vertical-align: middle;',
+			alt: 'Add'
+		}));
+		
+		
+		
+		return button;
 	}
 });
 

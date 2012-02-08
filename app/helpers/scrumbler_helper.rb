@@ -20,6 +20,7 @@ module ScrumblerHelper
       :scrumbler_sprint => t(:scrumbler_sprint),
       :nodata => t(:label_no_data),
       :label_backlog => t(:label_backlog),
+      :label_new_sprint => t(:label_new_sprint),
       :issue_not_assigned => t(:issue_not_assigned),
       :scrumbler_statistics => t(:scrumbler_statistics),
       :highstock => {

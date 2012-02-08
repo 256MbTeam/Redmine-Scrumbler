@@ -17,7 +17,7 @@
 class ScrumblerSprintsController < ScrumblerAbstractController
   unloadable
 
-  before_filter :find_scrumbler_sprint
+  before_filter :find_scrumbler_sprint, :except => [:create]
   before_filter :authorize, :only => [:settings, :update_general, :update_trackers, :update_issue_statuses]
 
   helper :scrumbler_sprints
@@ -25,6 +25,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
 
   helper :scrumbler
   include ScrumblerHelper
+  
   def settings
     @trackers = @project.trackers
     @issue_statuses = IssueStatus.all
