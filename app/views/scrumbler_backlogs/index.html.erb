@@ -358,9 +358,16 @@ Scrumbler.SprintSelector = Class.create({
 				this.sprint.update(sprint.issues);
 				sprint_trackers.update(sprint.trackers);
 				
+				this.disableIssuesInUnsupportedTrackers(this.backlog.issues, sprint.trackers);
+				this.backlog.update(this.backlog.issues);
+				
 			}.bind(this));
 		},
+		disableIssuesInUnsupportedTrackers: function(issues, trackers){
+			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+		},
 		createBacklog: function(){
+			this.disableIssuesInUnsupportedTrackers(this.config.backlog.issues, this.config.sprint.trackers);
 			var backlog = new Scrumbler.IssuesListUI(this.config.backlog.issues, {
 				project_id: this.config.project_id
 			});
@@ -373,8 +380,6 @@ Scrumbler.SprintSelector = Class.create({
 			return sprint;
 		}
 	});
-	
-	
 </script>
 
 <script>
