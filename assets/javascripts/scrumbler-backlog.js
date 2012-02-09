@@ -60,7 +60,7 @@ var ScrumPointEditor = Class.create({
             values: ["?", "0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100"]
         }, config);
         
-        this.el = this.createPopup(config);
+        this.el = this.createPopup(this.config);
     },
 	createPopup: function(){
 		var popup = new Element('div',{ 'class' : this.config.popup_classname });
@@ -72,7 +72,7 @@ var ScrumPointEditor = Class.create({
         this.config.values.each(function(value){
         	var value_field = this.createPopupOptionEl(value);
             popup.appendChild(value_field);
-        }, this);
+        }.bind(this));
         return popup;
     },
     createPopupOptionEl: function(value){
@@ -93,9 +93,8 @@ var ScrumPointEditor = Class.create({
     },
     // enable point editor for element     
     enableForElement: function(element, issue){
-    	var parentNode = this.el.parentNode;
     	element.observe("click", function(event){
-    		if(parentNode == element.parentNode){
+    		if(this.el.parentNode == element.parentNode){
     			this.el.toggle();
     			return;
     		}
@@ -103,11 +102,12 @@ var ScrumPointEditor = Class.create({
     		this.current_issue = issue;
     		this.edited_element = element;
     		
-    		this.el.hide();
-    		// remove from previews edited element
-    		if(parentNode){ parentNode.removeChild(this.el); }
+    		
+    		if(this.el.parentNode){ this.el.parentNode.removeChild(this.el); }
+    		this.el = this.createPopup(this.config);
     		element.parentNode.appendChild(this.el);
-            this.el.show();
+    		this.el.show();
+    		
         }.bind(this));
 	}
 });
