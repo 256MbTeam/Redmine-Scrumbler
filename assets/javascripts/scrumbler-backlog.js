@@ -140,7 +140,7 @@ var TrackersListUI = Class.create({
 			element_class_name : "scrumbler_backlog_tracker",
 		}, config);
 		
-		this.trackers = trackers;
+		this.trackers = trackers || [];
 		this.el = this.createUI();
 		this.drawTrackers();
 	},
@@ -183,7 +183,7 @@ var IssuesListUI = Class.create({
 			disabled_issue_class_name : "disabled_scrumbler_issue"
 		}, config);
 		
-		this.issues = issues;
+		this.issues = issues || [];
 		this.el = this.createUI();
 		this.editor = new ScrumPointEditor({
  			project_id: this.config.project_id
@@ -338,22 +338,21 @@ var SprintSelector = Class.create({
 	},
 	createUI: function(){
 		this.sprint_selector = new Element('select', { id: this.config.selector_id });
-		
-		if(this.config.sprints.length == 0){
-			// TODO change transaction  			
-			this.el = new Element('p',{'class':'nodata'}).update(t('nodata'));
-			return;
-		}
-		
-		this.el = new Element('div');
 		this.add_button = this.createNewSprintButton();
 		
+		this.el = new Element('div');
 		this.el.appendChild(this.sprint_selector);
 		this.el.appendChild(this.add_button);
 	},
 	update: function(sprints){
 		this.config.sprints = sprints; 
 		this.sprint_selector.update('');
+		
+		if(this.config.sprints.length == 0){
+			var option = new Element('option',{value: ""}).update(t('nodata'));
+			this.sprint_selector.appendChild(option);
+			return;
+		}
 		
 		// Populate selector with avaliable options
 		this.config.sprints.each(function(sprint){
@@ -506,7 +505,11 @@ return Class.create({
 		this.backlog.list.update(this.backlog.list.issues);
 	},
 	disableIssuesInUnsupportedTrackers: function(issues, trackers){
-		issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+		if(trackers.length != 0){
+			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+		}else{
+			issues.each(function(issue){ issue.disabled = true });
+		}
 	}
 });
 })();
