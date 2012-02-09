@@ -24,7 +24,8 @@ var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
 			onSuccess : function(transport) {
 				var response = transport.responseJSON;
 				if(response.success) {
-					config.observer.update(config.points);
+					config.edited_element.update(config.points);
+					config.observer.fire('issue:points_updated',{ id: config.issue_id, points: config.points})
 				}else{
 					// TODO create localizations for header
 					$growler.growl(resp.text, { header : 'Ошибка' });
@@ -59,7 +60,7 @@ var ScrumPointEditor = Class.create({
             values: ["?", "0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100"]
         }, config);
         
-        this.el = this.createPopup(config);
+        this.el = this.createPopup(this.config);
     },
 	createPopup: function(){
 		var popup = new Element('div',{ 'class' : this.config.popup_classname });
@@ -71,7 +72,7 @@ var ScrumPointEditor = Class.create({
         this.config.values.each(function(value){
         	var value_field = this.createPopupOptionEl(value);
             popup.appendChild(value_field);
-        }, this);
+        }.bind(this));
         return popup;
     },
     createPopupOptionEl: function(value){
@@ -82,29 +83,31 @@ var ScrumPointEditor = Class.create({
         		project_id: this.config.project_id,
         		issue_id: this.current_issue.id, 
         		points: value,
-        		observer: this.observer,
+        		observer: this.config.observer,
+        		edited_element: this.edited_element,
         		popup: this.el
         	});
         }.bind(this));
+        
     	return value_div;
     },
     // enable point editor for element     
     enableForElement: function(element, issue){
-    	var parentNode = this.el.parentNode;
     	element.observe("click", function(event){
-    		if(parentNode == element.parentNode){
+    		if(this.el.parentNode == element.parentNode){
     			this.el.toggle();
     			return;
     		}
 			// change current issue, that will be edited
     		this.current_issue = issue;
-    		this.observer = element;
+    		this.edited_element = element;
     		
-    		this.el.hide();
-    		// remove from previews edited element
-    		if(parentNode){ parentNode.removeChild(this.el); }
+    		
+    		if(this.el.parentNode){ this.el.parentNode.removeChild(this.el); }
+    		this.el = this.createPopup(this.config);
     		element.parentNode.appendChild(this.el);
-            this.el.show();
+    		this.el.show();
+    		
         }.bind(this));
 	}
 });
@@ -140,14 +143,14 @@ var TrackersListUI = Class.create({
 			element_class_name : "scrumbler_backlog_tracker",
 		}, config);
 		
-		this.trackers = trackers;
+		this.trackers = trackers || [];
 		this.el = this.createUI();
 		this.drawTrackers();
 	},
 	// create DOM Element
 	createUI: function(){
 		var collection_class_name = this.config.collection_class_name;
-		return new Element("div", {"class" : collection_class_name });
+		return new Element("span", {"class" : collection_class_name });
 	},
 	// update trackers list and repaint	
 	update: function(trackers){
@@ -183,10 +186,11 @@ var IssuesListUI = Class.create({
 			disabled_issue_class_name : "disabled_scrumbler_issue"
 		}, config);
 		
-		this.issues = issues;
+		this.issues = issues || [];
 		this.el = this.createUI();
 		this.editor = new ScrumPointEditor({
- 			project_id: this.config.project_id
+ 			project_id: this.config.project_id,
+ 			observer: this.el
  		});
  		
  		Droppables.add(this.el, {
@@ -243,6 +247,24 @@ var IssuesListUI = Class.create({
 		}
 		issue_div.hide();
 		this.el.fire('issue:drop', { id: issue_id, source: issue_div });
+	},
+	getPoints: function() {
+		var total = 0;
+		this.issues.each( function(issue) {
+			var points = parseFloat(issue.points);
+			if (points == points) {
+				total += points;
+			}
+		});
+		return total;
+	},
+	updateIssuePoints: function(issue_config){
+		this.issues.each(function(issue){
+			if(issue.id == issue_config.id){
+				issue.points = issue_config.points
+				return;
+			}
+		});
 	}
 });
 
@@ -338,22 +360,21 @@ var SprintSelector = Class.create({
 	},
 	createUI: function(){
 		this.sprint_selector = new Element('select', { id: this.config.selector_id });
-		
-		if(this.config.sprints.length == 0){
-			// TODO change transaction  			
-			this.el = new Element('p',{'class':'nodata'}).update(t('nodata'));
-			return;
-		}
-		
-		this.el = new Element('div');
 		this.add_button = this.createNewSprintButton();
 		
+		this.el = new Element('div');
 		this.el.appendChild(this.sprint_selector);
 		this.el.appendChild(this.add_button);
 	},
 	update: function(sprints){
 		this.config.sprints = sprints; 
 		this.sprint_selector.update('');
+		
+		if(this.config.sprints.length == 0){
+			var option = new Element('option',{value: ""}).update(t('nodata'));
+			this.sprint_selector.appendChild(option);
+			return;
+		}
 		
 		// Populate selector with avaliable options
 		this.config.sprints.each(function(sprint){
@@ -364,22 +385,18 @@ var SprintSelector = Class.create({
 	
 	createNewSprintButton: function() {
 		var button = new Element('a');
-		
 		button.appendChild(new Element('image', {
 			src: Scrumbler.root_url+'images/add.png',
 			style: 'vertical-align: middle;',
 			alt: 'Add'
 		}));
-		
-		
-		
 		return button;
 	}
 });
 
 var MoveIssue = Class.create(Ajax.Request, {
 	initialize: function($super, config){
-		var url = "projects/"+config.project_id+"/scrumbler_backlogs/change_issue_version";
+		var url = Scrumbler.root_url + "projects/"+config.project_id+"/scrumbler_backlogs/change_issue_version";
 		$super(url, {
 				method : 'post',
 				parameters : {
@@ -407,13 +424,30 @@ var MoveIssue = Class.create(Ajax.Request, {
 	}
 });
 
+var PointsLabel = Class.create({
+	initialize: function(config){
+		this.config = Object.extend({
+			point_label_class_name: 'scrumbler_point_label',
+			value: "?"		
+		},config);
+		this.el = this.createUI();
+		this.update(this.config.value);
+	},
+	createUI: function(){
+		var el = new Element('span', { 'class' : this.config.point_label_class_name });
+		return el;
+	},
+	update: function(value){
+		this.config.value = value;
+		this.el.update(value + " Points");
+	}
+});
 
 return Class.create({
 	initialize: function(config){
 		this.config = Object.extend({
 			parent_id : "content"
 		}, config);
-		
 		this.backlog = this.createBacklog();
 		this.sprint = this.createSprint();
 		
@@ -429,6 +463,20 @@ return Class.create({
 		$(document).observe('issue:moved', function(event){
 			var config = event.memo;
 			this.update(config);
+		}.bind(this));
+		
+		// Update backlog on issue movement
+		this.sprint.list.el.observe('issue:points_updated', function(event){
+			var issue = event.memo;
+			this.sprint.list.updateIssuePoints(issue);
+			this.sprint.points_label.update(this.sprint.list.getPoints());
+		}.bind(this));
+		
+		// Update backlog on issue movement
+		this.backlog.list.el.observe('issue:points_updated', function(event){
+			var issue = event.memo;
+			this.backlog.list.updateIssuePoints(issue);
+			this.backlog.points_label.update(this.backlog.list.getPoints());
 		}.bind(this));
 		
 		this.sprint.list.el.observe('issue:drop', function(event){
@@ -457,6 +505,7 @@ return Class.create({
 			project_id: this.config.project_id
 		});
 		backlog.trackers = new TrackersListUI(this.config.backlog.trackers);
+		backlog.points_label = new PointsLabel({value: backlog.list.getPoints()});
 		return backlog;			
 	},
 	createSprint: function(){
@@ -466,6 +515,7 @@ return Class.create({
 		});
 		sprint.trackers = new TrackersListUI(this.config.sprint.trackers);
 		sprint.selector = new SprintSelector({sprints: this.config.sprints, project_id: this.config.project_id});
+		sprint.points_label = new PointsLabel({value: sprint.list.getPoints()});
 		return sprint;
 	},
 	// Create Backlog HTML Element 
@@ -475,6 +525,7 @@ return Class.create({
 		div = new Element('div',{id:'splitcontentleft', style: "float:left;width:48%;"});
 		div.appendChild(new Element('h2').update(t('label_backlog')));
 		div.appendChild(this.backlog.trackers.el);
+		div.appendChild(this.backlog.points_label.el);
 		div.appendChild(this.backlog.list.el);
 		el.appendChild(div);
 
@@ -485,6 +536,7 @@ return Class.create({
 		div.appendChild(contextual_div);
 		div.appendChild(h2);
 		div.appendChild(this.sprint.trackers.el);
+		div.appendChild(this.sprint.points_label.el);
 		div.appendChild(this.sprint.list.el);
 		el.appendChild(div);
 		return el;
@@ -497,16 +549,22 @@ return Class.create({
 		this.config.backlog = Object.extend(this.config.backlog, backlog);
 		this.backlog.list.update(this.config.backlog.issues);
 		this.backlog.trackers.update(this.config.backlog.trackers);
+		this.backlog.points_label.update(this.backlog.list.getPoints());
 	},
 	updateSprint: function(sprint){
 		this.config.sprint = Object.extend(this.config.sprint, sprint);
-		this.sprint.list.update(sprint.issues);
-		this.sprint.trackers.update(sprint.trackers);
+		this.sprint.list.update(this.config.sprint.issues);
+		this.sprint.trackers.update(this.config.sprint.trackers);
+		this.sprint.points_label.update(this.sprint.list.getPoints());
 		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, sprint.trackers);
 		this.backlog.list.update(this.backlog.list.issues);
 	},
 	disableIssuesInUnsupportedTrackers: function(issues, trackers){
-		issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+		if(trackers.length != 0){
+			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+		}else{
+			issues.each(function(issue){ issue.disabled = true });
+		}
 	}
 });
 })();
