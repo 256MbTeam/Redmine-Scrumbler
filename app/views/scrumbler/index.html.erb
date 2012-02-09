@@ -7,11 +7,7 @@
 	<%= javascript_include_tag 'scrumbler-dashboard', :plugin => 'redmine_scrumbler' %>
 <% end %>
 <div class="contextual">
-	<%=link_to l(:label_backlog),
-	{:controller => :scrumbler_backlogs,
-	:action => :index,
-	:project_id => @project}, :class => "icon icon-scrumbler-backlog"
-	%>
+	<%= link_to l(:label_backlog), project_scrumbler_backlogs_url(@project), :class => "icon icon-scrumbler-backlog" %>
 	<%= link_to_if_authorized l(:label_settings), 
 	{:controller => :scrumbler_settings,
 	:action => :show, 

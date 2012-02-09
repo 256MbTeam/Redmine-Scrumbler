@@ -9,12 +9,12 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :projects do |project|
     
-    project.resource :scrumbler_backlogs, :member=>{
+    project.resource :scrumbler_backlogs, :member => {
       :update_scrum_points => :post,
       :change_issue_version => :post,
       :select_sprint => :post,
       :create_version => :post
-    },:prefix => '/projects/:project_id/scrumbler_backlogs'
+    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs'
     
     project.resource :scrumbler_settings, :member => {
       :update_trackers => :post,
