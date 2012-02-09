@@ -1,5 +1,11 @@
+span.scrumbler_point_label{
+	float: right;
+	font-size: 2.5em;
+	margin-right: 16px;
+}
+
 div.scrumbler_box{
-	color: #505050
+	background: #505050
 }
 
 div.disabled_scrumbler_issue {
@@ -11,10 +17,8 @@ div.disabled_scrumbler_issue {
 	border-radius: 12px;
 }
 
-
 div.disabled_scrumbler_issue > div.scrumbler_issue_heading > div.scrumbler_issue_color {
 	width: 100%;
-/*	background-color: #eee;*/
 	padding: 2px 0;
 	border-radius: 10px 10px 0 0;
 }
@@ -36,7 +40,7 @@ div.scrumbler_backlog_issues {
 	padding-top: 26px;
 }
 span.scrumbler_backlog_tracker {
-/*	float: right;*/
+	line-height: 1.75em;
 	padding: 0px;
 	margin-right: 1em;
 }
