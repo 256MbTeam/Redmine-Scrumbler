@@ -31,7 +31,7 @@ module Scrumbler
         def validate_sprint
           if @sprint = self.fixed_version.try(:scrumbler_sprint)
 
-            # Should not assign issue from disabled tracker 
+            # Should not assign issue from disabled tracker
             tracker_setting = @sprint.trackers[self.tracker_id.to_s] || @sprint.trackers[self.tracker_id.to_i]
             errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
 
@@ -50,6 +50,17 @@ module Scrumbler
       end
 
       def self.included(receiver)
+        receiver.module_eval {
+          alias_method :available_custom_fields_without_points, :available_custom_fields
+    
+          def available_custom_fields
+            if ScrumblerIssueCustomField.points.projects.include? self.project
+              (available_custom_fields_without_points + [ScrumblerIssueCustomField.points]).uniq
+            else
+              available_custom_fields_without_points
+            end
+          end
+        }
         receiver.extend         ClassMethods
         receiver.send :include, InstanceMethods
         receiver.class_eval {
