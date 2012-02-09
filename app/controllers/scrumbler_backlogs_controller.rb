@@ -67,7 +67,7 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
 
     render :json => { :success => @issue.save,
                       :backlog => prepare_backlog_for_json(@project),
-                      :sprint => prepare_sprint_for_json(@project, @sprint),
+                      :sprint => prepare_sprint_for_json(@sprint),
                       :text => @issue.errors.full_messages.join(", <br>")
                     }
   end

@@ -379,7 +379,7 @@ var SprintSelector = Class.create({
 
 var MoveIssue = Class.create(Ajax.Request, {
 	initialize: function($super, config){
-		var url = "projects/"+config.project_id+"/scrumbler_backlogs/change_issue_version";
+		var url = Scrumbler.root_url + "projects/"+config.project_id+"/scrumbler_backlogs/change_issue_version";
 		$super(url, {
 				method : 'post',
 				parameters : {
