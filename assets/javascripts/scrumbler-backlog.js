@@ -432,8 +432,7 @@ var SprintSelector = Class.create({
 		return button;
 	},
 	createOpenSprintButton: function(){
-// 		TODO MORE SEXY BUTTON
-		var button = new Element('a').update("Open&nbsp;");
+		var button = new Element('a', {style: 'vertical-align: middle; margin-right: 0.75em;'}).update("Open");
 		return button;
 	}	
 });

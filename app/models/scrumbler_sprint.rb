@@ -47,6 +47,7 @@ class ScrumblerSprint < ActiveRecord::Base
   validate :closing_validation
   validate :remove_tracker_validation
   validate :start_end_date_validation
+  validate :opening_validation
   
   def issues
     Issue.find :all, 
@@ -125,6 +126,12 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   def closing_validation
     if Issue.open.exists?(:id => self.issues.map(&:id)) && self.status == CLOSED
       errors.add_to_base(:closing_sprint_with_opened_issues) 
+    end
+  end
+  
+  def opening_validation
+    if self.status == OPENED && self.issues.empty?
+         errors.add_to_base(:cant_open_sprint_without_issues)
     end
   end
   

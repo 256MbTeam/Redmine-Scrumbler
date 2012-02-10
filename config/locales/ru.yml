@@ -59,6 +59,7 @@ ru:
               trackers_with_issues_in_sprint_cant_be_removed: "Нельзя отключить трекер, в котором есть задачи"
               sprint_without_project: "Нельзя создать спринт без проекта"
               closing_sprint_with_opened_issues: "Нельзя закрыть спринт, если в нем есть незакрытые задачи"
+              cant_open_sprint_without_issues: "Нельзя открыть спринт без задач"
             status:
               only_one_opened: "Только один спринт может быть открыт в проекте"
   active_record:
