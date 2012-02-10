@@ -432,7 +432,10 @@ var SprintSelector = Class.create({
 		return button;
 	},
 	createOpenSprintButton: function(){
-		var button = new Element('a', {style: 'vertical-align: middle; margin-right: 0.75em;'}).update("Open");
+		var button = new Element('a', {
+			href: '#', 
+			style: 'vertical-align: middle; margin-right: 0.75em;'}
+		).update("Open");
 		return button;
 	}	
 });
