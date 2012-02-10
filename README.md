@@ -1,6 +1,7 @@
 Scrumbler
 =========
-Current version: 1.3.1 ([Changelog](/256MbTeam/Redmine-Scrumbler/blob/master/CHANGELOG.md))
+Current version: 1.3.2 ([Changelog](/256MbTeam/Redmine-Scrumbler/blob/master/CHANGELOG.md))
+[Documentation](https://github.com/256MbTeam/Redmine-Scrumbler/wiki/Documentation-and-overview)
 
 Easy to use plugin for [Redmine](http://http://www.redmine.org/). It allows users to use the Scrum/Agile process in projects.
 Scrumbler have interactive dashboard with the ability to configure for each sprint. 
@@ -67,7 +68,6 @@ Restart the Redmine.
 TODO
 ----
 
-* IE support
 * Daily reporting for issue assignments
 * Template customization
 

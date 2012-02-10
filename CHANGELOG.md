@@ -1,10 +1,14 @@
 Scrumbler Changelog
 ===================
 
-1.4.0
+1.3.2
 -----
 
 * Fixed bug with custom fields
+* New backlog
+* You can edit points field from admin menu
+* Some bug fixes
+* Added documentation
 
 1.3.1
 --------
