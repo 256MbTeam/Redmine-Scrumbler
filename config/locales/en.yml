@@ -1,10 +1,10 @@
-# Russian strings go here for Rails i18n
 en:
   versions_for_sprints_not_created: "For sprint creation use project versions. Settings -> Versions."
   field_end_date: "End date"
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
-  
+  scrumbler_points_field: "Scrum Points"
+
   show_opened: "Show Opened"
   show_all: "All Sprints"
   label_general: "General"
@@ -36,7 +36,6 @@ en:
     estimated_axis: "Estimated work"
   
   scrumbler_sprint_statistics_not_available: "Warning! Statistics not available. Sprint must be opened and provided start and end date for sprint."
-
   
   scrumbler_sprint_opened: "Opened"
   scrumbler_sprint_planning: "Planning"
