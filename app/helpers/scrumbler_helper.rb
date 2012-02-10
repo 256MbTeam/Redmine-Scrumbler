@@ -23,6 +23,8 @@ module ScrumblerHelper
       :label_new_sprint => t(:label_new_sprint),
       :issue_not_assigned => t(:issue_not_assigned),
       :scrumbler_statistics => t(:scrumbler_statistics),
+      :label_header_error  => t(:label_header_error),
+      :label_confirm_sprint_opening => t(:label_confirm_sprint_opening),
       :highstock => {
         :months => t("date.month_names").compact,
         :shortMonths => t("date.abbr_month_names").compact,

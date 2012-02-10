@@ -36,7 +36,7 @@ module ScrumblerBacklogsHelper
   end
 
   def prepare_sprint_for_json(sprint)
-    return {} unless sprint
+    return {:issues=>[],:trackers=>[]} unless sprint
     trackers = prepare_trackers(sprint.trackers, sprint.project.trackers)
     {
       :id => sprint.id,
@@ -59,7 +59,7 @@ module ScrumblerBacklogsHelper
 
   def prepare_backlogs_data_to_json(project)
     {
-      :project_id => project.id,
+      :project_id => project.identifier,
       :backlog => prepare_backlog_for_json(project),
       :sprint => prepare_sprint_for_json(project.scrumbler_sprints.planning.first),
       :sprints => prepare_sprints(project.scrumbler_sprints.planning) 

@@ -18,14 +18,18 @@
 class ScrumblerSprint < ActiveRecord::Base
   unloadable
   
-  STATUSES = ["opened", "planning", "closed"]
+  OPENED = "opened"
+  PLANNING = "planning"
+  CLOSED = "closed"
+  
+  STATUSES = [OPENED, PLANNING, CLOSED]
   validates_inclusion_of :status, :in => ScrumblerSprint::STATUSES
     
   default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
   
-  named_scope :opened, :conditions => {:status => "opened"}
+  named_scope :opened, :conditions => {:status => OPENED}
   
-  named_scope :planning, :conditions => {:status => "planning"}
+  named_scope :planning, :conditions => {:status => PLANNING}
   
   belongs_to :project
   validates_presence_of :project
@@ -33,7 +37,7 @@ class ScrumblerSprint < ActiveRecord::Base
   belongs_to :version
   validates_presence_of :version
 
-  validates_uniqueness_of :status, :scope => :project_id, :if => lambda {|sprint| sprint.status == "opened"}, :message => :only_one_opened 
+  validates_uniqueness_of :status, :scope => :project_id, :if => lambda {|sprint| sprint.status == OPENED}, :message => :only_one_opened 
   
   delegate :scrumbler_project_setting, :to => :project
   
@@ -119,7 +123,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   end
   
   def closing_validation
-    if Issue.open.exists?(:id => self.issues.map(&:id)) && self.status == "closed"
+    if Issue.open.exists?(:id => self.issues.map(&:id)) && self.status == CLOSED
       errors.add_to_base(:closing_sprint_with_opened_issues) 
     end
   end

@@ -16,7 +16,9 @@ en:
   label_backlog: "Backlog"
   label_sprint_settings: "Sprint settings"
   label_statistics: "Statistics"
-
+  label_confirm_sprint_opening: "Are you sure you want to open a sprint?"
+  label_header_error: "Error"
+  
   issue_not_assigned: "Not assigned"
   
   tracker_use?: "Use?"

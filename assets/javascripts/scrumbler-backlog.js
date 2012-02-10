@@ -28,12 +28,12 @@ var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
 					config.observer.fire('issue:points_updated',{ id: config.issue_id, points: config.points})
 				}else{
 					// TODO create localizations for header
-					$growler.growl(resp.text, { header : 'Ошибка' });
+					$growler.growl(resp.text, { header : t('label_header_error') });
 				}
 			},
 			onFailure : function() {
 				// TODO display more details about error 
-				$growler.growl('Something went wrong...', { header : 'Error' });
+				$growler.growl('Something went wrong...', { header : t('label_header_error') });
 			},
 			onComplete: function(){ config.popup.hide(); }
 		});
@@ -280,12 +280,12 @@ var SelectSprintRequest = Class.create(Ajax.Request,{
 					if(resp.success) {
 						selector.fire('sprint:selected', resp.sprint);
 					} else {
-						$growler.growl(resp.text, { header : 'Ошибка' });
+						$growler.growl(resp.text, { header : t('label_header_error') });
 					}
 				}.bind(this),
 				onFailure : function() {
 					// TODO More details
-					$growler.growl('Something went wrong...', { header : 'Error' });
+					$growler.growl('Something went wrong...', { header : t('label_header_error') });
 				}
 			});
 	}
@@ -306,12 +306,39 @@ var CreateVersionRequest = Class.create(Ajax.Request,{
 						config.observer.sprint_selector.setValue(resp.sprint.id);
 						config.observer.sprint_selector.fire('sprint:selected', resp.sprint);
 					} else {
-						$growler.growl(resp.text, { header : 'Ошибка' });
+						$growler.growl(resp.text, { header : t('label_header_error') });
 					}
 				},
 			});
 	}
 });
+
+
+var OpenSprintRequest = Class.create(Ajax.Request,{
+	initialize: function($super,config){
+		var url = Scrumbler.root_url+'projects/'+config.project_id+'/scrumbler_backlogs/open_sprint';
+		var observer = config.observer;
+		var redirect_url = Scrumbler.root_url+'projects/'+config.project_id+'/scrumbler_sprints/'+observer.sprint_selector.value+'/settings';
+		
+		$super(url,{
+				parameters: {
+					sprint_id: observer.sprint_selector.value
+				},
+				onSuccess: function(transport) { 
+					var resp = transport.responseJSON;
+					if(resp.success) {
+						window.location.href = redirect_url;
+						// observer.update(resp.sprints);
+						// observer.sprint_selector.setValue(resp.sprint.id);
+						// observer.sprint_selector.fire('sprint:selected', resp.sprint);
+					} else {
+						$growler.growl(resp.text, { header : t('label_header_error') });
+					}
+				},
+			});
+	}
+});
+
 
 /**
  * Create HTML Select element for sprints. Observe change actionm and send request on it. 
@@ -357,12 +384,25 @@ var SprintSelector = Class.create({
 			});
 		}.bind(this))
 		
+		this.open_button.observe('click', function(){
+			var confirm_open = confirm(t('label_confirm_sprint_opening'));
+			if(!confirm_open){
+				return false;
+			}
+			new OpenSprintRequest({
+				project_id: this.config.project_id,
+				observer: this
+			});				
+		}.bind(this));
+		
 	},
 	createUI: function(){
 		this.sprint_selector = new Element('select', { id: this.config.selector_id });
 		this.add_button = this.createNewSprintButton();
+		this.open_button = this.createOpenSprintButton();		
 		
 		this.el = new Element('div');
+		this.el.appendChild(this.open_button);
 		this.el.appendChild(this.sprint_selector);
 		this.el.appendChild(this.add_button);
 	},
@@ -382,7 +422,6 @@ var SprintSelector = Class.create({
 			this.sprint_selector.appendChild(option);
 		}.bind(this));
 	},
-	
 	createNewSprintButton: function() {
 		var button = new Element('a');
 		button.appendChild(new Element('image', {
@@ -391,7 +430,12 @@ var SprintSelector = Class.create({
 			alt: 'Add'
 		}));
 		return button;
-	}
+	},
+	createOpenSprintButton: function(){
+// 		TODO MORE SEXY BUTTON
+		var button = new Element('a').update("Open&nbsp;");
+		return button;
+	}	
 });
 
 var MoveIssue = Class.create(Ajax.Request, {
@@ -411,11 +455,11 @@ var MoveIssue = Class.create(Ajax.Request, {
 							sprint: resp.sprint
 						});
 					} else {
-						$growler.growl(resp.text, { header : 'Ошибка' });
+						$growler.growl(resp.text, { header: t('label_header_error') });
 					}
 				},
 				onFailure : function() {
-					$growler.growl('Something went wrong...', { header : 'Error' });
+					$growler.growl('Something went wrong...', { header: t('label_header_error') });
 				},
 				onComplete: function(){
 					config.source.show();
@@ -448,6 +492,7 @@ return Class.create({
 		this.config = Object.extend({
 			parent_id : "content"
 		}, config);
+		console.log(this.config);
 		this.backlog = this.createBacklog();
 		this.sprint = this.createSprint();
 		
@@ -556,7 +601,7 @@ return Class.create({
 		this.sprint.list.update(this.config.sprint.issues);
 		this.sprint.trackers.update(this.config.sprint.trackers);
 		this.sprint.points_label.update(this.sprint.list.getPoints());
-		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, sprint.trackers);
+		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, this.sprint.trackers);
 		this.backlog.list.update(this.backlog.list.issues);
 	},
 	disableIssuesInUnsupportedTrackers: function(issues, trackers){

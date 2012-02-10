@@ -13,7 +13,8 @@ ActionController::Routing::Routes.draw do |map|
       :update_scrum_points => :post,
       :change_issue_version => :post,
       :select_sprint => :post,
-      :create_version => :post
+      :create_version => :post,
+      :open_sprint => :post
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs'
     
     project.resource :scrumbler_settings, :member => {

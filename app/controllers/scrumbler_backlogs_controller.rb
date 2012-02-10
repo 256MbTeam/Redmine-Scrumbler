@@ -71,4 +71,17 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
                       :text => @issue.errors.full_messages.join(", <br>")
                     }
   end
+  
+  def open_sprint
+    @sprint = ScrumblerSprint.find(params[:sprint_id])
+    @sprint.status = ScrumblerSprint::OPENED
+    planning = @project.scrumbler_sprints.planning
+    saved = @sprint.save
+    render :json => {
+                 :success => saved,
+                 :sprint => prepare_sprint_for_json(saved ? planning.first : @sprint),
+                 :sprints => prepare_sprints(planning),
+                 :text => @sprint.errors.full_messages.join(", <br>")
+                }
+  end
 end

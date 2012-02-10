@@ -16,6 +16,8 @@ ru:
   label_backlog: "Бэклог"
   label_sprint_settings: "Настройки спринта"
   label_statistics: "Статистика"
+  label_confirm_sprint_opening: "Вы уверены, что хотите открыть спринт?"
+  label_header_error: "Ошибка"
   
   issue_not_assigned: "Не назначена"
   
