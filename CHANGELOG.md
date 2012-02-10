@@ -1,5 +1,11 @@
 Scrumbler Changelog
 ===================
+
+1.4.0
+-----
+
+* Fixed bug with custom fields
+
 1.3.1
 --------
 
