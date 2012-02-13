@@ -1,6 +1,12 @@
 Scrumbler Changelog
 ===================
 
+1.3.x
+-----
+
+* Fixed. Issue journal dont created. 
+
+
 1.3.2
 -----
 
