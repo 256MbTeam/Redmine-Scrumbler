@@ -60,13 +60,15 @@ class ScrumblerSprint < ActiveRecord::Base
   end
   
   def points_total
-    connection.select_value("select sum(value) from custom_values where 
-custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
-custom_values.customized_type = 'Issue' and
-custom_values.customized_id in (#{(self.issues.map(&:id) << 0).join(",")}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :total_points).to_f
+    CustomValue.find(:all, :conditions => {
+      :custom_field_id => ScrumblerIssueCustomField.points.id,
+      :customized_type => 'Issue',
+      :customized_id => (self.issues.map(&:id) << 0)
+    }).sum {|points| points.value.to_f}
   end
   
+  
+  # deprecated
   def points_completed
     connection.select_value("select sum(value) from custom_values where 
 custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
@@ -83,13 +85,14 @@ and scrumbler_sprints.id = #{self.id}) and
 custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :completed_points).to_f
   end
   
+   # deprecated
   def name_with_points
     "#{name} (#{points_completed}/#{points_total})"
   end
   
   def after_initialize
     if self.new_record?
-      self.status ||= "planning"
+      self.status ||= ScrumblerSprint::PLANNING
     end
     self.settings ||= HashWithIndifferentAccess.new
   end
@@ -112,7 +115,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   end
   
   def statistics_available?
-    status != "planning" && start_date && end_date
+    status != ScrumblerSprint::PLANNING && start_date && end_date
   end
   
   private

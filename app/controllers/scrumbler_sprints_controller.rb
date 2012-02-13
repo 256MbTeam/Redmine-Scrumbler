@@ -88,20 +88,20 @@ class ScrumblerSprintsController < ScrumblerAbstractController
 
       # Set due date if issue closed
       params[:issue][:due_date] = Date.today if IssueStatus.exists?(:is_closed => true, :id => params[:issue][:status_id])
-
+      @issue.init_journal(User.current)
       {:success => @issue.update_attributes(params[:issue])}
 
     else
       new_status = IssueStatus.find(params[:issue][:status_id])
       {:success => false, :text => l(:error_scrumbler_issue_status_change, :status_name => new_status.name)}
     end
-    p @issue.errors
     render :json => @message
   end
 
   def change_issue_assignment_to_me
     @issue = Issue.find(params[:issue_id])
     @issue.assigned_to = User.current
+    @issue.init_journal(User.current)
     render :json => {:success => @issue.save, :issue => issue_for_json(@issue)}
   end
 
@@ -109,6 +109,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     @issue = Issue.find(params[:issue_id])
     if @issue.assigned_to == User.current
       @issue.assigned_to = nil
+      @issue.init_journal(User.current)
       render :json => {:success => @issue.save, :issue => issue_for_json(@issue)}
     else
       render :status => 403

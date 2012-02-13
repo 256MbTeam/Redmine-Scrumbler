@@ -11,7 +11,9 @@
 	<tbody>
 		<% @project.scrumbler_sprints.each do |sprint| %>
 		<tr class="<%= cycle 'odd', 'even' %>">
-			<td><%= sprint.name %></td>
+			<td>
+			<%= link_to sprint.name%>	
+			</td>
 			<td><%= l("scrumbler_sprint_#{sprint.status}") %></td>
 			<% if authorize_for(:scrumbler_sprints, :settings)%> 
 				<td><%= link_to l(:button_edit), project_scrumbler_sprint_settings_url(@project, sprint), :class=> "icon icon-scrumbler-settings" %></td>

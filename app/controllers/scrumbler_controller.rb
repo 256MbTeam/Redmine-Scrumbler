@@ -21,14 +21,16 @@ class ScrumblerController < ScrumblerAbstractController
 #  before_filter :authorize, :only => [:sprint, :index]
   
   def index
-    if(params[:show_all] == "true")
-      @scrumbler_sprints = @project.scrumbler_sprints
-    else
-      @scrumbler_sprints = @project.scrumbler_sprints.opened
-    end
+    @scrumbler_sprint = ScrumblerSprint.find_by_id(params[:scrumbler_sprint_id])
     
-    @scrumbler_sprint = ScrumblerSprint.find(params[:scrumbler_sprint_id]) rescue @scrumbler_sprints.last
-    @show_all = params[:show_all]
+    @show_all = if @scrumbler_sprint && @scrumbler_sprint.status != ScrumblerSprint::OPENED
+      true
+    else
+      !!params[:show_all]
+    end
+
+    @scrumbler_sprints  = @show_all ? @project.scrumbler_sprints : @project.scrumbler_sprints.opened
+    @scrumbler_sprint ||= @scrumbler_sprints.last
   end
     
   def sprint
