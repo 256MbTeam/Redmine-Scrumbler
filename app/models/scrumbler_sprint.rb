@@ -60,16 +60,11 @@ class ScrumblerSprint < ActiveRecord::Base
   end
   
   def points_total
-    CustomValue.sum(:value, :conditions => ["custom_field_id = :custom_field_id and
-      customized_type = :customized_type and
-      customized_id in (:customized_ids) and
-      value <> :default_value", 
-     {
+    CustomValue.find(:all, :conditions => {
       :custom_field_id => ScrumblerIssueCustomField.points.id,
       :customized_type => 'Issue',
-      :customized_ids => (self.issues.map(&:id) << 0),
-      :default_value => '?'
-     }]).to_f
+      :customized_id => (self.issues.map(&:id) << 0)
+    }).sum {|points| points.value.to_f}
   end
   
   
@@ -97,7 +92,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   
   def after_initialize
     if self.new_record?
-      self.status ||= "planning"
+      self.status ||= ScrumblerSprint::PLANNING
     end
     self.settings ||= HashWithIndifferentAccess.new
   end
@@ -120,7 +115,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   end
   
   def statistics_available?
-    status != "planning" && start_date && end_date
+    status != ScrumblerSprint::PLANNING && start_date && end_date
   end
   
   private
