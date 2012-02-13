@@ -36,7 +36,7 @@ module Scrumbler
             errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
 
             # should not add issue to not planning sprint
-            if fixed_version_id_changed? && @sprint.status != "planning"
+            if fixed_version_id_changed? && @sprint.status != ScrumblerSprint::PLANNING
               errors.add_to_base(:sprint_not_planning_error)
             end
 
