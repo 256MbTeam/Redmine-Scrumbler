@@ -17,6 +17,9 @@ ActionController::Routing::Routes.draw do |map|
       :open_sprint => :post
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs'
     
+    project.scrumbler_dashboard 'scrumbler', :controller => 'scrumbler'
+    project.scrumbler_dashboard_sprint 'scrumbler/:scrumbler_sprint_id', :controller => 'scrumbler'
+    
     project.resource :scrumbler_settings, :member => {
       :update_trackers => :post,
       :update_issue_statuses => :post
