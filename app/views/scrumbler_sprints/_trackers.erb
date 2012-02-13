@@ -1,9 +1,3 @@
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag    'prototype_colorpicker', :plugin => 'redmine_scrumbler' %>
-  <%= javascript_include_tag 'prototype_colorpicker', :plugin => 'redmine_scrumbler' %>
-<% end %>
-
-
 <% form_tag update_trackers_project_scrumbler_sprint_url(@project, @scrumbler_sprint) do%>
   <table class="list">
     <thead>
