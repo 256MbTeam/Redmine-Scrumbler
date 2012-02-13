@@ -18,10 +18,11 @@ en:
   label_statistics: "Statistics"
   label_confirm_sprint_opening: "Are you sure you want to open a sprint?"
   label_header_error: "Error"
+  label_header_warning: "Warning"
   issue_action_on_sprint_closing: "What to do with not closed issues?"
   close_issues: "Close issues"
   move_issues_to_backlog: "Move to backlog"
-  
+  opened_issues_in_closing_sprint: "There are some not not closed issues in sprint"
   
   issue_not_assigned: "Not assigned"
   
