@@ -60,13 +60,20 @@ class ScrumblerSprint < ActiveRecord::Base
   end
   
   def points_total
-    connection.select_value("select sum(value) from custom_values where 
-custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
-custom_values.customized_type = 'Issue' and
-custom_values.customized_id in (#{(self.issues.map(&:id) << 0).join(",")}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :total_points).to_f
+    CustomValue.sum(:value, :conditions => ["custom_field_id = :custom_field_id and
+      customized_type = :customized_type and
+      customized_id in (:customized_ids) and
+      value <> :default_value", 
+     {
+      :custom_field_id => ScrumblerIssueCustomField.points.id,
+      :customized_type => 'Issue',
+      :customized_ids => (self.issues.map(&:id) << 0),
+      :default_value => '?'
+     }]).to_f
   end
   
+  
+  # deprecated
   def points_completed
     connection.select_value("select sum(value) from custom_values where 
 custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
@@ -83,6 +90,7 @@ and scrumbler_sprints.id = #{self.id}) and
 custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :completed_points).to_f
   end
   
+   # deprecated
   def name_with_points
     "#{name} (#{points_completed}/#{points_total})"
   end
