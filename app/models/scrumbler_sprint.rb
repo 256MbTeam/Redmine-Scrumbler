@@ -97,7 +97,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   
   def after_initialize
     if self.new_record?
-      self.status ||= "planning"
+      self.status ||= ScrumblerSprint::PLANNING
     end
     self.settings ||= HashWithIndifferentAccess.new
   end
@@ -120,7 +120,7 @@ custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :co
   end
   
   def statistics_available?
-    status != "planning" && start_date && end_date
+    status != ScrumblerSprint::PLANNING && start_date && end_date
   end
   
   private
