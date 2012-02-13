@@ -1,0 +1,9 @@
+<div class="box">
+	<%form_tag close_confirm_project_scrumbler_sprint_url(@project, @scrumbler_sprint), :method=> :post do%>
+		<%= t(:issue_action_on_sprint_closing)%> <br>
+		<%=radio_button_tag('issue_action', 'close' )%> <%=t(:close_issues)%> <br>
+		
+		<%=radio_button_tag('issue_action', 'backlog' )%> <%=t(:move_issues_to_backlog)%><br>
+		<%= submit_tag l(:button_save) %>
+	<%end%>
+</div>

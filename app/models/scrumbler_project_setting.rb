@@ -25,11 +25,11 @@ class ScrumblerProjectSetting < ActiveRecord::Base
 
   serialize :settings, HashWithIndifferentAccess
   def find_tracker(id)
-    self.settings[:trackers][id.to_s] || create_setting(Tracker.find(id), false)
+    self.settings[:trackers][id.to_s] || ScrumblerProjectSetting.create_setting(Tracker.find(id), false)
   end
 
   def find_issue_status(id)
-    self.settings[:issue_statuses][id.to_s] || create_setting(IssueStatus.find(id), false)
+    self.settings[:issue_statuses][id.to_s] || ScrumblerProjectSetting.create_setting(IssueStatus.find(id), false)
   end
 
   def trackers
@@ -73,10 +73,8 @@ class ScrumblerProjectSetting < ActiveRecord::Base
     end
   end
 
-  private
-
   #  Create default setting
-  def create_setting(object, use = true)
+  def self.create_setting(object, use = true)
     if object.class == Tracker
       HashWithIndifferentAccess.new(
       {

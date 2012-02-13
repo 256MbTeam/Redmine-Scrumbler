@@ -15,12 +15,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerBacklogsHelper
+  
+  # def create_tracker_setting(tracker)
+    # settings = ScrumblerProjectSetting.create_setting(tracker, false)
+    # {
+      # :id => tracker.id,
+      # :name => tracker.name,
+      # :color => settings[:color]
+    # }
+  # end
+  
   def prepare_issues_for_json(issues, trackers)
     issues.sort_by(&:priority).reverse.map{|issue|
       { :id => issue.id,
         :subject => issue.subject,
         :points => issue.scrumbler_points,
-        :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s}
+        :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s} 
+        # || create_tracker_setting(Tracker.find(issue.tracker_id))
       }
     }
   end
@@ -34,6 +45,17 @@ module ScrumblerBacklogsHelper
       }
     }
   end
+  
+  def prepare_all_trackers(trackers_settings, trackers)
+    trackers.map{|tracker|
+      {
+        :id => tracker.id,
+        :name => tracker.name,
+        :color => (trackers_settings[tracker.id.to_s] || ScrumblerProjectSetting.create_setting(tracker,false))[:color]
+      }
+    }
+  end
+  
 
   def prepare_sprint_for_json(sprint)
     return {:issues=>[],:trackers=>[]} unless sprint
@@ -50,7 +72,7 @@ module ScrumblerBacklogsHelper
   end
 
   def prepare_backlog_for_json(project)
-    trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
+    trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     {
       :trackers => trackers,
       :issues => prepare_issues_for_json(project.issues.without_version, trackers)
