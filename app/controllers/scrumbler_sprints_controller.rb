@@ -85,7 +85,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
 
       # Set due date if issue closed
       params[:issue][:due_date] = Date.today if IssueStatus.exists?(:is_closed => true, :id => params[:issue][:status_id])
-
+      @issue.init_journal(User.current)
       {:success => @issue.update_attributes(params[:issue])}
 
     else
