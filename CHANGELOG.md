@@ -1,12 +1,15 @@
 Scrumbler Changelog
 ===================
 
-1.3.x
+1.4.0
 -----
 
 * Fixed. Issue journal dont created. 
 * Fixed. Back from sprint settings to dashboard in not opened sprint.
 * Fixed. Burndown don't work with Postgres.
+* Fixed. Routes in sprint dashboard.
+* Closing sprints with moving issues to backlog.
+
 
 
 1.3.2
