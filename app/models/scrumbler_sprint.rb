@@ -64,7 +64,7 @@ class ScrumblerSprint < ActiveRecord::Base
       :custom_field_id => ScrumblerIssueCustomField.points.id,
       :customized_type => 'Issue',
       :customized_id => (self.issues.map(&:id) << 0)
-    }).inject(0.0) {|t,c| t+=c.to_f}
+    }).inject(0.0) {|t,c| t+=c.value.to_f}
   end
   
   
