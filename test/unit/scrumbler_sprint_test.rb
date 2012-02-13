@@ -76,10 +76,19 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
   end
 
   test "cant assign task to sprint, if it not planning" do
-    sprint = ScrumblerSprint.create(:status => "opened", :version => versions(:versions_003), :project => @project)
+    # This issue needed for opened sprint creation
+    Issue.create(:author_id => 2, 
+                 :subject => 'test', 
+                 :tracker => Tracker.first, 
+                 :fixed_version => versions(:versions_003), 
+                 :project => @project)
+ 
+    ScrumblerSprint.create(:status => "opened", 
+                           :version => versions(:versions_003), 
+                           :project => @project)
 
     issue = scrumbler_issues(:issue_without_version)
-    issue.fixed_version_id = sprint.version_id
+    issue.fixed_version_id = versions(:versions_003)
 
     assert_equal false, issue.valid?
   end
