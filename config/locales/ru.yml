@@ -18,10 +18,11 @@ ru:
   label_statistics: "Статистика"
   label_confirm_sprint_opening: "Вы уверены, что хотите открыть спринт?"
   label_header_error: "Ошибка"
-  issue_action_on_sprint_closing: "Что делать с не закрытыми задачами?"
+  label_header_warning: "Предупреждение"
+  issue_action_on_sprint_closing: "Что делать с незакрытыми задачами?"
   close_issues: "Закрыть"
   move_issues_to_backlog: "Переместить в бэклог"
-  
+  opened_issues_in_closing_sprint: "В спринте есть незакрытые задачи!"
   
   issue_not_assigned: "Не назначена"
   
