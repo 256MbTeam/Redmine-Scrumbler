@@ -36,12 +36,12 @@
 			<%if @show_all %>
 				<%= link_to l(:show_opened), :controller => :scrumbler, :action => :index, :project_id => @project %>
 			<%else%>
-				<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
+				<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "" %>
 			<%end%>
 		</p>
 		<%= render :partial => 'sprint', :object =>  @scrumbler_sprint %>
 	<% else %>
-		<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "true" %>
+		<%= link_to l(:show_all), :controller => :scrumbler, :action => :index, :project_id => @project, :show_all => "" %>
 		<p class="nodata">
 			<%= l(:versions_for_sprints_not_created) %>
 		</p>

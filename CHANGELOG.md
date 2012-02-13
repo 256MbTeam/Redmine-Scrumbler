@@ -5,6 +5,7 @@ Scrumbler Changelog
 -----
 
 * Fixed. Issue journal dont created. 
+* Fixed. Back from sprint settings to dashboard in not opened sprint.
 
 
 1.3.2
