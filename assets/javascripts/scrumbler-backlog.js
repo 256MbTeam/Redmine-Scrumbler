@@ -603,12 +603,13 @@ return Class.create({
 		this.sprint.list.update(this.config.sprint.issues);
 		this.sprint.trackers.update(this.config.sprint.trackers);
 		this.sprint.points_label.update(this.sprint.list.getPoints());
-		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, this.sprint.trackers);
+		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, this.config.sprint.trackers);
 		this.backlog.list.update(this.backlog.list.issues);
 	},
 	disableIssuesInUnsupportedTrackers: function(issues, trackers){
+		console.log(issues,trackers);
 		if(trackers.length != 0){
-			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) });
+			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) } );
 		}else{
 			issues.each(function(issue){ issue.disabled = true });
 		}

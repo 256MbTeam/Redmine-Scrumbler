@@ -32,7 +32,8 @@ ActionController::Routing::Routes.draw do |map|
       :update_general => :post,
       :update_trackers => :post,
       :update_issue_statuses => :post,
-      :burndown => :get
+      :burndown => :get,
+      :close_confirm => :post
     } do |sprint|
       sprint.settings     'settings/:tab', :tab => nil,
         :path_prefix => '/projects/:project_id/scrumbler_sprints/:id',
