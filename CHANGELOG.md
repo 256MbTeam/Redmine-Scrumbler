@@ -6,6 +6,7 @@ Scrumbler Changelog
 
 * Fixed. Issue journal dont created. 
 * Fixed. Back from sprint settings to dashboard in not opened sprint.
+* Fixed. Burndown don't work with Postgres.
 
 
 1.3.2
