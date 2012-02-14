@@ -37,7 +37,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   def update_general
     if params[:scrumbler_sprint][:status] == ScrumblerSprint::CLOSED && Issue.open.exists?(:id => @scrumbler_sprint.issues.map(&:id))
       render :close_confirm
-    return
+      return
     end
     ScrumblerSprint.connection.transaction do
       unless @scrumbler_sprint.update_attributes({:status => params[:scrumbler_sprint][:status], :start_date => params[:scrumbler_sprint][:start_date], :end_date => params[:scrumbler_sprint][:end_date]})
@@ -123,33 +123,29 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   def close_confirm
     errors = []
     action = params[:issue_action]
-    @issues = @scrumbler_sprint.issues;
-    if action == 'close'
-      Issue.connection.transaction do
-        @issues.each{|issue|
+    Issue.connection.transaction do
+      if action == 'close'
+        @scrumbler_sprint.issues.each{|issue|
           issue.status = IssueStatus.find(:first, :conditions => {:is_closed => true})
           issue.init_journal(User.current)
           issue.errors.each_full{|msg| errors <<  msg.to_s } unless issue.save
         }
-        @scrumbler_sprint.status = ScrumblerSprint::CLOSED
-        @scrumbler_sprint.errors.each_full{|msg| errors <<  msg.to_s } unless @scrumbler_sprint.save
-      end
-    elsif action == 'backlog'
-      Issue.connection.transaction do
-        @issues.each{|issue|
+      elsif action == 'backlog'
+        @scrumbler_sprint.issues.each{|issue|
           issue.fixed_version_id = nil
           issue.init_journal(User.current)
           issue.errors.each_full{|msg| errors <<  msg.to_s } unless issue.save
         }
-        @scrumbler_sprint.status = ScrumblerSprint::CLOSED
-        @scrumbler_sprint.errors.each_full{|msg| errors <<  msg.to_s } unless @scrumbler_sprint.save
       end
     end
-    
+
+    @scrumbler_sprint.status = ScrumblerSprint::CLOSED
+    @scrumbler_sprint.errors.each_full{|msg| errors <<  msg.to_s } unless @scrumbler_sprint.save
+
     flash[:error] = errors if !errors.empty?
-    
+
     flash[:notice] = t :notice_successful_update unless flash[:error]
-    
+
     redirect_to project_scrumbler_sprint_settings_url(@project, @scrumbler_sprint)
   end
 

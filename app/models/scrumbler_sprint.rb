@@ -64,31 +64,9 @@ class ScrumblerSprint < ActiveRecord::Base
       :custom_field_id => ScrumblerIssueCustomField.points.id,
       :customized_type => 'Issue',
       :customized_id => (self.issues.map(&:id) << 0)
-    }).sum {|points| points.value.to_f}
+    }).inject(0.0) {|t,c| t+=c.value.to_f}
   end
   
-  
-  # deprecated
-  def points_completed
-    connection.select_value("select sum(value) from custom_values where 
-custom_values.custom_field_id = #{ScrumblerIssueCustomField.points.id} and
-custom_values.customized_type = 'Issue' and
-custom_values.customized_id in (select issues.id from scrumbler_sprints
-inner join projects on scrumbler_sprints.project_id = projects.id
-inner join issues on issues.project_id = projects.id
-inner join issue_statuses on issue_statuses.id = issues.status_id 
-where issues.tracker_id in (#{(self.trackers.keys << 0).join(',')})
-and issues.status_id in (#{(self.issue_statuses.keys << 0).join(',')})
-and issue_statuses.is_closed = true
-and scrumbler_sprints.version_id = issues.fixed_version_id
-and scrumbler_sprints.id = #{self.id}) and
-custom_values.value <> '#{ScrumblerIssueCustomField.points.default_value}'", :completed_points).to_f
-  end
-  
-   # deprecated
-  def name_with_points
-    "#{name} (#{points_completed}/#{points_total})"
-  end
   
   def after_initialize
     if self.new_record?

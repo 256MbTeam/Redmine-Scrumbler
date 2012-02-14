@@ -1,9 +1,15 @@
-<div class="box">
+<h2><%= t(:label_header_warning)%></h2>
+<div class="flash warning">
+	<%= t(:opened_issues_in_closing_sprint)%>
+</div>
+<div class = "box">
 	<%form_tag close_confirm_project_scrumbler_sprint_url(@project, @scrumbler_sprint), :method=> :post do%>
-		<%= t(:issue_action_on_sprint_closing)%> <br>
-		<%=radio_button_tag('issue_action', 'close' )%> <%=t(:close_issues)%> <br>
-		
-		<%=radio_button_tag('issue_action', 'backlog' )%> <%=t(:move_issues_to_backlog)%><br>
-		<%= submit_tag l(:button_save) %>
+	<div style="margin-bottom: 1em;">
+		<%= t(:issue_action_on_sprint_closing)%><br>
+		<%= radio_button_tag('issue_action', 'backlog', true)%> <%= t(:move_issues_to_backlog)%><br>
+		<%= radio_button_tag('issue_action', 'close')%> <%= t(:close_issues)%><br>
+	</div>
+	<%= submit_tag l(:button_save) %>
+	<%=button_to_function(l(:button_cancel), "window.location.href='#{project_scrumbler_sprint_settings_url(@project, @scrumbler_sprint)}'")%>
 	<%end%>
 </div>
