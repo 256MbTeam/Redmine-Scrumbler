@@ -27,7 +27,12 @@ class ScrumblerSprint < ActiveRecord::Base
     
   default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
   
-  named_scope :opened, :conditions => {:status => OPENED}
+  named_scope :opened, :conditions => {
+                                         :status => OPENED,
+                                         :versions => {
+                                           :status => 'open'
+                                         }
+                                       }
   
   named_scope :planning, :conditions => {:status => PLANNING}
   
