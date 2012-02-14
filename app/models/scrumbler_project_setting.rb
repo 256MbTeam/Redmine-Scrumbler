@@ -57,7 +57,7 @@ class ScrumblerProjectSetting < ActiveRecord::Base
         self.settings[:issue_statuses] =  HashWithIndifferentAccess.new
 
         IssueStatus.all.each {|status|
-          self.settings[:issue_statuses][status.id.to_s] = create_setting(status)
+          self.settings[:issue_statuses][status.id.to_s] = ScrumblerProjectSetting.create_setting(status)
         }
       end
 
@@ -66,7 +66,7 @@ class ScrumblerProjectSetting < ActiveRecord::Base
         trackers = self.project.trackers
         trackers = Tracker.all if trackers.empty?
         trackers.each {|tracker|
-          self.settings[:trackers][tracker.id.to_s] = create_setting(tracker)
+          self.settings[:trackers][tracker.id.to_s] = ScrumblerProjectSetting.create_setting(tracker)
         }
       end
 
