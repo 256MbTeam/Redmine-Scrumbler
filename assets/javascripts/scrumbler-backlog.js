@@ -40,6 +40,25 @@ var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
 	}
 });
 
+
+function get_height(max, count, el_size, el_w,width) {
+	var size = count*el_w;
+	var rows = Math.ceil(size/width);
+	var height = rows*el_size;
+	if(height < max){
+		return height;
+	}
+  	return max;
+}
+
+function get_width(max, count, el_size) {
+	var size = count*el_size;
+	if(size < max){
+		return size;
+	}
+  	return max;
+}
+
 /**
  * Create popup element for scrum points selection.
  * 
@@ -55,19 +74,22 @@ var ScrumPointEditor = Class.create({
         this.config = Object.extend({
             element_classname: "scrum-points-element",
             popup_classname: "scrum-points-popup",
-            popup_width: "188px",
+            popup_width: "180px",
             popup_height: "38px",
-            values: ["?", "0", "0.5", "1", "2", "3", "5", "8", "13", "20", "40", "100"]
+            values: ["?"]
         }, config);
         
         this.el = this.createPopup(this.config);
     },
 	createPopup: function(){
 		var popup = new Element('div',{ 'class' : this.config.popup_classname });
+		var w = get_width(parseInt(this.config.popup_width), this.config.values.length, 30);
+		var h = get_height(parseInt(this.config.popup_height), this.config.values.length, 18, 30, w);
+		
 		popup.setStyle({
         	display: 'none',
-            width: this.config.popup_width,
-            height: this.config.popup_height
+            width: w+"px",
+            height: h+"px"
         });
         this.config.values.each(function(value){
         	var value_field = this.createPopupOptionEl(value);
@@ -190,7 +212,8 @@ var IssuesListUI = Class.create({
 		this.el = this.createUI();
 		this.editor = new ScrumPointEditor({
  			project_id: this.config.project_id,
- 			observer: this.el
+ 			observer: this.el,
+ 			values: Scrumbler.possible_points
  		});
  		
  		Droppables.add(this.el, {
@@ -494,7 +517,6 @@ return Class.create({
 		this.config = Object.extend({
 			parent_id : "content"
 		}, config);
-		console.log(this.config);
 		this.backlog = this.createBacklog();
 		this.sprint = this.createSprint();
 		
@@ -607,7 +629,6 @@ return Class.create({
 		this.backlog.list.update(this.backlog.list.issues);
 	},
 	disableIssuesInUnsupportedTrackers: function(issues, trackers){
-		console.log(issues,trackers);
 		if(trackers.length != 0){
 			issues.each(function(issue){ issue.disabled = !containsById(trackers, issue.tracker.id) } );
 		}else{

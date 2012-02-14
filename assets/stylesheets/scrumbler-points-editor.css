@@ -13,6 +13,7 @@ div.scrum-points-element {
 	padding: 0px;
 	cursor: pointer;
 	cursor: hand;
+	text-align: center;
 }
 div.scrum-points-element:hover {
 	background-color: #ccc;
@@ -25,4 +26,5 @@ div.scrum-points-popup {
 	display: inline-block;
 	background: #fff;
 	z-index: 10000;
+	text-align: left;
 }
