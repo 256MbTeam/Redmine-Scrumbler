@@ -41,14 +41,10 @@ var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
 });
 
 
-function get_height(max, count, el_size, el_w,width) {
+function get_height(count, el_size, el_w,width) {
 	var size = count*el_w;
 	var rows = Math.ceil(size/width);
-	var height = rows*el_size;
-	if(height < max){
-		return height;
-	}
-  	return max;
+  	return rows*el_size;
 }
 
 function get_width(max, count, el_size) {
@@ -75,7 +71,6 @@ var ScrumPointEditor = Class.create({
             element_classname: "scrum-points-element",
             popup_classname: "scrum-points-popup",
             popup_width: "180px",
-            popup_height: "38px",
             values: ["?"]
         }, config);
         
@@ -84,7 +79,7 @@ var ScrumPointEditor = Class.create({
 	createPopup: function(){
 		var popup = new Element('div',{ 'class' : this.config.popup_classname });
 		var w = get_width(parseInt(this.config.popup_width), this.config.values.length, 30);
-		var h = get_height(parseInt(this.config.popup_height), this.config.values.length, 18, 30, w);
+		var h = get_height(this.config.values.length, 18, 30, w);
 		
 		popup.setStyle({
         	display: 'none',
@@ -95,6 +90,13 @@ var ScrumPointEditor = Class.create({
         	var value_field = this.createPopupOptionEl(value);
             popup.appendChild(value_field);
         }.bind(this));
+        
+        $(document).observe("click", function(event){
+        	if((event.target != popup) && popup.visible()){
+        		popup.hide();
+        	}
+        });
+        
         return popup;
     },
     createPopupOptionEl: function(value){
@@ -110,16 +112,18 @@ var ScrumPointEditor = Class.create({
         		popup: this.el
         	});
         }.bind(this));
-        
+        q
     	return value_div;
     },
     // enable point editor for element     
     enableForElement: function(element, issue){
     	element.observe("click", function(event){
+    		Event.stop(event);
     		if(this.el.parentNode == element.parentNode){
     			this.el.toggle();
     			return;
     		}
+    		
 			// change current issue, that will be edited
     		this.current_issue = issue;
     		this.edited_element = element;
@@ -129,7 +133,6 @@ var ScrumPointEditor = Class.create({
     		this.el = this.createPopup(this.config);
     		element.parentNode.appendChild(this.el);
     		this.el.show();
-    		
         }.bind(this));
 	}
 });
