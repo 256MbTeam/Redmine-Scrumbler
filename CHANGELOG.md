@@ -1,6 +1,13 @@
 Scrumbler Changelog
 ===================
 
+1.4.1
+-----
+
+* Fixed. Custom points values avaiable in points editor in backlog
+* Fixed. Bug with SQLite serialization
+* Hide Points editor on click 
+
 1.4.0
 -----
 
@@ -9,8 +16,6 @@ Scrumbler Changelog
 * Fixed. Burndown don't work with Postgres.
 * Fixed. Routes in sprint dashboard.
 * Closing sprints with moving issues to backlog.
-
-
 
 1.3.2
 -----
