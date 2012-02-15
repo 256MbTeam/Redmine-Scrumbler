@@ -17,7 +17,8 @@
 
 
 # Override binary_to_string SQLite adapter method for supporting hash serialization
-if ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+if ActiveRecord::ConnectionAdapters.const_defined?(SQLite3Adapter) && 
+   ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter) then
    ActiveRecord::ConnectionAdapters::SQLiteColumn.module_eval {
         class << self
           alias_method :old_binary_to_string, :binary_to_string
