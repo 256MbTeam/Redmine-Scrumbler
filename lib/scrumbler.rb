@@ -33,4 +33,13 @@ module Scrumbler
     end
   end
 
+  module Migration
+    def self.migration_exist?(*names)
+      all_migrations = ActiveRecord::Base::connection.select_values("select version from schema_migrations")
+      all_migrations.select {|migration_name|
+        names.include?(migration_name)
+        }.count == names.count
+    end
+  end
+
 end
