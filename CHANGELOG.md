@@ -1,6 +1,13 @@
 Scrumbler Changelog
 ===================
 
+1.x.x
+-----
+
+* Refactor. Migrations.
+* Highstock library upgraged to 1.1.4
+
+
 1.4.1
 -----
 
