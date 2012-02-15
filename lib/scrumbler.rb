@@ -40,6 +40,9 @@ module Scrumbler
         names.include?(migration_name)
         }.count == names.count
     end
+    def self.delete_migrations(*names)
+      ActiveRecord::Base.connection.delete "delete from #{ActiveRecord::Migrator.schema_migrations_table_name} where version in (#{names.map {|x| "'#{x}'"}.join(',')})"
+    end
   end
 
 end
