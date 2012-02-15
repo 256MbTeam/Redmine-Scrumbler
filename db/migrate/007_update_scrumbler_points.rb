@@ -17,6 +17,6 @@ class UpdateScrumblerPoints < ActiveRecord::Migration
   end
 
   def self.down
-#    
+    ScrumblerIssueCustomField.points.destroy
   end
 end

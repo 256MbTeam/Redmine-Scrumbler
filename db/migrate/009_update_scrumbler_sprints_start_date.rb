@@ -1,4 +1,4 @@
-class UpdateScrumblerSprints2 < ActiveRecord::Migration
+class UpdateScrumblerSprintsStartDate < ActiveRecord::Migration
   def self.up
     add_column :scrumbler_sprints, :start_date, :date
   end
