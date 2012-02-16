@@ -60,14 +60,11 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
 
   test "Should update scrum points" do
     @issue = issues(:issues_001)
-    post(:update_scrum_points, {:project_id => @project.id, :issue_id => @issue.id, :points => "10"}, {:user_id => @manager.id})
+    post(:update_scrum_points, {:project_id => @project.id, :issue_id => @issue.id, :points => "5"}, {:user_id => @manager.id})
     
     assert_response :success
-    
-    # TODO Саня не получается тест, давай помоги    
-    # assert_equal "10", Issue.find(@issue.id).scrumbler_points
+    assert_equal "5", Issue.find(@issue.id).scrumbler_points
   end
-  
 
   test "should move issue to sprint from backlog" do
     version = Version.find(3)
@@ -83,3 +80,4 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
     assert_nil Issue.find(2).fixed_version_id
   end
 end
+
