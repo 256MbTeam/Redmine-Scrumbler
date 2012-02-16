@@ -31,7 +31,7 @@ Redmine::Plugin.register :redmine_scrumbler do
   url 'https://github.com/256MbTeam/Redmine-Scrumbler/'
   author 'Alexandr_Andrianov, Ivan Kotenko'
   description 'This is a scrum plugin for Redmine'
-  version '1.4.1'
+  version '1.4.2'
   project_module :redmine_scrumbler do
     permission :scrumbler, :scrumbler => :index, :public => true
     permission :scrumbler_settings, :scrumbler_settings => [:show, :update_trackers, :update_issue_statuses, :update_sprints], 
