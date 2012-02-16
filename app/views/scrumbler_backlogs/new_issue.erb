@@ -1,0 +1,8 @@
+<% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'issues', :action => 'create', :project_id => @project},
+                             :html => {:multipart => true, :id => 'issue-form', :class => 'tabular new-issue-form'} do |f| %>
+    <%= error_messages_for 'issue' %>
+    <p><%= f.select :tracker_id, @project.trackers.collect {|t| [t.name, t.id]}, :required => true %></p>
+    <p><%= f.text_field :subject, :size => 80, :required => true %></p>
+	<div style="clear:both;"> </div>
+    <%= javascript_tag "Form.Element.focus('issue_subject');" %>
+<% end %>

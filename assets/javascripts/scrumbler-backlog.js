@@ -1,4 +1,4 @@
-
+var xxx;
 /**
  * Send AJAX request and update HTML Element - observer
  * 
@@ -531,6 +531,11 @@ return Class.create({
 			this.updateSprint(sprint);
 		}.bind(this));
 
+		// Update backlog on issue creation
+		$(document).observe("issue:created", function() {
+			
+		});
+
 		// Update backlog on issue movement
 		$(document).observe('issue:moved', function(event){
 			var config = event.memo;
@@ -593,14 +598,62 @@ return Class.create({
 	// Create Backlog HTML Element 
 	createUI: function(){
 		var el = new Element('div');
+		
+		// Left list
 		var div;
 		div = new Element('div',{id:'splitcontentleft', style: "float:left;width:48%;"});
+
+		var contextual_div = new Element('div', {'class': 'contextual'});
+		var issue_creation_form = new Element('div', {
+			id: 'issue_creation_form',
+			style: 'display: none; position: absolute; background: white; z-index: 10000; border: 1px solid red; width: 800px; margin-left: 15%; padding: 1em;'
+		});
+		
+		var new_issue_form_link = new Element('a', {href: '#'}).update('New issue');
+		
+		contextual_div.appendChild(new_issue_form_link);
+		div.appendChild(contextual_div);
+
 		div.appendChild(new Element('h2').update(t('label_backlog')));
+		div.appendChild(issue_creation_form);
 		div.appendChild(this.backlog.trackers.el);
 		div.appendChild(this.backlog.points_label.el);
 		div.appendChild(this.backlog.list.el);
 		el.appendChild(div);
 
+		new_issue_form_link.on('click', function() {
+			new Ajax.Request(Scrumbler.root_url+"projects/"+this.config.project_id+"/scrumbler_backlogs/new_issue", {
+				method: 'get',
+				onSuccess: function(transport) {
+					// Render
+					issue_creation_form.update(transport.responseText);
+					var submit_button = new Element('input', {type: 'button', value: 'Create'});
+					issue_creation_form.appendChild(submit_button);
+					issue_creation_form.show();
+					
+					// Events
+					submit_button.on('click', function() {
+						var external_form = issue_creation_form.select('form').first();
+						new Ajax.Request(Scrumbler.root_url+"projects/"+this.config.project_id+"/scrumbler_backlogs/create_issue", {
+							method: 'post',
+							parameters: external_form.serialize(),
+							onSuccess: function(transport) {
+								json = transport.responseJSON;
+								
+								issue_creation_form.hide();
+							}
+						});
+						
+					}.bind(this));
+											
+					
+					
+				}.bind(this)
+			});
+			
+		}.bind(this));
+
+		// Right list
 		div = new Element('div',{id:'splitcontentright', style: "float:right; width:50%;"})
 		var contextual_div = new Element('div', {'class': 'contextual'});
 		var h2 = new Element('h2').update(t('scrumbler_sprint'));
@@ -610,6 +663,7 @@ return Class.create({
 		div.appendChild(this.sprint.trackers.el);
 		div.appendChild(this.sprint.points_label.el);
 		div.appendChild(this.sprint.list.el);
+		
 		el.appendChild(div);
 		return el;
 	},

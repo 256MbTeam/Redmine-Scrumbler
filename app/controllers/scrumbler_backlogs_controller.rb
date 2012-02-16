@@ -17,6 +17,9 @@
 class ScrumblerBacklogsController < ScrumblerAbstractController
   unloadable
   
+  helper :custom_fields
+  include CustomFieldsHelper
+  
   helper :scrumbler_backlogs
   include ScrumblerBacklogsHelper
   
@@ -89,4 +92,22 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
                  :text => @sprint.errors.full_messages.join(", <br>")
                 }
   end
+  
+  def new_issue
+    @issue = Issue.new :project => @project, :author => User.current
+    render :layout => false
+  end
+  
+  def create_issue
+    @issue = Issue.new(params[:issue])
+    @issue.project = @project
+    @issue.author = User.current
+    
+    render :json => {
+      :success => @issue.save,
+      :backlog => prepare_backlog_for_json(@project),
+      :text => @issue.errors.full_messages.join(", <br>")
+    }
+  end
+  
 end
