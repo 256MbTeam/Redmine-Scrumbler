@@ -22,7 +22,6 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
   helper :scrumbler_backlogs
   include ScrumblerBacklogsHelper
   
-  
   def show
     @selected_sprint = @project.scrumbler_sprints.planning.first
   end
