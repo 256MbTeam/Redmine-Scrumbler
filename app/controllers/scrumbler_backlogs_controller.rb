@@ -17,8 +17,11 @@
 class ScrumblerBacklogsController < ScrumblerAbstractController
   unloadable
   
+  before_filter :authorize, :only => [:show, :select_sprint, :create_version, :update_scrum_points, :change_issue_version, :open_sprint]
+
   helper :scrumbler_backlogs
   include ScrumblerBacklogsHelper
+  
   
   def show
     @selected_sprint = @project.scrumbler_sprints.planning.first
