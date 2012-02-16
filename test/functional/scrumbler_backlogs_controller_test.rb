@@ -42,8 +42,21 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
 
     #    user with manager role
     @manager = users(:users_002)
+    #    user without permissions
+    @user = users(:users_003)
     User.current = nil
   end
+
+  test "Should not show backlog for permitted user" do
+     post(:show, {:project_id => @project.id}, {:user_id => @user.id})
+     assert_response 403 
+  end
+
+  test "Should show backlog for permitted user" do
+     post(:show, {:project_id => @project.id}, {:user_id => @manager.id})
+     assert_response :success 
+  end
+  
 
   test "Should save new custom field value, create if it doesnt exist" do
     # TODO
