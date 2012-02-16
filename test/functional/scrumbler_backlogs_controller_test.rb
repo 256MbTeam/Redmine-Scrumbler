@@ -58,9 +58,14 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
   end
   
 
-  test "Should save new custom field value, create if it doesnt exist" do
-    # TODO
-    assert true
+  test "Should update scrum points" do
+    @issue = issues(:issues_001)
+    post(:update_scrum_points, {:project_id => @project.id, :issue_id => @issue.id, :points => "10"}, {:user_id => @manager.id})
+    
+    assert_response :success
+    
+    # TODO Саня не получается тест, давай помоги    
+    # assert_equal "10", Issue.find(@issue.id).scrumbler_points
   end
   
 
