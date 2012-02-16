@@ -112,7 +112,7 @@ var ScrumPointEditor = Class.create({
         		popup: this.el
         	});
         }.bind(this));
-        q
+
     	return value_div;
     },
     // enable point editor for element     
