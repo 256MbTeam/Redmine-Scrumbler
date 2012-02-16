@@ -63,6 +63,10 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
     post(:update_scrum_points, {:project_id => @project.id, :issue_id => @issue.id, :points => "5"}, {:user_id => @manager.id})
     
     assert_response :success
+
+    response = JSON.parse(@response.body)
+    assert response["success"]
+    assert_equal 0, response["text"].size()
     assert_equal "5", Issue.find(@issue.id).scrumbler_points
   end
 
