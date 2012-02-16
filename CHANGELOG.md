@@ -1,11 +1,12 @@
 Scrumbler Changelog
 ===================
 
-1.x.x
+1.4.2
 -----
 
 * Refactor. Migrations.
 * Highstock library upgraged to 1.1.4
+* Fixed. Bugs in JS
 
 
 1.4.1
