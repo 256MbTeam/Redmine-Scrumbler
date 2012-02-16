@@ -75,7 +75,7 @@ module ScrumblerBacklogsHelper
     trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     {
       :trackers => trackers,
-      :issues => prepare_issues_for_json(project.issues.without_version, trackers)
+      :issues => prepare_issues_for_json(project.issues.open.without_version, trackers)
     }
   end
 
