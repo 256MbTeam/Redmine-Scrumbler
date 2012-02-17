@@ -23,9 +23,9 @@ Scrumbler.Backlog = (function() {
 			position: 'absolute',
 			background: 'white',
 			zIndex: '10000',
-			border: '1px solid red',
+			border: '2px solid #bbb',
 			width: '60%',
-			marginLeft: '15%',
+			left: '20%',
 			padding: '1em',
 			top: '15%'
 		});
