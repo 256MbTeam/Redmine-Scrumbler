@@ -4,6 +4,7 @@ zh:
   field_end_date: "结束日期"  
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
+  scrumbler_points_field: "Scrum 点"
   
   show_opened: "仅显示处理中"
   show_all: "全部 Sprints"
@@ -15,6 +16,13 @@ zh:
   label_backlog: "Backlog"
   label_sprint_settings: "Sprint 设置"
   label_statistics: "统计"
+  label_confirm_sprint_opening: "确认打开 Sprint？"
+  label_header_error: "错误"
+  label_header_warning: "警告"
+  issue_action_on_sprint_closing: "如何处理未关闭的问题？"
+  close_issues: "关闭当前 Sprint 中全部的问题"
+  move_issues_to_backlog: "移动到 backlog"
+  opened_issues_in_closing_sprint: "在当前 Sprint 中存在未关闭的问题。"
   
   issue_not_assigned: "未分配"
   
@@ -55,6 +63,7 @@ zh:
               trackers_with_issues_in_sprint_cant_be_removed: "无法从当前 Sprint 中删除跟踪标签。当前 Sprint 中的跟踪标签不能为空。"
               sprint_without_project: "没有对应的项目，不能创建 Sprint。"
               closing_sprint_with_opened_issues: "当前 Sprint 存在处理中问题，不能关闭。"
+              cant_open_sprint_without_issues: "当前 Sprint 不包含问题，不能打开。"
             status:
               only_one_opened: "错误。当前项目中只能有一个 Sprint 处于打开状态。"
   active_record:
