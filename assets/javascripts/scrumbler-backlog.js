@@ -29,21 +29,24 @@ Scrumbler.Backlog = (function() {
 			padding: '1em',
 			top: '15%'
 		});
-		var issue_urls = {
-			'new': Scrumbler.root_url+"projects/"+config.project_id+"/scrumbler_backlogs/new_issue",
-			'create': Scrumbler.root_url+"projects/"+config.project_id+"/scrumbler_backlogs/create_issue"
-		}
+		var url = Scrumbler.root_url+"projects/"+config.project_id+"/scrumbler_backlogs/create_issue";
 		
 		// Private functions
 		
 		function formResponse(transport) {
 			var json = transport.responseJSON;
-			$(document).fire('issue:created', json.backlog);
-			splash_div.hide();
+			if (json && json.success) {
+				$(document).fire('issue:created', json.backlog);
+				splash_div.hide();
+			} else {
+				console.log(transport)
+				formRequest(transport);
+			}
+			
 		}
 		
 		function formSubmit(event) {
-			new Ajax.Request(issue_urls['create'], {
+			new Ajax.Request(url, {
 				method: 'post',
 				parameters: external_form.serialize(),
 				onSuccess: formResponse
@@ -67,7 +70,7 @@ Scrumbler.Backlog = (function() {
 			if(external_form) {
 				params = external_form.serialize();
 			}
-			new Ajax.Request(issue_urls['new'], { 
+			new Ajax.Request(url, { 
 				method: 'get',
 				parameters: params,
 				onSuccess: formRequest

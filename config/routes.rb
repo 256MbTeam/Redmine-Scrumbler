@@ -16,8 +16,11 @@ ActionController::Routing::Routes.draw do |map|
       :create_version => :post,
       :open_sprint => :post,
       :new_issue => :get,
-      :create_issue => :post,
-    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs'
+      :new_issue => :post,
+    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs' do |backlog|
+      
+      backlog.new_issue  'create_issue', :controller => :scrumbler_backlogs, :action => :create_issue
+    end
     
     project.scrumbler_dashboard 'scrumbler', :controller => 'scrumbler'
     project.scrumbler_dashboard_sprint 'scrumbler/:scrumbler_sprint_id', :controller => 'scrumbler'
