@@ -13,6 +13,7 @@ end
 def assign_permissions(role)
   manager_role = role
   manager_role.permissions << :scrumbler
+  manager_role.permissions << :scrumbler_backlog
   manager_role.permissions << :scrumbler_settings
   manager_role.save
 end

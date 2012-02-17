@@ -42,14 +42,33 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
 
     #    user with manager role
     @manager = users(:users_002)
+    #    user without permissions
+    @user = users(:users_003)
     User.current = nil
   end
 
-  test "Should save new custom field value, create if it doesnt exist" do
-    # TODO
-    assert true
+  test "Should not show backlog for permitted user" do
+     post(:show, {:project_id => @project.id}, {:user_id => @user.id})
+     assert_response 403 
+  end
+
+  test "Should show backlog for permitted user" do
+     post(:show, {:project_id => @project.id}, {:user_id => @manager.id})
+     assert_response :success 
   end
   
+
+  test "Should update scrum points" do
+    @issue = issues(:issues_001)
+    post(:update_scrum_points, {:project_id => @project.id, :issue_id => @issue.id, :points => "5"}, {:user_id => @manager.id})
+    
+    assert_response :success
+
+    response = JSON.parse(@response.body)
+    assert response["success"]
+    assert_equal 0, response["text"].size()
+    assert_equal "5", Issue.find(@issue.id).scrumbler_points
+  end
 
   test "should move issue to sprint from backlog" do
     version = Version.find(3)
@@ -65,3 +84,4 @@ class ScrumblerBacklogsControllerTest < ActionController::TestCase
     assert_nil Issue.find(2).fixed_version_id
   end
 end
+

@@ -25,6 +25,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
 
   helper :scrumbler
   include ScrumblerHelper
+  
   def settings
     @trackers = @project.trackers
     @issue_statuses = IssueStatus.all

@@ -17,11 +17,13 @@
 class ScrumblerBacklogsController < ScrumblerAbstractController
   unloadable
   
+  before_filter :authorize, :only => [:show, :select_sprint, :create_version, :update_scrum_points, :change_issue_version, :open_sprint]
   before_filter :build_issue_from_params, :only => [:new_issue, :create_issue]
   
   helper :custom_fields
   include CustomFieldsHelper
   
+
   helper :scrumbler_backlogs
   include ScrumblerBacklogsHelper
   
