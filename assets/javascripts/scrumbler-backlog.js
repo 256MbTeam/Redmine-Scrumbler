@@ -15,16 +15,14 @@ Scrumbler.Backlog = (function() {
 		var external_form;
 		var tracker_select;
 		var params = {};
+		var request_processing = false;
+		
 		var ajax_params = {
 			onCreate: function() {
-				if(external_form) {
-					external_form.select('input#issue_submit').first().disable()
-				}
+				request_processing = true;
 			},
 			onComplete: function() {
-				if(external_form) {
-					external_form.select('input#issue_submit').first().enable()
-				}
+				request_processing = false;
   			}
 		}
 		var main_link = new Element('a', {href: '#'}).update('New issue');
@@ -57,13 +55,15 @@ Scrumbler.Backlog = (function() {
 		}
 		
 		function formSubmit(event) {
+			Event.stop(event);
+			if (request_processing) return false;
+			
 			new Ajax.Request(url, Object.extend(ajax_params, {
 				method: 'post',
 				parameters: external_form.serialize(),
 				onSuccess: formResponse
 			}));
-						
-			Event.stop(event);
+			
 			return false;
 		}
 		
@@ -77,7 +77,8 @@ Scrumbler.Backlog = (function() {
 		}
 		
 		function mainLinkClick(event) {
-			console.log(event, params);
+			if (request_processing) return false;
+			
 			if(external_form) {
 				params = external_form.serialize();
 			}
