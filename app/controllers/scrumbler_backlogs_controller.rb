@@ -17,6 +17,8 @@
 class ScrumblerBacklogsController < ScrumblerAbstractController
   unloadable
   
+  before_filter :build_issue_from_params, :only => [:new_issue, :create_issue]
+  
   helper :custom_fields
   include CustomFieldsHelper
   
@@ -94,20 +96,25 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
   end
   
   def new_issue
-    @issue = Issue.new :project => @project, :author => User.current
+    
     render :layout => false
   end
   
-  def create_issue
-    @issue = Issue.new(params[:issue])
-    @issue.project = @project
-    @issue.author = User.current
-    
+  def create_issue    
     render :json => {
       :success => @issue.save,
       :backlog => prepare_backlog_for_json(@project),
       :text => @issue.errors.full_messages.join(", <br>")
     }
+  end
+  
+  private
+  def build_issue_from_params
+    @issue = Issue.new(params[:issue])
+    @issue.project = @project
+    @issue.author = User.current
+    @issue.tracker ||= Tracker.first
+    @issue.safe_attributes = params[:issue]
   end
   
 end

@@ -1,4 +1,3 @@
-var xxx;
 /**
  * Send AJAX request and update HTML Element - observer
  * 
@@ -11,6 +10,75 @@ var xxx;
  *       	});
 **/
 Scrumbler.Backlog = (function() {
+
+	function buildIssueCreationFormLink(config) {
+		var external_form;
+		var tracker_select;
+		var params = {};
+		
+		var main_link = new Element('a', {href: '#'}).update('New issue');
+		var splash_div = new Element('div');
+		splash_div.setStyle({
+			display: 'none',
+			position: 'absolute',
+			background: 'white',
+			zIndex: '10000',
+			border: '1px solid red',
+			width: '60%',
+			marginLeft: '15%',
+			padding: '1em',
+			top: '15%'
+		});
+		var issue_urls = {
+			'new': Scrumbler.root_url+"projects/"+config.project_id+"/scrumbler_backlogs/new_issue",
+			'create': Scrumbler.root_url+"projects/"+config.project_id+"/scrumbler_backlogs/create_issue"
+		}
+		
+		// Private functions
+		
+		function formResponse(transport) {
+			var json = transport.responseJSON;
+			$(document).fire('issue:created', json.backlog);
+			splash_div.hide();
+		}
+		
+		function formSubmit(event) {
+			new Ajax.Request(issue_urls['create'], {
+				method: 'post',
+				parameters: external_form.serialize(),
+				onSuccess: formResponse
+			});
+						
+			Event.stop(event);
+			return false;
+		}
+		
+		function formRequest(transport) {
+			splash_div.update(transport.responseText);
+			external_form = splash_div.select('form').first();
+			tracker_select = external_form.select("select#issue_tracker_id").first();
+			tracker_select.observe('change', mainLinkClick);
+			external_form.observe('submit', formSubmit);
+			splash_div.show();
+		}
+		
+		function mainLinkClick(event) {
+			console.log(event, params);
+			if(external_form) {
+				params = external_form.serialize();
+			}
+			new Ajax.Request(issue_urls['new'], { 
+				method: 'get',
+				parameters: params,
+				onSuccess: formRequest
+			});
+		}
+		
+		$(document.body).appendChild(splash_div);
+		main_link.on('click', mainLinkClick);
+		
+		return main_link;
+};
 	
 var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
 	initialize: function($super, config){
@@ -532,9 +600,10 @@ return Class.create({
 		}.bind(this));
 
 		// Update backlog on issue creation
-		$(document).observe("issue:created", function() {
-			
-		});
+		$(document).observe("issue:created", function(event) {
+			var backlog = event.memo;
+			this.updateBacklog(backlog);
+		}.bind(this));
 
 		// Update backlog on issue movement
 		$(document).observe('issue:moved', function(event){
@@ -598,60 +667,21 @@ return Class.create({
 	// Create Backlog HTML Element 
 	createUI: function(){
 		var el = new Element('div');
+		var div;
 		
 		// Left list
-		var div;
 		div = new Element('div',{id:'splitcontentleft', style: "float:left;width:48%;"});
-
 		var contextual_div = new Element('div', {'class': 'contextual'});
-		var issue_creation_form = new Element('div', {
-			id: 'issue_creation_form',
-			style: 'display: none; position: absolute; background: white; z-index: 10000; border: 1px solid red; width: 800px; margin-left: 15%; padding: 1em;'
-		});
+		contextual_div.appendChild(buildIssueCreationFormLink(this.config));
 		
-		var new_issue_form_link = new Element('a', {href: '#'}).update('New issue');
-		
-		contextual_div.appendChild(new_issue_form_link);
 		div.appendChild(contextual_div);
-
 		div.appendChild(new Element('h2').update(t('label_backlog')));
-		div.appendChild(issue_creation_form);
 		div.appendChild(this.backlog.trackers.el);
 		div.appendChild(this.backlog.points_label.el);
 		div.appendChild(this.backlog.list.el);
 		el.appendChild(div);
 
-		new_issue_form_link.on('click', function() {
-			new Ajax.Request(Scrumbler.root_url+"projects/"+this.config.project_id+"/scrumbler_backlogs/new_issue", {
-				method: 'get',
-				onSuccess: function(transport) {
-					// Render
-					issue_creation_form.update(transport.responseText);
-					var submit_button = new Element('input', {type: 'button', value: 'Create'});
-					issue_creation_form.appendChild(submit_button);
-					issue_creation_form.show();
-					
-					// Events
-					submit_button.on('click', function() {
-						var external_form = issue_creation_form.select('form').first();
-						new Ajax.Request(Scrumbler.root_url+"projects/"+this.config.project_id+"/scrumbler_backlogs/create_issue", {
-							method: 'post',
-							parameters: external_form.serialize(),
-							onSuccess: function(transport) {
-								json = transport.responseJSON;
-								
-								issue_creation_form.hide();
-							}
-						});
-						
-					}.bind(this));
-											
-					
-					
-				}.bind(this)
-			});
-			
-		}.bind(this));
+		
 
 		// Right list
 		div = new Element('div',{id:'splitcontentright', style: "float:right; width:50%;"})
