@@ -110,12 +110,19 @@ class ScrumblerSprintTest < ActiveSupport::TestCase
   test "should not edit issues in closed sprint" do
     version = versions(:versions_003)
 
-    Issue.find(:all, :conditions => {:project_id => @project.id, :fixed_version_id => nil}).each{|issue|
-      issue.fixed_version_id = version.id
-      issue.status = issue_statuses(:issue_statuses_005)
-      issue.save
-      assert_equal true, issue.valid?
-    }
+    issue = Issue.find(:first, :conditions => {:project_id => @project.id, :fixed_version_id => nil})
+    issue.fixed_version_id = version.id
+    issue.status = issue_statuses(:issue_statuses_005)
+   
+    safe_points = HashWithIndifferentAccess.new({
+          "custom_field_values" => {
+            ScrumblerIssueCustomField.points.id.to_s => "?"
+          }
+        })
+    issue.safe_attributes = safe_points
+    issue.save_issue_with_child_records(safe_points)
+    assert_equal true, issue.valid?
+
 
     sprint = ScrumblerSprint.create(:version_id => version.id, :project_id => @project.id)
     sprint.status = "closed"
