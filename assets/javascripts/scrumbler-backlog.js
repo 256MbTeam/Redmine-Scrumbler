@@ -505,13 +505,20 @@ var SprintSelector = Class.create({
 			});				
 		}.bind(this));
 		
+		this.edit_button.observe('click', function(){
+			var redirect_url = Scrumbler.root_url+'projects/'+this.config.project_id+'/scrumbler_sprints/'+this.sprint_selector.value+'/settings';
+			window.location.href = redirect_url;				
+		}.bind(this));
+		
 	},
 	createUI: function(){
 		this.sprint_selector = new Element('select', { id: this.config.selector_id });
 		this.add_button = this.createNewSprintButton();
 		this.open_button = this.createOpenSprintButton();		
+		this.edit_button = this.createEditSprintButton();
 		
 		this.el = new Element('div');
+		this.el.appendChild(this.edit_button);
 		this.el.appendChild(this.open_button);
 		this.el.appendChild(this.sprint_selector);
 		this.el.appendChild(this.add_button);
@@ -523,10 +530,12 @@ var SprintSelector = Class.create({
 		if(this.config.sprints.length == 0){
 			var option = new Element('option',{value: ""}).update(t('nodata'));
 			this.open_button.hide();
+			this.edit_button.hide();
 			this.sprint_selector.appendChild(option);
 			return;
 		}
 		this.open_button.show();
+		this.edit_button.show();
 		// Populate selector with avaliable options
 		this.config.sprints.each(function(sprint){
 			var option = new Element('option',{value: sprint.id}).update(sprint.name);
@@ -546,7 +555,16 @@ var SprintSelector = Class.create({
 		var button = new Element('a', {
 			href: '#', 
 			style: 'vertical-align: middle; margin-right: 0.75em;'}
+// 			TODO Translation
 		).update("Open");
+		return button;
+	},
+	createEditSprintButton: function(){
+		var button = new Element('a', {
+			href: '#', 
+			style: 'vertical-align: middle; margin-right: 0.75em;'}
+			// 			TODO Translation
+		).update("Edit");
 		return button;
 	}	
 });
