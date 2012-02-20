@@ -521,10 +521,11 @@ var SprintSelector = Class.create({
 		
 		if(this.config.sprints.length == 0){
 			var option = new Element('option',{value: ""}).update(t('nodata'));
+			this.open_button.hide();
 			this.sprint_selector.appendChild(option);
 			return;
 		}
-		
+		this.open_button.show();
 		// Populate selector with avaliable options
 		this.config.sprints.each(function(sprint){
 			var option = new Element('option',{value: sprint.id}).update(sprint.name);
