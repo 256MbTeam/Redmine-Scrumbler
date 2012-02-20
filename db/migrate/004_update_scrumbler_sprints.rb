@@ -4,6 +4,6 @@ class UpdateScrumblerSprints < ActiveRecord::Migration
   end
 
   def self.down
-    add_column :scrumbler_sprints, :max_points
+     remove_column :scrumbler_sprints, :max_points
   end
 end
