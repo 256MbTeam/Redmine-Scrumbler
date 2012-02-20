@@ -25,8 +25,10 @@ module Scrumbler
           ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value) ||
           ScrumblerIssueCustomField.points.default_value
         end
-
+        
         private
+
+          # self.custom_field_values.select{|val| val.custom_field_id == ScrumblerIssueCustomField.points.id}.first.value
 
         def validate_sprint
           if @sprint = self.fixed_version.try(:scrumbler_sprint)
@@ -46,7 +48,7 @@ module Scrumbler
             end
 
             # should not add issue to limited sprint by points
-            if @sprint.max_points != 0 && (@sprint.points_total + self.scrumbler_points.to_f) >  @sprint.max_points
+            if @sprint.max_points != 0 && (@sprint.points_total + self.custom_value_for(ScrumblerIssueCustomField.points).try(:value).to_f - self.scrumbler_points.to_f) > @sprint.max_points
               errors.add_to_base(:sprint_points_limit_error)
             end 
 
