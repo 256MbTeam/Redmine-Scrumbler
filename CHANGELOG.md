@@ -1,12 +1,14 @@
 Scrumbler Changelog
 ===================
 
-1.5.0
+1.4.3
 
 * Quick issue creation in backlog
 * Added rules and permissions to backlog
 * Fixed. In backlog shows closed task without version
-* Support for Chiliproject
+* Support for Chiliproject 3.0
+* Added. Fact close date field in sprint
+* Added. Limit sprint by points
 
 1.4.2
 -----
