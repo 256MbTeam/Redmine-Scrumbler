@@ -4,6 +4,7 @@
   <div class="box">
     <p><%=label("scrumbler_sprint","name") %> <%= text_field_tag "scrumbler_sprint[name]",  @scrumbler_sprint.version.name, :size => 60, :required => true %></p>
     <p><%=label("scrumbler_sprint", "description")%> <%= text_field_tag "scrumbler_sprint[description]", @scrumbler_sprint.version.description, :size => 60 %></p>
+        <p><%=label("scrumbler_sprint", "max_points")%> <%= text_field_tag "scrumbler_sprint[max_points]", @scrumbler_sprint.max_points, :size => 6 %></p>
     <p><%=label("scrumbler_sprint", "status")%> <%=  select_sprint_statuses_tag("scrumbler_sprint[status]", @scrumbler_sprint.status) %></p>
     <p><%=label("scrumbler_sprint","start_date") %> <%= text_field_tag "scrumbler_sprint[start_date]",  @scrumbler_sprint.start_date, :size => 10 %> <%= calendar_for('scrumbler_sprint_start_date') %></p>
     <p><%=label("scrumbler_sprint","end_date") %> <%= text_field_tag "scrumbler_sprint[end_date]",  @scrumbler_sprint.end_date, :size => 10 %> <%= calendar_for('scrumbler_sprint_end_date') %></p>
