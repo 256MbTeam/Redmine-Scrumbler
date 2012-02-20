@@ -31,7 +31,7 @@ module ScrumblerHelper
         :weekdays => t("date.day_names").compact
       }
     }
-    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_path.to_json}; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
+    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_url.to_json}; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
   end
 
   def select_color_tag(name, value=nil, options={})
