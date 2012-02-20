@@ -63,7 +63,8 @@ module ScrumblerBacklogsHelper
     {
       :id => sprint.id,
       :issues => prepare_issues_for_json(sprint.issues, trackers),
-      :trackers => trackers
+      :trackers => trackers,
+      :max_points => sprint.max_points 
     }
   end
 

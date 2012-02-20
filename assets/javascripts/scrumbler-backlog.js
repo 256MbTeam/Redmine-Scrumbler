@@ -327,7 +327,6 @@ var IssuesListUI = Class.create({
 	drawIssues: function(){
 		var issues_div = this.el.update("");
 		if(this.issues.length == 0){
-			// TODO Extract transaction strings to this.config 			
 			issues_div.appendChild(new Element('p',{'class':'nodata'}).update(t('nodata')));
 		}else{
 			this.issues.each(function(issue) {
@@ -413,7 +412,6 @@ var CreateVersionRequest = Class.create(Ajax.Request,{
 				onSuccess: function(transport) { 
 					var resp = transport.responseJSON;
 					if(resp.success) {
-						// TODO maybe extract to event 'sprint:created' 
 						config.observer.update(resp.sprints);
 						config.observer.sprint_selector.setValue(resp.sprint.id);
 						config.observer.sprint_selector.fire('sprint:selected', resp.sprint);
@@ -587,18 +585,23 @@ var PointsLabel = Class.create({
 	initialize: function(config){
 		this.config = Object.extend({
 			point_label_class_name: 'scrumbler_point_label',
-			value: "?"		
+			points: "?"		
 		},config);
 		this.el = this.createUI();
-		this.update(this.config.value);
+		this.update(this.config);
 	},
 	createUI: function(){
 		var el = new Element('span', { 'class' : this.config.point_label_class_name });
 		return el;
 	},
-	update: function(value){
-		this.config.value = value;
-		this.el.update(value + " Points");
+	update: function(data){
+		console.log(data);
+		this.config = Object.extend(this.config, data);
+		if(this.config.max_points && this.config.max_points != "" && this.config.max_points != 0){
+			this.el.update(this.config.points+"/"+this.config.max_points+ " Points");
+		}else{
+			this.el.update(this.config.points + " Points");	
+		}
 	}
 });
 
@@ -630,18 +633,16 @@ return Class.create({
 			this.update(config);
 		}.bind(this));
 		
-		// Update backlog on issue movement
 		this.sprint.list.el.observe('issue:points_updated', function(event){
 			var issue = event.memo;
 			this.sprint.list.updateIssuePoints(issue);
-			this.sprint.points_label.update(this.sprint.list.getPoints());
+			this.sprint.points_label.update({ points: this.sprint.list.getPoints() });
 		}.bind(this));
 		
-		// Update backlog on issue movement
 		this.backlog.list.el.observe('issue:points_updated', function(event){
 			var issue = event.memo;
 			this.backlog.list.updateIssuePoints(issue);
-			this.backlog.points_label.update(this.backlog.list.getPoints());
+			this.backlog.points_label.update({ points:this.backlog.list.getPoints() });
 		}.bind(this));
 		
 		this.sprint.list.el.observe('issue:drop', function(event){
@@ -670,7 +671,9 @@ return Class.create({
 			project_id: this.config.project_id
 		});
 		backlog.trackers = new TrackersListUI(this.config.backlog.trackers);
-		backlog.points_label = new PointsLabel({value: backlog.list.getPoints()});
+		backlog.points_label = new PointsLabel({
+			points: backlog.list.getPoints()
+		});
 		return backlog;			
 	},
 	createSprint: function(){
@@ -680,7 +683,10 @@ return Class.create({
 		});
 		sprint.trackers = new TrackersListUI(this.config.sprint.trackers);
 		sprint.selector = new SprintSelector({sprints: this.config.sprints, project_id: this.config.project_id});
-		sprint.points_label = new PointsLabel({value: sprint.list.getPoints()});
+		sprint.points_label = new PointsLabel({
+			points: sprint.list.getPoints(), 
+			max_points: this.config.sprint.max_points
+		});
 		return sprint;
 	},
 	// Create Backlog HTML Element 
@@ -724,13 +730,17 @@ return Class.create({
 		this.config.backlog = Object.extend(this.config.backlog, backlog);
 		this.backlog.list.update(this.config.backlog.issues);
 		this.backlog.trackers.update(this.config.backlog.trackers);
-		this.backlog.points_label.update(this.backlog.list.getPoints());
+		this.backlog.points_label.update({ points: this.backlog.list.getPoints() });
 	},
 	updateSprint: function(sprint){
 		this.config.sprint = Object.extend(this.config.sprint, sprint);
 		this.sprint.list.update(this.config.sprint.issues);
 		this.sprint.trackers.update(this.config.sprint.trackers);
-		this.sprint.points_label.update(this.sprint.list.getPoints());
+		console.log("sprint", this.config.sprint);
+		this.sprint.points_label.update({ 
+			points: this.sprint.list.getPoints(),
+			max_points: this.config.sprint.max_points
+		});
 		this.disableIssuesInUnsupportedTrackers(this.backlog.list.issues, this.config.sprint.trackers);
 		this.backlog.list.update(this.backlog.list.issues);
 	},
