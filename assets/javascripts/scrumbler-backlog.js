@@ -48,7 +48,6 @@ Scrumbler.Backlog = (function() {
 				$(document).fire('issue:created', json.backlog);
 				splash_div.hide();
 			} else {
-				console.log(transport)
 				formRequest(transport);
 			}
 			
@@ -110,8 +109,7 @@ var UpdateIssuePointsRequest = Class.create(Ajax.Request, {
 					config.edited_element.update(config.points);
 					config.observer.fire('issue:points_updated',{ id: config.issue_id, points: config.points})
 				}else{
-					// TODO create localizations for header
-					$growler.growl(resp.text, { header : t('label_header_error') });
+					$growler.growl(response.text, { header : t('label_header_error') });
 				}
 			},
 			onFailure : function() {
@@ -257,7 +255,6 @@ var TrackersListUI = Class.create({
 		}, config);
 		
 		this.trackers = (trackers && trackers.size() > 0) ? trackers : [dummy_tracker];
-		console.log(this.trackers)
 		this.el = this.createUI();
 		this.drawTrackers();
 	},

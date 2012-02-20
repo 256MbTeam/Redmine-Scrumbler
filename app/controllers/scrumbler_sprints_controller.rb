@@ -41,7 +41,7 @@ class ScrumblerSprintsController < ScrumblerAbstractController
       return
     end
     ScrumblerSprint.connection.transaction do
-      unless @scrumbler_sprint.update_attributes({:status => params[:scrumbler_sprint][:status], :start_date => params[:scrumbler_sprint][:start_date], :end_date => params[:scrumbler_sprint][:end_date]})
+      unless @scrumbler_sprint.update_attributes({:status => params[:scrumbler_sprint][:status], :start_date => params[:scrumbler_sprint][:start_date], :end_date => params[:scrumbler_sprint][:end_date], :max_points => params[:scrumbler_sprint][:max_points]})
         flash[:error] ||= ""
         @scrumbler_sprint.errors.each_full{|msg|
           flash[:error] << msg.to_s

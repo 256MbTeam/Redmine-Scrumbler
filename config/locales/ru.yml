@@ -2,6 +2,7 @@
 ru:
   versions_for_sprints_not_created: "Для создания спринтов используйте версии проекта. Настройки -> Версии."
   field_end_date: "Окончание"
+  field_max_points: "Max Points"
   scrumbler_menu: "Скрамблер"
   scrumbler_sprint: "Спринт"
   
@@ -57,6 +58,7 @@ ru:
               tracker_error: "Трекер не активен для данного спринта"
               sprint_not_planning_error: "Задачу можно добавить только в спринт находящийся в статусе планирование"
               sprint_is_closed_error: "Нельзя редактировать задачу, находящуюся в закрытом спринте"
+              sprint_points_limit_error: "Превышен лимит Points"
         scrumbler_sprint:
           attributes:
             base:
@@ -65,6 +67,7 @@ ru:
               sprint_without_project: "Нельзя создать спринт без проекта"
               closing_sprint_with_opened_issues: "Нельзя закрыть спринт, если в нем есть незакрытые задачи"
               cant_open_sprint_without_issues: "Нельзя открыть спринт без задач"
+              sprint_points_limit_error: "Превышен лимит Points"
             status:
               only_one_opened: "Только один спринт может быть открыт в проекте"
   active_record:
