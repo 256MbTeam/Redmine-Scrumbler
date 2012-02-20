@@ -17,6 +17,7 @@
 
 class ScrumblerSprint < ActiveRecord::Base
   unloadable
+  self.include_root_in_json = false if ScrumblerSprint.respond_to? :include_root_in_json
   
   OPENED = "opened"
   PLANNING = "planning"

@@ -25,10 +25,11 @@ Scrumbler supports the following:
 * Backlog for easy sprint composing with Drag & Drop
 * Burndown chart
 
-Requirements
+Supported verisions
 ------------
 
 * Redmine 1.2.x or 1.3.x
+* ChiliProject 3.0.0
 
 Installation
 ------------

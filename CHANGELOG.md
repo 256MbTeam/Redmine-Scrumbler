@@ -6,6 +6,7 @@ Scrumbler Changelog
 * Quick issue creation in backlog
 * Added rules and permissions to backlog
 * Fixed. In backlog shows closed task without version
+* Support for Chiliproject
 
 1.4.2
 -----
