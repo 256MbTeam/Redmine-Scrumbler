@@ -12,11 +12,11 @@
 		<% @project.scrumbler_sprints.each do |sprint| %>
 		<tr class="<%= cycle 'odd', 'even' %>">
 			<td>
-			<%= link_to sprint.name, project_scrumbler_dashboard_sprint_url(@project, sprint) %>	
+			<%= link_to sprint.name, project_scrumbler_dashboard_sprint_path(@project, sprint) %>	
 			</td>
 			<td><%= l("scrumbler_sprint_#{sprint.status}") %></td>
 			<% if authorize_for(:scrumbler_sprints, :settings)%> 
-				<td><%= link_to l(:button_edit), project_scrumbler_sprint_settings_url(@project, sprint), :class=> "icon icon-scrumbler-settings" %></td>
+				<td><%= link_to l(:button_edit), project_scrumbler_sprint_settings_path(@project, sprint), :class=> "icon icon-scrumbler-settings" %></td>
 			<%end%>
 		</tr>
 		<% end %>
