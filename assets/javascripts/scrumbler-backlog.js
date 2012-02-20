@@ -246,12 +246,18 @@ var IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 var TrackersListUI = Class.create({
 	// Create trackers ui element 	
 	initialize: function(trackers, config){
+		var dummy_tracker = {
+			id: 0,
+			color: 'fff; opacity: 0',
+			name: '&nbsp;'
+		}
 		this.config = Object.extend({
 			collection_class_name : "scrumbler_backlog_trackers",
 			element_class_name : "scrumbler_backlog_tracker",
 		}, config);
 		
-		this.trackers = trackers || [];
+		this.trackers = (trackers && trackers.size() > 0) ? trackers : [dummy_tracker];
+		console.log(this.trackers)
 		this.el = this.createUI();
 		this.drawTrackers();
 	},
@@ -271,7 +277,7 @@ var TrackersListUI = Class.create({
 		this.trackers.each(function(tracker){
 			var tracker_el = this.createTrackerEl(tracker);
 			trackers_div.appendChild(tracker_el);
-		},this);
+		}, this);
 	},
 	// create tracker ui element
 	createTrackerEl: function(tracker){
@@ -521,10 +527,11 @@ var SprintSelector = Class.create({
 		
 		if(this.config.sprints.length == 0){
 			var option = new Element('option',{value: ""}).update(t('nodata'));
+			this.open_button.hide();
 			this.sprint_selector.appendChild(option);
 			return;
 		}
-		
+		this.open_button.show();
 		// Populate selector with avaliable options
 		this.config.sprints.each(function(sprint){
 			var option = new Element('option',{value: sprint.id}).update(sprint.name);
