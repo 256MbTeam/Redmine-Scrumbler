@@ -5,7 +5,6 @@ class CreateScrumblerSprints < ActiveRecord::Migration
                                                     "20111018172707-redmine_scrumbler",
                                                     "20111018172704-redmine_scrumbler"  
     
-    
     create_table :scrumbler_sprints, :force => true do |t|
       t.references :project
       t.references :version
