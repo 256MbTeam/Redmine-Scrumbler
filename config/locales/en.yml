@@ -65,6 +65,7 @@ en:
               sprint_without_project: "Can't create sprint without project"
               closing_sprint_with_opened_issues: "Can't close sprint with opened issues"
               cant_open_sprint_without_issues: "Cant open sprint without issues"
+              sprint_points_limit_error: "Scrum points limit exceeded"
             status:
               only_one_opened: "error. Only one sprint can be opened a in the project"
   active_record:
