@@ -56,6 +56,7 @@ en:
               tracker_error: "Tracker doesn's exist in this sprint"
               sprint_not_planning_error: "Issue can be assigned to planning sprint only"
               sprint_is_closed_error: "Can't edit issue in closed sprint"
+              sprint_points_limit_error: "Scrum points limit exceeded"
         scrumbler_sprint:
           attributes:
             base:

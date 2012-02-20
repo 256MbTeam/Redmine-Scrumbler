@@ -45,6 +45,11 @@ module Scrumbler
               errors.add_to_base(:sprint_is_closed_error)
             end
 
+            # should not add issue to limited sprint by points
+            if @sprint.max_points != 0 && (@sprint.points_total + self.scrumbler_points.to_f) >  @sprint.max_points
+              errors.add_to_base(:sprint_points_limit_error)
+            end 
+
           end
         end
       end

@@ -242,12 +242,12 @@ Scrumbler.ScrumblerDashboard = (function() {
 									dropEl.appendChild(issue.getIssueEl());
 									issue.getDashboard().refreshHeader();
 								} else {
-									$growler.growl(resp.text, { header: 'Ошибка' });
+									$growler.growl(resp.text, { header: t('label_header_error') });
 								}
 
 							},
 							onFailure: function() {
-								$growler.growl('Something went wrong...', { header: 'Error' });
+								$growler.growl('Something went wrong...', { header: t('label_header_error') });
 							},
 							onComplete: function() { issue.getIssueEl().show() }
 						});
