@@ -28,11 +28,9 @@
 		(function() {
 
 	Highcharts.setOptions({lang: Scrumbler.Translations.highstock});
-	var normal_data =<%= @burndown[:normal].to_json%>
-		;
-		var real_data = 
- <%= @burndown[:real].to_json%>
-		;
+		var normal_data =<%= @burndown[:normal].to_json%>;
+		var real_data = <%= @burndown[:real].to_json%>;
+		var flags = <%= @burndown[:flags].to_json%>;
 
 		var current_extr = (normal_data.concat(real_data)).max(function(i) {
 			return i[0];
@@ -80,6 +78,13 @@
 				tooltip : {
 					yDecimals : 2
 				}
+			}, {
+				type: 'flags',
+				data: flags,
+				tooltip: {
+					pointFormat: ''
+				},
+				shape: 'squarepin'
 			}]
 		});
 

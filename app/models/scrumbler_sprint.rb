@@ -54,6 +54,8 @@ class ScrumblerSprint < ActiveRecord::Base
   validate :start_end_date_validation
   validate :opening_validation
   validate :max_points_validations
+  
+  before_save :set_fact_close_date
 
   def issues
     Issue.find :all,
@@ -136,6 +138,12 @@ class ScrumblerSprint < ActiveRecord::Base
   def max_points_validations
     if self.max_points != 0 && self.max_points < self.points_total
       errors.add_to_base(:sprint_points_limit_error)
+    end
+  end
+  
+  def set_fact_close_date
+    if self.status_changed? && self.status == ScrumblerSprint::CLOSED
+      self.fact_close_date = Date.today
     end
   end
 

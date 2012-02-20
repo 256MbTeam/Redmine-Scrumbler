@@ -2,6 +2,7 @@
 ru:
   versions_for_sprints_not_created: "Для создания спринтов используйте версии проекта. Настройки -> Версии."
   field_end_date: "Окончание"
+  field_fact_close_date: "Фактическая дата завершения"
   field_max_points: "Max Points"
   scrumbler_menu: "Скрамблер"
   scrumbler_sprint: "Спринт"

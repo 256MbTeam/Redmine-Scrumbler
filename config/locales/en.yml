@@ -1,6 +1,7 @@
 en:
   versions_for_sprints_not_created: "For sprint creation use project versions. Settings -> Versions."
   field_end_date: "End date"
+  field_fact_close_date: "Fact close date"
   field_max_points: "Max Points"
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"

@@ -153,10 +153,22 @@ class ScrumblerSprintsController < ScrumblerAbstractController
   private
 
   def burndown_calc
-    out = {}
+    to_js_date = proc {|x|
+      x.to_time.to_i*1000
+    }
+    out = {
+      :normal => [],
+      :real => [],
+      :flags => []
+    }
     start_date = @scrumbler_sprint.start_date
 
     end_date  = @scrumbler_sprint.end_date || Date.today
+
+    fact_close_date = @scrumbler_sprint.fact_close_date || end_date
+    
+
+ 
 
     closed_issues = @scrumbler_sprint.issues.find_all {|i| i.due_date && i.closed?}
     closed_issues = Hash[closed_issues.group_by(&:due_date).map {|k,v|
@@ -171,16 +183,29 @@ class ScrumblerSprintsController < ScrumblerAbstractController
 
     points_per_day_normal = points_total_normal/days_total.to_f
 
-    out[:normal] = []
-    out[:real] = []
+    
     (days_total+1).times {|day_num|
       cycle_date = (start_date + day_num)
-      js_date = cycle_date.to_time.to_i*1000
+      js_date = to_js_date.call(cycle_date)
       out[:normal] << [js_date, points_total_normal]
       out[:real] << [js_date, points_total_real -= closed_issues[cycle_date].to_f]
       points_total_normal = (points_total_normal - points_per_day_normal).round(2)
       points_total_normal = 0 if points_total_normal < 0
     }
+    
+    out[:flags] << {
+      :x => to_js_date.call(@scrumbler_sprint.fact_close_date),
+      :title => t(:field_fact_close_date),
+      :dataLabels => {
+        :enabled => false
+      }
+    } if @scrumbler_sprint.fact_close_date
+    
+    out[:flags] << {
+      :x => to_js_date.call(end_date),
+      :title => t(:field_end_date)
+    }
+    
     out
   end
 

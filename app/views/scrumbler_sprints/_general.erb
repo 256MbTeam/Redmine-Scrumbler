@@ -8,6 +8,7 @@
     <p><%=label("scrumbler_sprint", "status")%> <%=  select_sprint_statuses_tag("scrumbler_sprint[status]", @scrumbler_sprint.status) %></p>
     <p><%=label("scrumbler_sprint","start_date") %> <%= text_field_tag "scrumbler_sprint[start_date]",  @scrumbler_sprint.start_date, :size => 10 %> <%= calendar_for('scrumbler_sprint_start_date') %></p>
     <p><%=label("scrumbler_sprint","end_date") %> <%= text_field_tag "scrumbler_sprint[end_date]",  @scrumbler_sprint.end_date, :size => 10 %> <%= calendar_for('scrumbler_sprint_end_date') %></p>
+      <p><%=label("scrumbler_sprint","fact_close_date") %> <%= text_field_tag "scrumbler_sprint[fact_close_date]",  @scrumbler_sprint.fact_close_date, :size => 10 %> <%= calendar_for('scrumbler_sprint_fact_close_date') %></p>
 
   </div>
   <%= submit_tag l(:button_save) %>
