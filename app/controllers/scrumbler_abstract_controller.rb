@@ -17,7 +17,9 @@
 class ScrumblerAbstractController < ApplicationController
   unloadable
 
+    
   helper :scrumbler
+  include ScrumblerHelper
 
   before_filter :find_project
 
