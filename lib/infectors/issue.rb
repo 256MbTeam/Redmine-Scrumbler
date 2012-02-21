@@ -25,41 +25,38 @@ module Scrumbler
           ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value) ||
           ScrumblerIssueCustomField.points.default_value
         end
-        
+
         private
 
-          # self.custom_field_values.select{|val| val.custom_field_id == ScrumblerIssueCustomField.points.id}.first.value
-
         def validate_sprint
-          if @sprint = self.fixed_version.try(:scrumbler_sprint)
+          return unless (@sprint = fixed_version.try(:scrumbler_sprint)) && !parent_issue_id
 
-            # Should not assign issue from disabled tracker
-            tracker_setting = @sprint.trackers[self.tracker_id.to_s] || @sprint.trackers[self.tracker_id.to_i]
-            errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
+          # Should not assign issue from disabled tracker
+          tracker_setting = @sprint.trackers[self.tracker_id.to_s] || @sprint.trackers[self.tracker_id.to_i]
+          errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
 
-            # should not add issue to not planning sprint
-            if fixed_version_id_changed? && @sprint.status != ScrumblerSprint::PLANNING
-              errors.add_to_base(:sprint_not_planning_error)
-            end
-
-            # should not edit issues in closed sprint
-            if @sprint.status == "closed"
-              errors.add_to_base(:sprint_is_closed_error)
-            end
-
-            # should not add issue to limited sprint by points
-            if @sprint.max_points != 0 && (@sprint.points_total + self.custom_value_for(ScrumblerIssueCustomField.points).try(:value).to_f - self.scrumbler_points.to_f) > @sprint.max_points
-              errors.add_to_base(:sprint_points_limit_error)
-            end 
-
+          # should not add issue to not planning sprint
+          if fixed_version_id_changed? && @sprint.status != ScrumblerSprint::PLANNING
+            errors.add_to_base(:sprint_not_planning_error)
           end
+
+          # should not edit issues in closed sprint
+          errors.add_to_base(:sprint_is_closed_error) if @sprint.status == "closed"
+
+          # should not add issue to limited sprint by points
+          points = custom_value_for(ScrumblerIssueCustomField.points).try(:value).to_f
+          
+          if @sprint.max_points != 0 && 
+            (@sprint.points_total + points - scrumbler_points.to_f) > @sprint.max_points
+            errors.add_to_base(:sprint_points_limit_error)
+          end
+
         end
       end
 
       def self.included(receiver)
         receiver.module_eval {
           alias_method :available_custom_fields_without_points, :available_custom_fields
-    
           def available_custom_fields
             if ScrumblerIssueCustomField.points.projects.include? self.project
               (available_custom_fields_without_points + [ScrumblerIssueCustomField.points]).uniq

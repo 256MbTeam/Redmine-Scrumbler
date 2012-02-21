@@ -34,6 +34,20 @@ module ScrumblerHelper
     javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_url.to_json}; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
   end
 
+  def prepare_issue_subject(issue)
+    subj = issue.subject
+    if issue.children?
+      subj << "<hr>"
+      issue.children.each {|child|
+        link = link_to("##{child.tracker.name} #{child.id}", {:controller => 'issues', :action => 'show', :id => child.id},
+                                        :class => child.css_classes,
+                                        :title => "#{child.subject[0..99]} (#{child.status.name})")
+        subj << "#{link}: #{child.subject}<br>"
+      }
+    end
+    subj
+  end
+
   def select_color_tag(name, value=nil, options={})
     out = hidden_field_tag(name, value, options)
     out << javascript_tag("new TinyColorChooser(\"#{sanitize_to_id(name)}\", #{options.to_json})");
@@ -45,7 +59,7 @@ module ScrumblerHelper
       :status_id => issue.status_id,
       :tracker_id => issue.tracker_id,
       :project_id => issue.project_id,
-      :subject => issue.subject,
+      :subject => prepare_issue_subject(issue),
       :points => issue.scrumbler_points,
       :closed => issue.closed?
     }

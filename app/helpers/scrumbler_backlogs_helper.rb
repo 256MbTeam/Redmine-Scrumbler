@@ -27,8 +27,9 @@ module ScrumblerBacklogsHelper
   
   def prepare_issues_for_json(issues, trackers)
     issues.sort_by(&:priority).reverse.map{|issue|
+    
       { :id => issue.id,
-        :subject => issue.subject,
+        :subject => prepare_issue_subject(issue),
         :points => issue.scrumbler_points,
         :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s} 
         # || create_tracker_setting(Tracker.find(issue.tracker_id))
@@ -74,9 +75,10 @@ module ScrumblerBacklogsHelper
 
   def prepare_backlog_for_json(project)
     trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
+    issues = project.issues.open.without_version.all(:conditions => {:parent_id => nil})
     {
       :trackers => trackers,
-      :issues => prepare_issues_for_json(project.issues.open.without_version, trackers)
+      :issues => prepare_issues_for_json(issues, trackers)
     }
   end
 

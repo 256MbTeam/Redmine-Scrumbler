@@ -63,7 +63,8 @@ class ScrumblerSprint < ActiveRecord::Base
     :conditions => {
       :tracker_id => self.trackers.keys,
       :status_id => self.issue_statuses.keys,
-      :fixed_version_id => self.version_id
+      :fixed_version_id => self.version_id,
+      :parent_id => nil
     }
   end
 
