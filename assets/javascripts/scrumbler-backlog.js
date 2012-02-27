@@ -750,6 +750,14 @@ return Class.create({
 		}else{
 			issues.each(function(issue){ issue.disabled = true });
 		}
+		
+		// don't show issues that can't be assigned to the selected sprint
+		issues.each(function(issue){
+			if(issue.disabled){
+				var idx = issues.indexOf(issue);
+				if(idx!=-1){ issues.splice(idx, 1); }
+			}
+		});
 	}
 });
 })();
