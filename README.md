@@ -42,7 +42,7 @@ Install the plugin in your Redmine plugins directory, name of directory must be 
 
 Run migrations:
 
-    rake db:migrate:plugins
+    rake db:migrate:plugin NAME=redmine_scrumbler
 
 Restart the Redmine:
 
@@ -62,9 +62,24 @@ Update the plugin.
 	
 Execute plugin migrations.
 
-	rake db:plugins_migrate
+	rake db:migrate:plugin NAME=redmine_scrumbler
 
 Restart the Redmine.
+
+Uninstalling
+------------
+
+Browse to Redmine installation directory.
+
+	cd $REDMINE_HOME
+	
+Revert migrations
+
+	rake db:migrate:plugin NAME=redmine_scrumbler VERSION=0
+	
+Remove the plugin folder
+
+	rm -fr $REDMINE_HOME/vendor/plugins/redmine_scrumbler
 
 TODO
 ----

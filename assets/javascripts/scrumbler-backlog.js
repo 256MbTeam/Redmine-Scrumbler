@@ -89,7 +89,7 @@ Scrumbler.Backlog = (function() {
 		}
 		
 		$(document.body).appendChild(splash_div);
-		main_link.on('click', mainLinkClick);
+		main_link.observe('click', mainLinkClick);
 		
 		return main_link;
 };
