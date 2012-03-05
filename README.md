@@ -1,5 +1,6 @@
 Scrumbler
 =========
+
 Current version: 1.4.3 ([Changelog](/256MbTeam/Redmine-Scrumbler/blob/master/CHANGELOG.md))
 [Documentation](https://github.com/256MbTeam/Redmine-Scrumbler/wiki/Documentation-and-overview)
 
