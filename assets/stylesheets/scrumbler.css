@@ -9,6 +9,7 @@ div.scrumbler_box{
 }
 
 div.disabled_scrumbler_issue {
+	display: none;
 	border: 2px solid #ccc;
 	height: 100%;
 	background: #ccc;

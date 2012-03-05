@@ -16,15 +16,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerBacklogsHelper
   
-  # def create_tracker_setting(tracker)
-    # settings = ScrumblerProjectSetting.create_setting(tracker, false)
-    # {
-      # :id => tracker.id,
-      # :name => tracker.name,
-      # :color => settings[:color]
-    # }
-  # end
-  
   def prepare_issues_for_json(issues, trackers)
     issues.sort_by(&:priority).reverse.map{|issue|
     
@@ -32,7 +23,6 @@ module ScrumblerBacklogsHelper
         :subject => prepare_issue_subject(issue),
         :points => issue.scrumbler_points,
         :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s} 
-        # || create_tracker_setting(Tracker.find(issue.tracker_id))
       }
     }
   end

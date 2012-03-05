@@ -1,4 +1,4 @@
-<% form_tag update_issue_statuses_project_scrumbler_settings_url(@project) do%>
+<% form_tag :controller => :scrumbler_settings, :action => :update_issue_statuses, :project_id => @project do%>
     <table class="list">
         <thead>
             <tr>

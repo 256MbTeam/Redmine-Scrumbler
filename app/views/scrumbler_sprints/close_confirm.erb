@@ -3,7 +3,7 @@
 	<%= t(:opened_issues_in_closing_sprint)%>
 </div>
 <div class = "box">
-	<%form_tag close_confirm_project_scrumbler_sprint_url(@project, @scrumbler_sprint), :method=> :post do%>
+	<%form_tag({:controller => :scrumbler_sprints, :action => :close_confirm, :project_id => @project, :id => @scrumbler_sprint.id}, {:method=> :post}) do%>
 	<div style="margin-bottom: 1em;">
 		<%= t(:issue_action_on_sprint_closing)%><br>
 		<%= radio_button_tag('issue_action', 'backlog', true)%> <%= t(:move_issues_to_backlog)%><br>

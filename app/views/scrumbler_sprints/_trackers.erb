@@ -1,4 +1,4 @@
-<% form_tag update_trackers_project_scrumbler_sprint_url(@project, @scrumbler_sprint) do%>
+<% form_tag :controller => :scrumbler_sprints, :action => :update_trackers, :project_id => @project, :id => @scrumbler_sprint.id do%>
   <table class="list">
     <thead>
       <tr>
