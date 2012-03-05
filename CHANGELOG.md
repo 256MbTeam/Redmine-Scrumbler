@@ -1,7 +1,15 @@
 Scrumbler Changelog
 ===================
 
+1.5.0
+-----
+
+* Subtasks don't provide scrum points to sprint
+* Display subtasks in dashboard
+* Don't show issues in backlog that cannot be assigned to the selected sprint
+
 1.4.3
+-----
 
 * Quick issue creation in backlog
 * Added rules and permissions to backlog
