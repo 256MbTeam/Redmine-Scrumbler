@@ -16,6 +16,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerHelper
   def scrumbler_javascript_helper
+    # This Hack fir compability with  "Redmine - Stuff To Do Plugin". 
+    # That guys transform array to hash in this place.
+    prepare_stupid_hash = Proc.new {|name|
+      data = t(name)
+      data = data.values if data.is_a?(Hash)
+    }
+
     translations = {
       :scrumbler_sprint => t(:scrumbler_sprint),
       :nodata => t(:label_no_data),
@@ -26,9 +33,9 @@ module ScrumblerHelper
       :label_header_error  => t(:label_header_error),
       :label_confirm_sprint_opening => t(:label_confirm_sprint_opening),
       :highstock => {
-        :months => t("date.month_names").compact,
-        :shortMonths => t("date.abbr_month_names").compact,
-        :weekdays => t("date.day_names").compact
+        :months => prepare_stupid_hash.call("date.month_names").compact,
+        :shortMonths => prepare_stupid_hash.call("date.abbr_month_names").compact,
+        :weekdays => prepare_stupid_hash.call("date.day_names").compact
       }
     }
     javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_url.to_json}; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
