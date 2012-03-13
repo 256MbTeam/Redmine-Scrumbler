@@ -21,6 +21,7 @@ module ScrumblerHelper
     prepare_stupid_hash = Proc.new {|name|
       data = t(name)
       data = data.values if data.is_a?(Hash)
+      data
     }
 
     translations = {
