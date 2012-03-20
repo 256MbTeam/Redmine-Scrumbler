@@ -10,6 +10,15 @@ Plugin adds Scrum Points field in every issue in project.
 Scrumbler as possible using the standard redmine structure of projects.
 Plugin tested in many browsers, but it's not working in IE.
 
+Demo
+-----
+http://demo.nishisha.net/
+
+1. Register on demo
+2. Create project or use existing 
+3. Try Scrumbler
+
+
 Features
 --------
 
