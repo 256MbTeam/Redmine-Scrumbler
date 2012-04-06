@@ -326,7 +326,15 @@ var IssuesListUI = Class.create({
 	// repaint issues list from this.issue data
 	drawIssues: function(){
 		var issues_div = this.el.update("");
-		if(this.issues.length == 0){
+		var no_issues = (this.issues.length == 0);
+		if(!no_issues){
+			no_issues = true;
+			this.issues.each(function(issue){
+				if(!issue.disabled){ no_issues = false }
+			});
+		}
+		
+		if(no_issues){
 			issues_div.appendChild(new Element('p',{'class':'nodata'}).update(t('nodata')));
 		}else{
 			this.issues.each(function(issue) {
