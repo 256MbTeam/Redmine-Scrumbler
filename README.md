@@ -114,6 +114,8 @@ Translations
 
 * [Steven.W](https://github.com/archonwang) - zh
 * [Terence Miller](https://github.com/cforce) - de
+* Vidal Arpin - fr
+
 
 License
 -------
