@@ -1,0 +1,78 @@
+fr:
+  versions_for_sprints_not_created: "Utilisez les versions du project pour la création de sprints (Configuration -> Versions)."
+  field_end_date: "Date de fin"
+  field_fact_close_date: "Date de fermeture Fact"
+  field_max_points: "Points maximum"
+  scrumbler_menu: "Scrumbleur"
+  scrumbler_sprint: "Sprint"
+  scrumbler_points_field: "Points Scrum"
+
+  show_opened: "Afficher les sprints ouverts"
+  show_all: "Tous les sprints"
+  label_general: "Général"
+  label_sprints: "Sprints"
+  label_new_sprint: "Nouveau sprint :"
+  label_trackers: "Trackers"
+  label_issue_statuses: "Statuts de demandes"
+  label_sprint_back: "Retour au sprint"
+  label_backlog: "Pile de travaux"
+  label_sprint_settings: "Configuration du sprint"
+  label_statistics: "Statistiques"
+  label_confirm_sprint_opening: "Êtes-vous certain de vouloir ouvrir un sprint ?"
+  label_header_error: "Erreur"
+  label_header_warning: "Avertissement"
+  issue_action_on_sprint_closing: "Que doit-on faire avec les demandes qui ne sont pas fermées ?"
+  close_issues: "Fermer toutes les demandes dans le sprint"
+  move_issues_to_backlog: "Déplacer les demandes dans la pile de travaux"
+  opened_issues_in_closing_sprint: "Il y a certaines demandes qui ne sont pas fermées dans le sprint"
+  
+  issue_not_assigned: "Pas assignée"
+  
+  tracker_use?: "Utiliser ?"
+  error_scrumbler_general_update: "La mise à jour de la configuration a échouée"
+  error_scrumbler_trackers_update: "La mise à jour des trackers a échouée"
+  error_scrumbler_issue_statuses_update: "La mise à jour des statuts de demandes a échouée"
+  error_sprint_not_found_in_project: "Aucun sprint trouvé pour ce projet"
+  error_scrumbler_issue_status_change: "Vous n'avez pas les permissions pour changer le statut \"%{status_name}\" pour cette demande"
+  error_sprint_not_found: "Aucun sprint trouvé"
+  
+  scrumbler_statistics:
+    ideal_issues: "Idéal"
+    actual_issues: "Actuel"
+    iteration_axis: "Échéancier de l'itération"
+    estimated_axis: "Évaluation des travaux"
+  
+  scrumbler_sprint_statistics_not_available: "Attention ! Les statistiques ne sont pas disponible. Le sprint doit être ouvert et avoir une date de début et de fin."
+  
+  scrumbler_sprint_opened: "Ouvert"
+  scrumbler_sprint_planning: "Planification"
+  scrumbler_sprint_closed: "Fermé"
+  
+  activerecord:
+    errors:
+      models:
+        issue:
+          attributes:
+            base:
+              tracker_error: "Tracker inexistant pour ce sprint"
+              sprint_not_planning_error: "Une demande peut seulement être assignée à un sprint en planification"
+              sprint_is_closed_error: "Une demande ne peut pas être édité lorsque le sprint est fermé"
+              sprint_points_limit_error: "Limite de points Scrum dépassée"
+        scrumbler_sprint:
+          attributes:
+            base:
+              start_date_is_greater_than_end_date: "La date de début ne peut pas dépasser la date de fin"
+              trackers_with_issues_in_sprint_cant_be_removed: "Le tracker ne peut pas être supprimé du sprint. Le tracker n'est pas vide !"
+              sprint_without_project: "Un sprint ne peut pas être créé sans projet"
+              closing_sprint_with_opened_issues: "Le sprint ne peut pas être fermé lorsque des demandes sont ouvertes"
+              cant_open_sprint_without_issues: "Un sprint ne peut pas être ouvert sans demande"
+              sprint_points_limit_error: "Limite de points Scrum dépassée"
+            status:
+              only_one_opened: "Erreur ! Seul un sprint peut être ouvert par projet"
+  active_record:
+    models:
+      scrumbler_sprint_tracker:
+        position: "Position"
+        color: "Couleur"
+      scrumbler_sprint_status:
+        position: "Position"
