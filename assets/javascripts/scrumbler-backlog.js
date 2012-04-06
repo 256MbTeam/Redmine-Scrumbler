@@ -362,6 +362,9 @@ var IssuesListUI = Class.create({
 	getPoints: function() {
 		var total = 0;
 		this.issues.each( function(issue) {
+			if(issue.disabled){
+				return;
+			}
 			var points = parseFloat(issue.points);
 			if (points == points) {
 				total += points;

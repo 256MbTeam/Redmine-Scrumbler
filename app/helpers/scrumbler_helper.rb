@@ -112,7 +112,7 @@ module ScrumblerHelper
       :url => project_url(sprint.project),
       :current_user_id => User.current.id
     }.to_json
-    out = "<div id='#{div_id}' style='width:100%;height=100%;'>&nbsp;</div>"
+    out = "<div id='#{div_id}' style='width:100%;height:100%;'>&nbsp;</div>"
     out << javascript_tag("new Scrumbler.ScrumblerDashboard('#{div_id}', #{config});")
   end
 
