@@ -4,7 +4,7 @@ Scrumbler
 Current version: 1.5.0 ([Changelog](/256MbTeam/Redmine-Scrumbler/blob/master/CHANGELOG.md))
 [Documentation](https://github.com/256MbTeam/Redmine-Scrumbler/wiki/Documentation-and-overview)
 
-Easy to use plugin for [Redmine](http://http://www.redmine.org/). It allows users to use the Scrum/Agile process in projects.
+Easy to use plugin for [Redmine](http://www.redmine.org/). It allows users to use the Scrum/Agile process in projects.
 Scrumbler have interactive dashboard with the ability to configure for each sprint. 
 Plugin adds Scrum Points field in every issue in project.
 Scrumbler as possible using the standard redmine structure of projects.
