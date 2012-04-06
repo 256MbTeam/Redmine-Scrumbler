@@ -1,6 +1,11 @@
 Scrumbler Changelog
 ===================
 
+1.5.x
+-----
+
+* Added fr.yml
+
 1.5.0
 -----
 
