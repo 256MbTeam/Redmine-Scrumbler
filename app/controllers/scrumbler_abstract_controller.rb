@@ -30,7 +30,7 @@ class ScrumblerAbstractController < ApplicationController
 
   def find_or_create_scrumbler_project_setting
     @project.scrumbler_project_setting || begin
-      @project.create_scrumbler_project_settings
+      @project.create_scrumbler_project_setting
       @project.scrumbler_project_setting
     end
   end
