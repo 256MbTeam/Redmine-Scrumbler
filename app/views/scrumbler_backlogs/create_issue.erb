@@ -2,7 +2,8 @@
 <% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'scrumbler_backlogs', :action => 'create_issue', :project_id => @project},
                              :html => {:multipart => true, :id => 'issue-form', :class => 'tabular new-issue-form'} do |f| %>
     <%= error_messages_for 'issue' %>
-    <p><%= f.select :tracker_id, @project.trackers.collect {|t| [t.name, t.id]}, :required => true %></p>
+    <%@project_setting = @project.scrumbler_project_setting%>
+    <p><%= f.select :tracker_id, @project.trackers.select {|t| @project_setting.find_tracker(t.id)[:use]}.collect{|t|[t.name, t.id]}, :required => true %></p>
     <p><%= f.text_field :subject, :size => 80, :required => true %></p>
 	<%= render :partial => 'issues/form_custom_fields'%>
 	<%= f.submit%>

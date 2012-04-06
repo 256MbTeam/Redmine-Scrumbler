@@ -11,6 +11,7 @@
 **/
 Scrumbler.Backlog = (function() {
 
+// TODO Refactoring to Class.create
 	function buildIssueCreationFormLink(config) {
 		var external_form;
 		var tracker_select;
@@ -25,6 +26,7 @@ Scrumbler.Backlog = (function() {
 				request_processing = false;
   			}
 		}
+		// TODO Translate
 		var main_link = new Element('a', {href: '#'}).update('New issue');
 		var splash_div = new Element('div');
 		splash_div.setStyle({
@@ -695,7 +697,7 @@ return Class.create({
 		}.bind(this));
 	},
 	createBacklog: function(){
-		this.disableIssuesInUnsupportedTrackers(this.config.backlog.issues, this.config.sprint.trackers);
+		this.disableIssuesInUnsupportedTrackers(this.config.backlog.issues, this.config.backlog.trackers);
 		var backlog = {};
 		backlog.list = new IssuesListUI(this.config.backlog.issues, {
 			project_id: this.config.project_id
@@ -758,6 +760,7 @@ return Class.create({
 	},
 	updateBacklog: function(backlog){
 		this.config.backlog = Object.extend(this.config.backlog, backlog);
+		this.disableIssuesInUnsupportedTrackers(this.config.backlog.issues, this.config.backlog.trackers);
 		this.backlog.list.update(this.config.backlog.issues);
 		this.backlog.trackers.update(this.config.backlog.trackers);
 		this.backlog.points_label.update({ points: this.backlog.list.getPoints() });
