@@ -613,7 +613,6 @@ var PointsLabel = Class.create({
 		return el;
 	},
 	update: function(data){
-		console.log(data);
 		this.config = Object.extend(this.config, data);
 		if(this.config.max_points && this.config.max_points != "" && this.config.max_points != 0){
 			this.el.update(this.config.points+"/"+this.config.max_points+ " Points");
@@ -754,7 +753,6 @@ return Class.create({
 		this.config.sprint = Object.extend(this.config.sprint, sprint);
 		this.sprint.list.update(this.config.sprint.issues);
 		this.sprint.trackers.update(this.config.sprint.trackers);
-		console.log("sprint", this.config.sprint);
 		this.sprint.points_label.update({ 
 			points: this.sprint.list.getPoints(),
 			max_points: this.config.sprint.max_points
