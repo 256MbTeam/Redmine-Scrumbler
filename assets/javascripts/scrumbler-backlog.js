@@ -327,9 +327,11 @@ var IssuesListUI = Class.create({
 	drawIssues: function(){
 		var issues_div = this.el.update("");
 		var no_issues = (this.issues.length == 0);
+		console.log(no_issues);
 		if(!no_issues){
 			no_issues = true;
 			this.issues.each(function(issue){
+				console.log(issue,!issue.disabled)
 				if(!issue.disabled){ no_issues = false }
 			});
 		}

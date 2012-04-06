@@ -15,14 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerBacklogsHelper
-  
   def prepare_issues_for_json(issues, trackers)
     issues.sort_by(&:priority).reverse.map{|issue|
-    
+
       { :id => issue.id,
         :subject => prepare_issue_subject(issue),
         :points => issue.scrumbler_points,
-        :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s} 
+        :tracker => trackers.detect{|tracker| tracker[:id].to_s == issue.tracker_id.to_s}
       }
     }
   end
@@ -36,7 +35,7 @@ module ScrumblerBacklogsHelper
       }
     }
   end
-  
+
   def prepare_all_trackers(trackers_settings, trackers)
     trackers.map{|tracker|
       {
@@ -46,7 +45,6 @@ module ScrumblerBacklogsHelper
       }
     }
   end
-  
 
   def prepare_sprint_for_json(sprint)
     return {:issues=>[],:trackers=>[]} unless sprint
@@ -55,20 +53,21 @@ module ScrumblerBacklogsHelper
       :id => sprint.id,
       :issues => prepare_issues_for_json(sprint.issues, trackers),
       :trackers => trackers,
-      :max_points => sprint.max_points 
+      :max_points => sprint.max_points
     }
   end
 
   def prepare_sprints(sprints)
-    sprints.map{|sprint| {:name => sprint.name, :id => sprint.id} } 
+    sprints.map{|sprint| {:name => sprint.name, :id => sprint.id} }
   end
 
   def prepare_backlog_for_json(project)
-    trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
+    all_trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
+    trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     issues = project.issues.open.without_version.all(:conditions => {:parent_id => nil})
     {
       :trackers => trackers,
-      :issues => prepare_issues_for_json(issues, trackers)
+      :issues => prepare_issues_for_json(issues, all_trackers)
     }
   end
 
@@ -77,7 +76,7 @@ module ScrumblerBacklogsHelper
       :project_id => project.identifier,
       :backlog => prepare_backlog_for_json(project),
       :sprint => prepare_sprint_for_json(project.scrumbler_sprints.planning.first),
-      :sprints => prepare_sprints(project.scrumbler_sprints.planning) 
+      :sprints => prepare_sprints(project.scrumbler_sprints.planning)
     }
   end
 
