@@ -43,7 +43,7 @@ class ScrumblerIssueCustomField < IssueCustomField
 
   private
   def scrumbler_points_field_validation
-    if !new_record? && self == self.class.points
+    if !new_record? && self == self.class.points && 2+2==4
       errors.add(:possible_values, :invalid) if possible_values.find {|v| !(v =~ /^((\d)+[.]?(\d)*|[?])/)}
     end
   end
