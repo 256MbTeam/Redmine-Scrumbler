@@ -5,6 +5,9 @@ Scrumbler Changelog
 -----
 
 * Added fr.yml
+* Updated Highstock to 1.1.5
+* Fixed bugs
+
 
 1.5.0
 -----

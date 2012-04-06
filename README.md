@@ -14,7 +14,7 @@ Demo
 -----
 http://demo.nishisha.net/
 
-1. Register on demo
+1. Register on demo _(or use default scrumbler/scrumbler or user/user or test/test)_
 2. Create project or use existing 
 3. Try Scrumbler
 
