@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerHelper
   def scrumbler_javascript_helper
-    # This Hack fir compability with  "Redmine - Stuff To Do Plugin". 
+    # This Hack fir compability with  "Redmine - Stuff To Do Plugin".
     # That guys transform array to hash in this place.
     prepare_stupid_hash = Proc.new {|name|
       data = t(name)
@@ -47,10 +47,12 @@ module ScrumblerHelper
     if issue.children?
       subj << "<hr>"
       issue.children.each {|child|
-        link = link_to("##{child.tracker.name} #{child.id}", {:controller => 'issues', :action => 'show', :id => child.id},
-                                        :class => child.css_classes,
-                                        :title => "#{child.subject[0..99]} (#{child.status.name})")
-        subj << "#{link}: #{child.subject}<br>"
+        link = "<a href=\"#{url_for({:controller => 'issues', :action => 'show', :id => child.id})}\" class=\"#{child.css_classes}\" title=\"#{child.subject[0..99]} (#{child.status.name})\">##{child.tracker.name} #{child.id}</a>"
+
+        # link_to("##{child.tracker.name} #{child.id}", url_for({:controller => 'issues', :action => 'show', :id => child.id}),
+        # :class => child.css_classes,
+        # :title => "#{child.subject[0..99]} (#{child.status.name})")
+        subj << "#{link}: #{child.subject} <br>"
       }
     end
     subj
