@@ -171,6 +171,7 @@ var ScrumPointEditor = Class.create({
         });
         this.config.values.each(function(value){
         	var value_field = this.createPopupOptionEl(value);
+        	
             popup.appendChild(value_field);
         }.bind(this));
         
