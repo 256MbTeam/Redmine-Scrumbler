@@ -2,7 +2,9 @@ Scrumbler
 =========
 
 Current version: 1.5.0 ([Changelog](/256MbTeam/Redmine-Scrumbler/blob/master/CHANGELOG.md))
+
 [Documentation](https://github.com/256MbTeam/Redmine-Scrumbler/wiki/Documentation-and-overview)
+
 [How to contribute](https://github.com/256MbTeam/Redmine-Scrumbler/wiki#wiki-contribute)
 
 Easy to use plugin for [Redmine](http://www.redmine.org/). It allows users to use the Scrum/Agile process in projects.
