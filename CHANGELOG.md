@@ -3,11 +3,10 @@ Scrumbler Changelog
 
 1.5.x
 -----
-
+* Support for Redmine 1.4.1
 * Added fr.yml
 * Updated Highstock to 1.1.5
 * Fixed bugs
-
 
 1.5.0
 -----
