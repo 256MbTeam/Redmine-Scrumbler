@@ -1,11 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
   
-  # map.resource :scrumbler_admin, :only => [:show] , :as => 'admin/scrumbler/:tab', :tab => "xxx" do |admin|
-    # admin.update_points_field "points_field", :controller => "scrumbler_admins", :action => :update_points_field, :conditions => { :method => :post }
-  # end
-  
-  #map.connect '',:controller=>"scrumbler",:action=>"sprint"
-  
   map.with_options :controller => 'scrumbler_admins' do |admin|
     admin.scrumbler_admin_update_points_field "/admin/scrumbler/points_field", :action => :update_points_field, :conditions => { :method => :post }
     admin.connect "/admin/scrumbler/:tab", :tab => nil

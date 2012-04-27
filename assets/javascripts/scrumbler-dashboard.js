@@ -1,12 +1,8 @@
 Scrumbler.ScrumblerDashboard = (function() {
 	// Helpers
 	var BacklogHeader = function(name) {
-		var el = new Element('div', {
-			id: "scrumbler_sprint_header"
-		});
-		var h3 = new Element('h3', {
-			id: "scrumbler_sprint_header_name"
-		}).update(name);
+		var el = new Element('div', { id: "scrumbler_sprint_header" });
+		var h3 = new Element('h3', {  id: "scrumbler_sprint_header_name"}).update(name);
 
 		var progress_bar = new Element('table', {
 			width: '100%',
@@ -19,9 +15,7 @@ Scrumbler.ScrumblerDashboard = (function() {
 		var td_total = new Element('td', {
 			'class': 'done'
 		});
-		var p = new Element('p', {
-			'class': 'pourcent'
-		});
+		var p = new Element('p', { 'class': 'pourcent'});
 
 		el.appendChild(h3);
 		el.appendChild(progress_bar);
@@ -36,8 +30,6 @@ Scrumbler.ScrumblerDashboard = (function() {
 			function drawBar(bar, pct) {
 				bar.setStyle({
 					width: pct+"%",
-				});
-				bar.setStyle({
 					display: (pct == 0) ? 'none' : 'table-cell'
 				});
 			}
@@ -290,11 +282,9 @@ Scrumbler.ScrumblerDashboard = (function() {
 			var css_class = ['odd','even'];
 			var css_selector = 0;
 			config.issues.each( function(issue) {
-				if(css_selector==0) {
-					css_selector = 1
-				} else {
-					css_selector = 0
-				}
+				if(css_selector==0) { css_selector = 1 } 
+				else 				{ css_selector = 0 }
+				
 				issues.push(new Issue(_self, config.sprint, issue, sorted_statuses, config.trackers, config.url, css_class[css_selector]));
 			});
 			// +
@@ -319,9 +309,7 @@ Scrumbler.ScrumblerDashboard = (function() {
 				var points = parseFloat(config.points);
 
 				if (points == points) {
-					if (config.closed) {
-						completed += points;
-					}
+					if (config.closed) { completed += points; }
 					total += points;
 				}
 			});
