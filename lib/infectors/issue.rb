@@ -69,7 +69,7 @@ module Scrumbler
         receiver.send :include, InstanceMethods
         receiver.class_eval {
           validate :validate_sprint
-        }
+	  named_scope :without_version, :conditions => {:fixed_version_id => nil}        }
       end
     end
   end

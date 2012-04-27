@@ -1,8 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
   
-  # map.resource :scrumbler_admin, :only => [:show] , :as => 'admin/scrumbler/:tab', :tab => "xxx" do |admin|
-    # admin.update_points_field "points_field", :controller => "scrumbler_admins", :action => :update_points_field, :conditions => { :method => :post }
-  # end
   map.with_options :controller => 'scrumbler_admins' do |admin|
     admin.scrumbler_admin_update_points_field "/admin/scrumbler/points_field", :action => :update_points_field, :conditions => { :method => :post }
     admin.connect "/admin/scrumbler/:tab", :tab => nil
@@ -22,13 +19,15 @@ ActionController::Routing::Routes.draw do |map|
       backlog.new_issue  'create_issue', :controller => :scrumbler_backlogs, :action => :create_issue
     end
     
-    project.scrumbler_dashboard 'scrumbler', :controller => 'scrumbler'
-    project.scrumbler_dashboard_sprint 'scrumbler/:scrumbler_sprint_id', :controller => 'scrumbler'
+    project.resource "scrumbler", :controller => :scrumbler, :member=>{
+      :index=>:get,
+      :sprint=>:get
+    }, :prefix => '/projects/:project_id/scrumbler'
     
     project.resource :scrumbler_settings, :member => {
       :update_trackers => :post,
       :update_issue_statuses => :post
-    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler'
+    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_settings'
     
     project.scrumbler_settings 'scrumbler_settings/:tab', :tab => nil , :controller => :scrumbler_settings, :action => :show
     
@@ -51,7 +50,7 @@ ActionController::Routing::Routes.draw do |map|
         :controller => :scrumbler_sprints, :action => :drop_issue_assignment, :method => :post
     end
     
-    project.sprint 'sprint/:sprint_id', :controller => 'scrumbler', :action => :sprint, :method => :post
+    
   end
 
   

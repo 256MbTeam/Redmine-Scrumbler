@@ -41,7 +41,7 @@ Scrumbler supports the following:
 Supported verisions
 ------------
 
-* Redmine 1.2.x or 1.3.x
+* Redmine 1.2.x, 1.3.x or 1.4.x
 * ChiliProject 3.0.0
 
 Installation

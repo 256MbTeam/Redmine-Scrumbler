@@ -1,13 +1,8 @@
 $from = function(v) {
-
-	return function() {
-		return v
-	}
+	return function() { return v}
 };
 
-t = function(msg){
-	return Scrumbler.Translations[msg];
-}
+var t = function(msg){ return Scrumbler.Translations[msg] };
 
 Scrumbler.IssueTemplate = Class.create({
 	initialize: function(config){
@@ -86,16 +81,11 @@ Scrumbler.IssueTemplate = Class.create({
 
         
 function getRealId(id) {
-	var splitted = id.split("_");
-	return splitted.last();
+	return id.split("_").last();
 };
 
 function containsById(collection, id){
-	var return_value = false;
-	collection.each(function(element){
-			if(element.id == id){
-				return_value = true;
-			}
-	});
-	return return_value;
+	var v = false;
+	collection.each(function(el){if(el.id == id){ v = true;} });
+	return v;
 };
