@@ -97,6 +97,7 @@ class ScrumblerSprint < ActiveRecord::Base
   end
 
   def end_date
+    return nil unless version
     version.effective_date
   end
 
