@@ -38,7 +38,7 @@ Scrumbler supports the following:
 * Backlog for easy sprint composing with Drag & Drop
 * Burndown chart
 
-Supported verisions
+Supported versions
 ------------
 
 * Redmine 1.2.x, 1.3.x or 1.4.x
