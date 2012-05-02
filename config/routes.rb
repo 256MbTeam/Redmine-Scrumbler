@@ -21,7 +21,7 @@ ActionController::Routing::Routes.draw do |map|
     
     project.resource "scrumbler", :controller => :scrumbler, :member=>{
       :index=>:get,
-      :sprint=>:get
+      :sprint=>:post
     }, :prefix => '/projects/:project_id/scrumbler'
     
     project.resource :scrumbler_settings, :member => {
@@ -36,7 +36,8 @@ ActionController::Routing::Routes.draw do |map|
       :update_trackers => :post,
       :update_issue_statuses => :post,
       :burndown => :get,
-      :close_confirm => :post
+      :close_confirm => :post,
+      :settings => :get
     } do |sprint|
       sprint.settings     'settings/:tab', :tab => nil,
         :path_prefix => '/projects/:project_id/scrumbler_sprints/:id',
