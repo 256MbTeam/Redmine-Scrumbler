@@ -39,7 +39,7 @@ module ScrumblerHelper
         :weekdays => prepare_stupid_hash.call("date.day_names").compact
       }
     }
-    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_url.to_json}; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
+    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = '#{Setting['protocol']}://#{Setting['host_name']}/'; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
   end
 
   def prepare_issue_subject(issue)
@@ -109,7 +109,7 @@ module ScrumblerHelper
       :statuses => prepare_issue_statuses(sprint.issue_statuses, IssueStatus.all),
       :trackers => prepare_trackers(sprint.trackers, sprint.project.trackers),
       :issues => prepared_issues,
-      :url => project_url(sprint.project),
+      :url => "#{Setting['protocol']}//#{Setting['host_name']}/projects/#{sprint.project.identifier}",
       :current_user_id => User.current.id
     }.to_json
     out = "<div id='#{div_id}' style='width:100%;height:100%;'>&nbsp;</div>"
