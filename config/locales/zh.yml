@@ -2,6 +2,8 @@
 zh:
   versions_for_sprints_not_created: "创建 Sprint 前，项目必须存在版本。请从项目的配置中，先设置版本（配置 -> 版本）。"
   field_end_date: "结束日期"  
+  field_fact_close_date: "实际结束日期"
+  field_max_points: "点上限值"  
   scrumbler_menu: "Scrumbler"
   scrumbler_sprint: "Sprint"
   scrumbler_points_field: "Scrum 点"
@@ -10,6 +12,7 @@ zh:
   show_all: "全部 Sprints"
   label_general: "通用选项"
   label_sprints: "Sprints"
+  label_new_sprint: "新建 Sprint："  
   label_trackers: "跟踪标签"
   label_issue_statuses: "问题状态"
   label_sprint_back: "返回 Sprint"
@@ -41,7 +44,6 @@ zh:
     estimated_axis: "估计工作"
   
   scrumbler_sprint_statistics_not_available: "警告！无法进行统计。Sprint 必须处于打开状态并设置起始日期与结束日期。"
-
   
   scrumbler_sprint_opened: "处理中"
   scrumbler_sprint_planning: "计划中"
@@ -53,9 +55,10 @@ zh:
         issue:
           attributes:
             base:
-              tracker_error: "在当前Sprint中不存在跟踪标签"
+              tracker_error: "在当前Sprint中不存在跟踪标签。"
               sprint_not_planning_error: "问题只能分配到计划中的 Sprint。"
-              sprint_is_closed_error: "在已关闭的Sprint中，不能编辑问题"
+              sprint_is_closed_error: "在已关闭的Sprint中，不能编辑问题。"
+              sprint_points_limit_error: "已超过 Scrum 点上限。"              
         scrumbler_sprint:
           attributes:
             base:
@@ -64,6 +67,7 @@ zh:
               sprint_without_project: "没有对应的项目，不能创建 Sprint。"
               closing_sprint_with_opened_issues: "当前 Sprint 存在处理中问题，不能关闭。"
               cant_open_sprint_without_issues: "当前 Sprint 不包含问题，不能打开。"
+              sprint_points_limit_error: "已超过 Scrum 点上限。"              
             status:
               only_one_opened: "错误。当前项目中只能有一个 Sprint 处于打开状态。"
   active_record:
