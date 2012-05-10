@@ -166,8 +166,6 @@ class ScrumblerSprintsController < ScrumblerAbstractController
     end_date  = @scrumbler_sprint.end_date || Date.today
 
     fact_close_date = @scrumbler_sprint.fact_close_date || end_date
-    
-
  
 
     closed_issues = @scrumbler_sprint.issues.find_all {|i| i.due_date && i.closed?}

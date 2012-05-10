@@ -35,6 +35,20 @@ class ScrumblerIssueCustomField < IssueCustomField
         :projects => Project.all(:joins => :scrumbler_project_setting),
         :trackers => Tracker.all)
     end
+    
+    ScrumPriorityName = "Scrum Priority"
+    @@priority = nil
+    def priority
+      @@priority ||= first(:conditions => {:name => ScrumPriorityName}) ||
+      create( :name => ScrumPriorityName,
+        :field_format => "int",
+        :is_required => true,
+        :is_filter => false,
+        :default_value => "0",
+        :projects => Project.all(:joins => :scrumbler_project_setting),
+        :trackers => Tracker.all)
+    end
+    
 
     def customized_class
       Issue

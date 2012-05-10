@@ -59,7 +59,7 @@ class ScrumblerSprint < ActiveRecord::Base
 
   def issues
     Issue.find :all,
-    :include => [:assigned_to, :status, :priority],
+    :include => [:assigned_to, :status, :priority, :custom_values],
     :conditions => {
       :tracker_id => self.trackers.keys,
       :status_id => self.issue_statuses.keys,
