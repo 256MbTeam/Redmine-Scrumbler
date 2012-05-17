@@ -24,11 +24,6 @@ class ScrumblerAbstractController < ApplicationController
 
   private
   def find_project
-    puts "XXXXXX #{Time.now}"
-    p request
-    
-    
-    
     @project = Project.find(params[:project_id])
     @scrumbler_project_setting = find_or_create_scrumbler_project_setting
   end
