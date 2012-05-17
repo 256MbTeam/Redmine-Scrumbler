@@ -77,6 +77,9 @@ module ScrumblerHelper
 
     out
   end
+  
+
+
 
   def prepare_issue_statuses(issue_statuses_settings, issue_statuses)
     r_issue_statuses = {}
@@ -112,6 +115,7 @@ module ScrumblerHelper
       :url => project_url(sprint.project),
       :current_user_id => User.current.id
     }.to_json
+    out = content_tag('div', '&nbsp;', {:style => "width:100%; height: 100%;"})
     out = "<div id='#{div_id}' style='width:100%;height:100%;'>&nbsp;</div>"
     out << javascript_tag("new Scrumbler.ScrumblerDashboard('#{div_id}', #{config});")
   end

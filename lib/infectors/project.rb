@@ -23,9 +23,9 @@ module Scrumbler
       module InstanceMethods
         
         def create_scrumbler_sprints
-          versions.each do |version|
+          versions.each {|version|
             version.create_scrumbler_sprint(:project_id => self.id)
-          end
+          }
         end
       
       end

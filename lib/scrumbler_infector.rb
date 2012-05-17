@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-Dir[File.join(File.dirname(__FILE__), "infectors", "*.rb")].each{|file| 
+Dir[File.join(File.dirname(__FILE__), "infectors", "*.rb")].each {|file| 
   require_dependency file;
   infected_name = File.basename(file, ".rb").classify
   Rails.logger.info "Infected #{infected_name} with #{file}"
