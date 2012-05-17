@@ -238,8 +238,87 @@ var IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 				
 		this.getEl().addClassName("scrumbler_issue_backlog");
 		return points_div;
+	},
+	createBody:function(){
+		var body_div = new Element('div', {
+			'class': 'scrumbler_issue_body'
+		});
+		
+		var points_div = this.createPointsDiv(this.config);
+		
+		body_div.appendChild(points_div);
+		
+		var subject = new Element('p').update(this.config.issue.subject);
+		
+		var move_actions = new Element('span');
+		
+		
+		var move_up_link = this.createImageLink({ text: 'move_up' });
+		
+		move_up_link.observe('click', function(event){
+			$(document).fire("issue:move_priority",{
+				issue_id: this.config.issue.id,
+				issue_action: "move_up"
+			});
+		}.bind(this));
+	
+	
+		move_actions.appendChild(move_up_link);
+		
+		var move_down_link = this.createImageLink({ text: 'move_down' });
+		move_down_link.observe('click', function(event){
+			$(document).fire("issue:move_priority",{
+				issue_id: this.config.issue.id,
+				issue_action: "move_down"
+			});
+		}.bind(this));
+		
+		move_actions.appendChild(move_down_link);
+		
+		body_div.appendChild(subject);
+		body_div.appendChild(move_actions);
+		
+		return body_div;
+	},
+	createImageLink:function(config){
+		var a = new Element('span');
+		a.update(config.text)
+		return a;
 	}
 }); 
+
+var MoveIssuePriorityRequest = Class.create(Ajax.Request, {
+	initialize: function($super, config){
+		this.config = Object.extend({
+		}, config);
+		
+		var url = Scrumbler.root_url+'projects/'+this.config.project_id+'/scrumbler_backlogs/move_issue_priority';
+		
+		$super(url,{ method: 'post',
+				parameters: { 
+					'issue_action': this.config.issue_action,
+					'issue_id' : this.config.issue_id,
+					'sprint_id' : this.config.sprint_id
+				},
+				onSuccess : function(transport) {
+					var resp = transport.responseJSON;
+					
+					if(resp.success) {
+						$(document).fire('issue:moved',{
+							backlog: resp.backlog,
+							sprint: resp.sprint
+						});
+					} else {
+						$growler.growl(resp.text, { header : t('label_header_error') });
+					}
+				}.bind(this),
+				onFailure : function() {
+					// TODO More details
+					$growler.growl('Something went wrong...', { header : t('label_header_error') });
+				}
+			});
+	}
+});
 
 /**
  * Create ui element for tracker displaying
@@ -330,7 +409,6 @@ var IssuesListUI = Class.create({
 	drawIssues: function(){
 		var issues_div = this.el.update("");
 		var no_issues = (this.issues.length == 0);
-		console.log(no_issues);
 		if(!no_issues){
 			no_issues = true;
 			this.issues.each(function(issue){
@@ -350,6 +428,7 @@ var IssuesListUI = Class.create({
 	},
 	// create issue ui element
 	createIssueEl: function(issue){
+		
 		var issue_div = new IssueBacklogTemplate({
 					'project_id': this.config.project_id,
 					'tracker': issue.tracker,
@@ -661,9 +740,19 @@ return Class.create({
 		}.bind(this));
 
 		// Update backlog on issue movement
-		$(document).observe('issue:moved', function(event){
+		$(document).observe("issue:moved", function(event){
 			var config = event.memo;
 			this.update(config);
+		}.bind(this));
+		
+		$(document).observe("issue:move_priority", function(event){
+			var config = event.memo;
+			new MoveIssuePriorityRequest({
+				project_id:this.config.project_id,
+				sprint_id: this.config.sprint.id,
+				issue_action: config.issue_action,
+				issue_id: config.issue_id
+			});
 		}.bind(this));
 		
 		this.sprint.list.el.observe('issue:points_updated', function(event){
@@ -687,6 +776,8 @@ return Class.create({
 				source: issue.source
 			});
 		}.bind(this));
+		
+		
 		
 		this.backlog.list.el.observe('issue:drop', function(event){
 			var issue = event.memo;

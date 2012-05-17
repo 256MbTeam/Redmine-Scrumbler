@@ -14,6 +14,7 @@ ActionController::Routing::Routes.draw do |map|
       :open_sprint => :post,
       :new_issue => :get,
       :new_issue => :post,
+      :move_issue_priority => :post
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs' do |backlog|
       
       backlog.new_issue  'create_issue', :controller => :scrumbler_backlogs, :action => :create_issue

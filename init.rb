@@ -32,7 +32,7 @@ Redmine::Plugin.register Scrumbler::MODULE_NAME do
   version '1.5.0'
   project_module :redmine_scrumbler do
     permission :scrumbler, :scrumbler => [:index, :sprint], :public => true
-    permission :scrumbler_backlog, :scrumbler_backlogs => [:show, :select_sprint, :create_version, :update_scrum_points, :change_issue_version, :open_sprint],
+    permission :scrumbler_backlog, :scrumbler_backlogs => [:show, :select_sprint, :create_version, :update_scrum_points, :change_issue_version, :open_sprint, :move_issue_priority],
                :public => true
     permission :scrumbler_settings, :scrumbler_settings => [:show, :update_trackers, :update_issue_statuses, :update_sprints],
                                     :scrumbler_sprints => [:settings, :update_general, :update_trackers, :update_issue_statuses],
