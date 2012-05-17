@@ -29,7 +29,8 @@
 			:selected => @scrumbler_sprint.id
 			},
 			{
-			:onchange => remote_function(:url => {
+			:onchange => remote_function(:method=>:post,
+			:url => {
 			:controller => :scrumbler,
 			:action => :sprint,
 			:project_id => @project

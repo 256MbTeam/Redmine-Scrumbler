@@ -45,9 +45,9 @@ module Scrumbler
 
           # should not add issue to limited sprint by points
           points = custom_value_for(ScrumblerIssueCustomField.points).try(:value).to_f
-          
-          if @sprint.max_points != 0 && 
-            (@sprint.points_total + points - scrumbler_points.to_f) > @sprint.max_points
+
+          if @sprint.max_points != 0 &&
+          (@sprint.points_total + points - scrumbler_points.to_f) > @sprint.max_points
             errors.add_to_base(:sprint_points_limit_error)
           end
 
@@ -69,7 +69,9 @@ module Scrumbler
         receiver.send :include, InstanceMethods
         receiver.class_eval {
           validate :validate_sprint
+          named_scope :without_version, :conditions => {:fixed_version_id => nil}
         }
+        
       end
     end
   end

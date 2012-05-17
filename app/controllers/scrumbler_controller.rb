@@ -18,7 +18,7 @@
 class ScrumblerController < ScrumblerAbstractController
   unloadable
 
-#  before_filter :authorize, :only => [:sprint, :index]
+  before_filter :authorize, :only => [:sprint, :index]
   
   def index
     @scrumbler_sprint = ScrumblerSprint.find_by_id(params[:scrumbler_sprint_id])

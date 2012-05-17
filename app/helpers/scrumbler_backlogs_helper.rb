@@ -15,9 +15,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module ScrumblerBacklogsHelper
-  def prepare_issues_for_json(issues, trackers)
-    issues.sort_by(&:priority).reverse.map{|issue|
+  def by_priority(issues)
+    issues.sort {|a,b|
+      v1 = a.try(:custom_value_for, ScrumblerIssueCustomField.priority).try(:value).to_i
+      v2 = b.try(:custom_value_for, ScrumblerIssueCustomField.priority).try(:value).to_i
+      v1==v2 ? b.priority <=> a.priority : v2 <=> v1 
 
+    }
+  end
+
+  def prepare_issues_for_json(issues, trackers)
+    by_priority(issues).map{|issue|
       { :id => issue.id,
         :subject => prepare_issue_subject(issue),
         :points => issue.scrumbler_points,
@@ -64,7 +72,7 @@ module ScrumblerBacklogsHelper
   def prepare_backlog_for_json(project)
     all_trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
-    issues = project.issues.open.without_version.all(:conditions => {:parent_id => nil})
+    issues = project.issues.open.without_version.all(:conditions => {:parent_id => nil}, :include=>:custom_values)
     {
       :trackers => trackers,
       :issues => prepare_issues_for_json(issues, all_trackers)

@@ -14,18 +14,21 @@ ActionController::Routing::Routes.draw do |map|
       :open_sprint => :post,
       :new_issue => :get,
       :new_issue => :post,
+      :move_issue_priority => :post
     }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_backlogs' do |backlog|
       
       backlog.new_issue  'create_issue', :controller => :scrumbler_backlogs, :action => :create_issue
     end
     
-    project.scrumbler_dashboard 'scrumbler', :controller => 'scrumbler'
-    project.scrumbler_dashboard_sprint 'scrumbler/:scrumbler_sprint_id', :controller => 'scrumbler'
+    project.resource "scrumbler", :controller => :scrumbler, :member=>{
+      :index=>:get,
+      :sprint=>:post
+    }, :prefix => '/projects/:project_id/scrumbler'
     
     project.resource :scrumbler_settings, :member => {
       :update_trackers => :post,
       :update_issue_statuses => :post
-    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler'
+    }, :only => [:show], :prefix => '/projects/:project_id/scrumbler_settings'
     
     project.scrumbler_settings 'scrumbler_settings/:tab', :tab => nil , :controller => :scrumbler_settings, :action => :show
     
@@ -34,7 +37,8 @@ ActionController::Routing::Routes.draw do |map|
       :update_trackers => :post,
       :update_issue_statuses => :post,
       :burndown => :get,
-      :close_confirm => :post
+      :close_confirm => :post,
+      :settings => :get
     } do |sprint|
       sprint.settings     'settings/:tab', :tab => nil,
         :path_prefix => '/projects/:project_id/scrumbler_sprints/:id',
@@ -48,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
         :controller => :scrumbler_sprints, :action => :drop_issue_assignment, :method => :post
     end
     
-    project.sprint 'sprint/:sprint_id', :controller => 'scrumbler', :action => :sprint, :method => :post
+    
   end
 
   
