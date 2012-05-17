@@ -97,64 +97,22 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
                 }
   end
   
+
   
-  def move_issue issues, moved_issue, new_priority
-    @issues.each{|issue|
-        _priority = get_position.call(issue)
-        if issue.id != moved_issue.id &&  ((_priority <= new_priority && _priority > moved_issue.priority) || 
-          (_priority >= new_priority && _priority < moved_issue.priority)) 
+  def move_issue(issues, moved_issue, new_priority)
+      priority = moved_issue.get_prioroty
+    
+      issues.each{|issue|
+        next if issue.id == @issue.id
+        _priority = issue.get_prioroty
+        if _priority <= @new_priority && _priority > priority 
            params[:issue] = HashWithIndifferentAccess.new({"custom_field_values" => {
               ScrumblerIssueCustomField.priority.id.to_s => (_priority-1).to_s
             }
           })
           issue.safe_attributes = params[:issue]
           issue.save_issue_with_child_records(params[:issue])
-        end 
-        
-      }
-      
-    params[:issue] = HashWithIndifferentAccess.new({
-        "custom_field_values" => {
-          ScrumblerIssueCustomField.priority.id.to_s => (@new_priority).to_s
-        }
-      })
-    @issue.safe_attributes = params[:issue]
-    @saved = @issue.save_issue_with_child_records(params[:issue])
-  end
-  
-  def move_issue_priority
-    get_position = proc {|issue|
-      issue.custom_value_for(ScrumblerIssueCustomField.priority).try(:value).to_i
-    }
-    sort_pos = proc {|a,b|
-        get_position.call(a) <=> get_position.call(b)
-    }
-    @issue = Issue.find(params[:issue_id])
-    @sprint = ScrumblerSprint.find(params[:sprint_id])
-    
-    @issues = @issue.fixed_version ? @sprint.issues : @project.issues.without_version
-
-
-    priority = get_position.call(@issue)
-    if "move_up" == params[:issue_action]
-      
-      @new_priority = get_position.call(@issues.select{|issue|
-        _priority = get_position.call(issue)
-        issue.id != @issue.id && _priority >= priority
-      }.min &sort_pos)
-      
-      move_issue(@issues, @issue, @new_priority)
-      
-    elsif "move_down" == params[:issue_action]
-      
-        @new_priority = get_position.call(@issues.select{|issue|
-        _priority = get_position.call(issue)
-        issue.id != @issue.id && _priority <= priority
-      }.max &sort_pos)
-       
-       @issues.each{|issue|
-        _priority = get_position.call(issue)
-        if issue.id != @issue.id &&  _priority >= @new_priority
+        elsif _priority >= @new_priority && _priority < priority 
            params[:issue] = HashWithIndifferentAccess.new({"custom_field_values" => {
               ScrumblerIssueCustomField.priority.id.to_s => (_priority+1).to_s
             }
@@ -162,50 +120,59 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
           issue.safe_attributes = params[:issue]
           issue.save_issue_with_child_records(params[:issue])
         end 
-        
       }
-    # elsif "top_up" == params[:issue_action]
-          # @new_priority = get_position.call(@issues.select{|issue|
-        # _priority = get_position.call(issue)
-        # issue.id != @issue.id && _priority >= priority
-      # }.min &sort_pos)
-#        
-       # @issues.each{|issue|
-        # _priority = get_position.call(issue)
-        # if issue.id != @issue.id &&  _priority <= @new_priority
-           # params[:issue] = HashWithIndifferentAccess.new({"custom_field_values" => {
-              # ScrumblerIssueCustomField.priority.id.to_s => (_priority-1).to_s
-            # }
-          # })
-          # issue.safe_attributes = params[:issue]
-          # issue.save_issue_with_child_records(params[:issue])
-        # end 
-#         
-      # }
-    # elsif "top_down" == params[:issue_action]
-        # @new_priority = get_position.call(@issues.select{|issue|
-        # _priority = get_position.call(issue)
-        # issue.id != @issue.id && _priority <= priority
-      # }.max &sort_pos)
-#        
-       # @issues.each{|issue|
-        # _priority = get_position.call(issue)
-        # if issue.id != @issue.id &&  _priority >= @new_priority
-           # params[:issue] = HashWithIndifferentAccess.new({"custom_field_values" => {
-              # ScrumblerIssueCustomField.priority.id.to_s => (_priority+1).to_s
-            # }
-          # })
-          # issue.safe_attributes = params[:issue]
-          # issue.save_issue_with_child_records(params[:issue])
-        # end 
-#         
-      # }
+    
+     params[:issue] = HashWithIndifferentAccess.new({
+        "custom_field_values" => {
+          ScrumblerIssueCustomField.priority.id.to_s => (new_priority).to_s
+        }
+      })
+    moved_issue.safe_attributes = params[:issue]
+    moved_issue.save_issue_with_child_records(params[:issue])
+  end
+  
+  def move_issue_priority
+   
+    sort_pos = proc {|a,b|
+        a.get_prioroty <=> b.get_prioroty
+    }
+    @issue = Issue.find(params[:issue_id])
+    @sprint = ScrumblerSprint.find(params[:sprint_id])
+    
+    @issues = @issue.fixed_version ? @sprint.issues : @project.issues.without_version
+
+    priority = @issue.get_prioroty
+    
+    if "higher" == params[:issue_action]
+      higher_issues = @issues.select{|issue|
+        _priority = issue.get_prioroty
+        issue.id != @issue.id && _priority >= priority
+      }
+      
+      @new_priority = (higher_issues.min &sort_pos ).get_prioroty() unless higher_issues.empty?
+    elsif "highest" == params[:issue_action]
+      @new_priority = (@issues.max &sort_pos).get_prioroty
+    elsif "lower" == params[:issue_action]
+      lower_issues = @issues.select{|issue|
+        _priority = issue.get_prioroty
+        issue.id != @issue.id && _priority <= priority
+      }
+      
+      @new_priority = (lower_issues.max &sort_pos).get_prioroty unless lower_issues.empty?
+      
+    elsif "lowest" == params[:issue_action]
+      @new_priority = (@issues.min &sort_pos).get_prioroty
     end
-
-
+    
+    
+    if @new_priority != nil
+      @success = move_issue(@issues, @issue, @new_priority)
+    else
+      @success = true
+    end
     
     render :json => {
-             :success => @saved,
+             :success => @success,
              :sprint => prepare_sprint_for_json(@sprint),
              :backlog => prepare_backlog_for_json(@project),
              :text => @issue.errors.full_messages.join(", <br>")

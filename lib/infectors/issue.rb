@@ -25,7 +25,12 @@ module Scrumbler
           ScrumblerIssueCustomField.points.find_value_by_issue(self).try(:value) ||
           ScrumblerIssueCustomField.points.default_value
         end
-
+        
+        def get_prioroty
+          # issue.custom_value_for(ScrumblerIssueCustomField.priority).try(:value).to_i
+          ScrumblerIssueCustomField.priority.find_value_by_issue(self).try(:value).to_i || 0 
+        end
+        
         private
 
         def validate_sprint
