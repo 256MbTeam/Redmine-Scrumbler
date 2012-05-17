@@ -137,7 +137,7 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
         a.get_prioroty <=> b.get_prioroty
     }
     @issue = Issue.find(params[:issue_id])
-    @sprint = ScrumblerSprint.find(params[:sprint_id])
+    @sprint = ScrumblerSprint.find(params[:sprint_id]) if params[:sprint_id]
     
     @issues = @issue.fixed_version ? @sprint.issues : @project.issues.without_version
 

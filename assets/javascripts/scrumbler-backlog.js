@@ -410,7 +410,6 @@ var IssuesListUI = Class.create({
 		if(!no_issues){
 			no_issues = true;
 			this.issues.each(function(issue){
-				console.log(issue,!issue.disabled)
 				if(!issue.disabled){ no_issues = false }
 			});
 		}
