@@ -250,40 +250,38 @@ var IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 		
 		var subject = new Element('p').update(this.config.issue.subject);
 		
-		var move_actions = new Element('span');
 		
 		
-		var move_up_link = this.createImageLink({ text: 'move_up' });
+		// move actions 
+
 		
-		move_up_link.observe('click', function(event){
-			$(document).fire("issue:move_priority",{
-				issue_id: this.config.issue.id,
-				issue_action: "move_up"
-			});
-		}.bind(this));
-	
-	
-		move_actions.appendChild(move_up_link);
+		var move_actions = new Element('div', {
+			style: 'text-align: center;'
+		});
 		
-		var move_down_link = this.createImageLink({ text: 'move_down' });
-		move_down_link.observe('click', function(event){
-			$(document).fire("issue:move_priority",{
-				issue_id: this.config.issue.id,
-				issue_action: "move_down"
-			});
-		}.bind(this));
+		function makeMovePriorityLink(config) {
+			var title = Scrumbler.Translations['label_sort_'+config.issue_action];
+			var a = new Element('img', { 
+				src: '/images/'+config.image,
+				title: title,
+				alt: title,
+				'class': 'scrumbler-move-issue-priority'
+			});			
+			a.observe('click', function(event){ $(document).fire("issue:move_priority", config); });
+			move_actions.appendChild(a);		
+		};
 		
-		move_actions.appendChild(move_down_link);
+		makeMovePriorityLink({image: '2uparrow.png',   issue_action: "highest",    issue_id: this.config.issue.id});
+		makeMovePriorityLink({image: '1uparrow.png',   issue_action: "higher",   issue_id: this.config.issue.id});
+		makeMovePriorityLink({image: '1downarrow.png', issue_action: "lower", issue_id: this.config.issue.id});
+		makeMovePriorityLink({image: '2downarrow.png', issue_action: "lowest",  issue_id: this.config.issue.id});
 		
+		
+		// assembling body
 		body_div.appendChild(subject);
 		body_div.appendChild(move_actions);
 		
 		return body_div;
-	},
-	createImageLink:function(config){
-		var a = new Element('span');
-		a.update(config.text)
-		return a;
 	}
 }); 
 

@@ -25,20 +25,32 @@ module ScrumblerHelper
     }
 
     translations = {
-      :scrumbler_sprint => t(:scrumbler_sprint),
       :nodata => t(:label_no_data),
-      :label_backlog => t(:label_backlog),
-      :label_new_sprint => t(:label_new_sprint),
-      :issue_not_assigned => t(:issue_not_assigned),
-      :scrumbler_statistics => t(:scrumbler_statistics),
-      :label_header_error  => t(:label_header_error),
-      :label_confirm_sprint_opening => t(:label_confirm_sprint_opening),
       :highstock => {
         :months => prepare_stupid_hash.call("date.month_names").compact,
         :shortMonths => prepare_stupid_hash.call("date.abbr_month_names").compact,
         :weekdays => prepare_stupid_hash.call("date.day_names").compact
       }
     }
+    
+    convert_translation = Proc.new {|key|  }
+    
+    %w(label_sort_lower
+       label_sort_higher
+       label_sort_highest
+       label_sort_lowest 
+       scrumbler_sprint 
+       label_backlog 
+       label_new_sprint 
+       issue_not_assigned
+       scrumbler_statistics
+       label_header_error
+       label_confirm_sprint_opening).each {|key| 
+         key = key.to_sym
+         translations[key] = t(key)
+       }
+    
+    
     javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = #{root_url.to_json}; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
   end
 
