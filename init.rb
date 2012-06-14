@@ -20,9 +20,10 @@ require 'dispatcher'
 
 require_dependency "scrumbler"
 
-Dispatcher.to_prepare Scrumbler::MODULE_NAME do
+#Dispatcher.to_prepare Scrumbler::MODULE_NAME do
+#Dispatcher.to_prepare Scrumbler::MODULE_NAME do
   require_dependency "scrumbler_infector"
-end
+#end
 
 Redmine::Plugin.register Scrumbler::MODULE_NAME do
   name 'Redmine Scrumbler plugin'
