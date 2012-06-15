@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require 'sqlite_3_serialization_hack'
 require 'redmine'
-require 'dispatcher'
+#require 'dispatcher'
 
 require_dependency "scrumbler"
 
