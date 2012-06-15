@@ -16,11 +16,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require 'sqlite_3_serialization_hack'
 require 'redmine'
-require 'dispatcher'
 
 require_dependency "scrumbler"
 
-Dispatcher.to_prepare Scrumbler::MODULE_NAME do
+Rails.application.config.to_prepare do
   require_dependency "scrumbler_infector"
 end
 

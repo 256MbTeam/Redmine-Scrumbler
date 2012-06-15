@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 module Scrumbler
   module Infectors
     module Version
@@ -23,7 +22,7 @@ module Scrumbler
       module InstanceMethods
         def version_created
           Infectors::integration_module_for(self.project) do
-            create_scrumbler_sprint(:project => self.project)
+            scrumbler_sprint = create_scrumbler_sprint(:project => self.project)
           end
         end
       end

@@ -1,5 +1,5 @@
 <h2><%=l(:label_issue_new)%></h2>
-<% labelled_tabular_form_for :issue, @issue, :url => {:controller => 'scrumbler_backlogs', :action => 'create_issue', :project_id => @project},
+<%= labelled_form_for :issue, @issue, :url => {:controller => 'scrumbler_backlogs', :action => 'create_issue', :project_id => @project},
                              :html => {:multipart => true, :id => 'issue-form', :class => 'tabular new-issue-form'} do |f| %>
     <%= error_messages_for 'issue' %>
     <%@project_setting = @project.scrumbler_project_setting%>

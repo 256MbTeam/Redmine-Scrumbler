@@ -27,14 +27,14 @@ class ScrumblerSprint < ActiveRecord::Base
 
   default_scope :joins => [:version], :select => "#{ScrumblerSprint.table_name}.*, name"
 
-  named_scope :opened, :conditions => {
+  scope :opened, :conditions => {
                                          :status => OPENED,
                                          :versions => {
                                            :status => 'open'
                                          }
                                        }
 
-  named_scope :planning, :conditions => {:status => PLANNING}
+  scope :planning, where(:status => PLANNING)
 
   belongs_to :project
   validates_presence_of :project
@@ -56,16 +56,27 @@ class ScrumblerSprint < ActiveRecord::Base
   validate :max_points_validations
   
   before_save :set_fact_close_date
+  after_initialize :set_default_values
 
   def issues
-    Issue.find :all,
-    :include => [:assigned_to, :status, :priority, :custom_values],
-    :conditions => {
-      :tracker_id => self.trackers.keys,
-      :status_id => self.issue_statuses.keys,
-      :fixed_version_id => self.version_id,
-      :parent_id => nil
-    }
+    if self.issue_statuses.nil?
+      Issue.find :all,
+      :include => [:assigned_to, :status, :priority, :custom_values],
+      :conditions => {
+        :tracker_id => self.trackers.keys,
+        :fixed_version_id => self.version_id,
+        :parent_id => nil
+      }
+    else
+      Issue.find :all,
+      :include => [:assigned_to, :status, :priority, :custom_values],
+      :conditions => {
+        :tracker_id => self.trackers.keys,
+        :status_id => self.issue_statuses.keys,
+        :fixed_version_id => self.version_id,
+        :parent_id => nil
+      }
+    end
   end
 
   def points_total
@@ -76,7 +87,7 @@ class ScrumblerSprint < ActiveRecord::Base
     }).inject(0.0) {|t,c| t+=c.value.to_f}
   end
 
-  def after_initialize
+  def set_default_values
     if self.new_record?
       self.status ||= ScrumblerSprint::PLANNING
     end
@@ -109,37 +120,37 @@ class ScrumblerSprint < ActiveRecord::Base
 
   def scrumbler_project_setting_validation
     if !project || !scrumbler_project_setting
-      errors.add_to_base(:sprint_without_project)
+      errors[:base] << I18n.t(:sprint_without_project)
     end
   end
 
   def closing_validation
     if Issue.open.exists?(:id => self.issues.map(&:id)) && self.status == CLOSED
-      errors.add_to_base(:closing_sprint_with_opened_issues)
+      errors[:base] << I18n.t(:closing_sprint_with_opened_issues)
     end
   end
 
   def opening_validation
     if self.status == OPENED && self.issues.empty?
-      errors.add_to_base(:cant_open_sprint_without_issues)
+      errors[:base] << I18n.t(:cant_open_sprint_without_issues)
     end
   end
 
   def remove_tracker_validation
     if Issue.exists?(["tracker_id not in (?) and fixed_version_id = ?", self.trackers.keys, self.version_id])
-      errors.add_to_base(:trackers_with_issues_in_sprint_cant_be_removed)
+      errors[:base] << I18n.t(:trackers_with_issues_in_sprint_cant_be_removed)
     end
   end
 
   def start_end_date_validation
     if start_date && end_date && start_date > end_date
-      errors.add_to_base(:start_date_is_greater_than_end_date)
+      errors[:base] << I18n.t(:start_date_is_greater_than_end_date)
     end
   end
 
   def max_points_validations
     if self.max_points != 0 && self.max_points < self.points_total
-      errors.add_to_base(:sprint_points_limit_error)
+      errors[:base] << I18n.t(:sprint_points_limit_error)
     end
   end
   
