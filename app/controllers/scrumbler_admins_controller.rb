@@ -33,7 +33,7 @@ class ScrumblerAdminsController < ApplicationController
 
   def update_points_field
     @points_field = ScrumblerIssueCustomField.points
-    if request.post? && @points_field.update_attributes(params[:points_field])
+    if @points_field.update_attributes(params[:points_field])
       flash[:notice] = l(:notice_successful_update)
     end
     render :action => "index", :tab => "points_field"

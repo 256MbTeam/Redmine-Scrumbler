@@ -22,14 +22,23 @@ class ScrumblerProjectSetting < ActiveRecord::Base
 
   validates_presence_of :project
   belongs_to :project
+  before_save :initialize_before_saving
 
   serialize :settings, HashWithIndifferentAccess
   def find_tracker(id)
-    self.settings[:trackers][id.to_s] || ScrumblerProjectSetting.create_setting(Tracker.find(id), false)
+    unless self.settings[:trackers].nil? || self.settings[:trackers][id.to_s].nil?
+      return self.settings[:trackers][id.to_s]
+    else
+      return ScrumblerProjectSetting.create_setting(Tracker.find(id), false)
+    end
   end
 
   def find_issue_status(id)
-    self.settings[:issue_statuses][id.to_s] || ScrumblerProjectSetting.create_setting(IssueStatus.find(id), false)
+    unless self.settings[:issue_statuses].nil? || self.settings[:issue_statuses][id.to_s].nil?
+      return self.settings[:issue_statuses][id.to_s]
+    else
+      return ScrumblerProjectSetting.create_setting(IssueStatus.find(id), false)
+    end
   end
 
   def trackers
@@ -40,7 +49,7 @@ class ScrumblerProjectSetting < ActiveRecord::Base
     self.settings[:issue_statuses]
   end
 
-  def before_save
+  def initialize_before_saving
     if self.new_record?
       self.settings ||= HashWithIndifferentAccess.new
 

@@ -38,22 +38,22 @@ module Scrumbler
 
           # Should not assign issue from disabled tracker
           tracker_setting = @sprint.trackers[self.tracker_id.to_s] || @sprint.trackers[self.tracker_id.to_i]
-          errors.add_to_base(:tracker_error) if !tracker_setting || !tracker_setting[:use]
+          errors[:base] << (:tracker_error) if !tracker_setting || !tracker_setting[:use]
 
           # should not add issue to not planning sprint
           if fixed_version_id_changed? && @sprint.status != ScrumblerSprint::PLANNING
-            errors.add_to_base(:sprint_not_planning_error)
+            errors[:base] << (:sprint_not_planning_error)
           end
 
           # should not edit issues in closed sprint
-          errors.add_to_base(:sprint_is_closed_error) if @sprint.status == "closed"
+          errors[:base] << (:sprint_is_closed_error) if @sprint.status == "closed"
 
           # should not add issue to limited sprint by points
           points = custom_value_for(ScrumblerIssueCustomField.points).try(:value).to_f
 
           if @sprint.max_points != 0 &&
           (@sprint.points_total + points - scrumbler_points.to_f) > @sprint.max_points
-            errors.add_to_base(:sprint_points_limit_error)
+            errors[:base] << (:sprint_points_limit_error)
           end
 
         end
@@ -74,7 +74,7 @@ module Scrumbler
         receiver.send :include, InstanceMethods
         receiver.class_eval {
           validate :validate_sprint
-          named_scope :without_version, :conditions => {:fixed_version_id => nil}
+          scope :without_version, :where => {:fixed_version_id => nil}
         }
         
       end

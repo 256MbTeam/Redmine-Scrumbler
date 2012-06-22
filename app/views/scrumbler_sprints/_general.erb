@@ -1,6 +1,6 @@
 <%= error_messages_for 'scrumbler_sprint' %>
 
-<%form_tag({:controller => :scrumbler_sprints, :action => :update_general, :project_id => @project, :id => @scrumbler_sprint.id}, {:method=> :post, :class => :tabular})	 do%>
+<%=form_tag({:controller => :scrumbler_sprints, :action => :update_general, :project_id => @project, :id => @scrumbler_sprint.id}, {:method=> :post, :class => :tabular})	 do%>
   <div class="box">
     <p><%=label("scrumbler_sprint","name") %> <%= text_field_tag "scrumbler_sprint[name]",  @scrumbler_sprint.version.name, :size => 60, :required => true %></p>
     <p><%=label("scrumbler_sprint", "description")%> <%= text_field_tag "scrumbler_sprint[description]", @scrumbler_sprint.version.description, :size => 60 %></p>

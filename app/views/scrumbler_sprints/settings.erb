@@ -5,13 +5,9 @@
 <% end %>
 
 <div class="contextual">
-    <%= link_to l(:label_sprint_back), {
-    									:controller => :scrumbler, 
-    									:action => :index, 
-    									:project_id => @project, 
-    									:scrumbler_sprint_id => @scrumbler_sprint
-    									},
-    									:class => "icon icon-scrumbler-back"  %>
+    <%= link_to l(:label_sprint_back), 
+        index_project_scrumbler_path(@project,{:scrumbler_sprint_id => @scrumbler_sprint}),
+	:class => "icon icon-scrumbler-back"  %>
 </div>
 <h2><%=  @scrumbler_sprint.name%> - <%=l(:label_settings)%></h2>
 <%= render_tabs scrumbler_sprint_settings_tabs %>

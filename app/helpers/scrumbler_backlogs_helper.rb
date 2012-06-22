@@ -35,23 +35,37 @@ module ScrumblerBacklogsHelper
   end
 
   def prepare_trackers(trackers_settings, trackers)
-    trackers_settings.map{|tracker_id, settings|
-      {
-        :id => tracker_id,
-        :name => trackers.detect {|tracker| tracker.id == tracker_id.to_i}.try(:name),
-        :color => settings[:color]
+    if trackers_settings.nil?
+      {}
+    else
+      trackers_settings.map{|tracker_id, settings|
+        {
+          :id => tracker_id,
+          :name => trackers.detect {|tracker| tracker.id == tracker_id.to_i}.try(:name),
+          :color => settings[:color]
+        }
       }
-    }
+    end
   end
 
   def prepare_all_trackers(trackers_settings, trackers)
-    trackers.map{|tracker|
-      {
-        :id => tracker.id,
-        :name => tracker.name,
-        :color => (trackers_settings[tracker.id.to_s] || ScrumblerProjectSetting.create_setting(tracker,false))[:color]
+    if trackers_settings.nil?
+      trackers.map{|tracker|
+        {
+          :id => tracker.id,
+          :name => tracker.name,
+          :color => (ScrumblerProjectSetting.create_setting(tracker,false))[:color]
+        }
       }
-    }
+    else
+      trackers.map{|tracker|
+        {
+          :id => tracker.id,
+          :name => tracker.name,
+          :color => (trackers_settings[tracker.id.to_s] || ScrumblerProjectSetting.create_setting(tracker,false))[:color]
+        }
+      }
+    end
   end
 
   def prepare_sprint_for_json(sprint)
@@ -72,7 +86,7 @@ module ScrumblerBacklogsHelper
   def prepare_backlog_for_json(project)
     all_trackers = prepare_all_trackers(project.scrumbler_project_setting.trackers, project.trackers)
     trackers = prepare_trackers(project.scrumbler_project_setting.trackers, project.trackers)
-    issues = project.issues.open.without_version.all(:conditions => {:parent_id => nil}, :include=>:custom_values)
+    issues =  Issue.open.all(:conditions => {:parent_id => nil,:fixed_version_id => nil, :project_id => project.id }, :include=>:custom_values)
     {
       :trackers => trackers,
       :issues => prepare_issues_for_json(issues, all_trackers)
