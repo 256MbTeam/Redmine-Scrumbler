@@ -148,13 +148,13 @@ div.Growler-notice-exit {
 .scrumbler-assignee-link {
 	width: 16px;
 	height: 16px;
-	background: url(/images/link_break.png);
+	background: url(../../../images/link_break.png);
 }
 .scrumbler-assignee-link:hover {
 	cursor: pointer;
 }
 .scrumbler-not-assigned-issue {
-	background-image: url("/images/link.png") !important;
+	background-image: url("../../../images/link.png") !important;
 }
 .scrumler-dashboard-status-inactive {
 	text-decoration: line-through;
