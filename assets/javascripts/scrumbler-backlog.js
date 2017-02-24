@@ -871,6 +871,13 @@ return Class.create({
 		}else{
 			issues.each(function(issue){ issue.disabled = true });
 		}
+		
+		// don't show issues that can't be assigned to the selected sprint
+		issues.each(function(issue, key){
+			if(issue.disabled){
+				delete issues[key];
+			}
+		});
 	}
 });
 })();
