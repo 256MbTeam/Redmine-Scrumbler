@@ -262,7 +262,7 @@ var IssueBacklogTemplate = Class.create(Scrumbler.IssueTemplate,{
 		function makeMovePriorityLink(config) {
 			var title = Scrumbler.Translations['label_sort_'+config.issue_action];
 			var a = new Element('img', { 
-				src: '/images/'+config.image,
+				src: '../../images/'+config.image,
 				title: title,
 				alt: title,
 				'class': 'scrumbler-move-issue-priority'

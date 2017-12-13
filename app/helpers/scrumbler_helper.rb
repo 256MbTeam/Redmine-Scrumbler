@@ -51,7 +51,7 @@ module ScrumblerHelper
        }
     
     
-    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = '/'; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
+    javascript_tag "var Scrumbler = {}; Scrumbler.Translations = #{translations.to_json}; Scrumbler.root_url = '../../'; Scrumbler.possible_points = #{ScrumblerIssueCustomField.points.possible_values.to_json};"
   end
 
   def prepare_issue_subject(issue)

@@ -140,6 +140,21 @@ class ScrumblerBacklogsController < ScrumblerAbstractController
     @sprint = ScrumblerSprint.find(params[:sprint_id]) if params[:sprint_id]
     
     @issues = @issue.fixed_version ? @sprint.issues : @project.issues.without_version
+    @issues = @issues.sort_by{ |i| i.get_prioroty}.reverse
+    if !@issues.empty?
+      priority = @issues.first.get_prioroty
+    end
+    @issues = @issues.map do |issue|
+      params[:issue] = HashWithIndifferentAccess.new({"custom_field_values" => {
+          ScrumblerIssueCustomField.priority.id.to_s => (priority).to_s
+      }
+                                                     })
+      issue.safe_attributes = params[:issue]
+      issue.save_issue_with_child_records(params[:issue])
+      priority -= 1
+      issue
+    end
+
 
     priority = @issue.get_prioroty
     
